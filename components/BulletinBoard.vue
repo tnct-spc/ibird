@@ -1,11 +1,12 @@
 <template>
   <section>
-    a
+    <Card v-for="card in cards" :card="card" />
   </section>
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import Card from '~/components/Card.vue'
+import { mapState } from 'vuex'
 export default {
   data () {
     return {
@@ -15,6 +16,9 @@ export default {
     ...mapState({
       cards: 'cards'
     })
+  },
+  components: {
+    Card
   }
 }
 </script>
