@@ -1,6 +1,6 @@
 <template>
   <section>
-    <Card v-for="card in cards" :card="card" />
+    <Card v-for="cardId in Object.keys(cards)" :cardId="cardId" />
   </section>
 </template>
 
@@ -22,3 +22,7 @@ export default {
   }
 }
 </script>
+<style scoped>
+section {
+}
+</style>
