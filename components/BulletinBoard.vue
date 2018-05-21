@@ -1,6 +1,6 @@
 <template>
   <section>
-    <Card v-for="cardId in Object.keys(cards)" :cardId="cardId" />
+    <Card v-for="(card, cardId) in cards" :key="cardId" :cardId="cardId" />
   </section>
 </template>
 
