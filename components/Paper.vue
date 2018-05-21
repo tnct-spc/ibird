@@ -1,31 +1,31 @@
 <template>
-  <img class="card" :src="card.imgUrl" 
+  <img class="paper" :src="paper.imgUrl" 
     alt="" :style="{left: x, top: y}">
 </template>
 <script>
 import { mapState } from 'vuex'
 export default {
   props: {
-    cardId: String
+    paperId: String
   },
   computed: {
     ...mapState({
-      cards: 'cards'
+      papers: 'papers'
     }),
-    card () {
-      return this.cards[this.cardId]
+    paper () {
+      return this.papers[this.paperId]
     },
     x () {
-      return this.card.x + 'px'
+      return this.paper.x + 'px'
     },
     y () {
-      return this.card.y + 'px'
+      return this.paper.y + 'px'
     }
   }
 }
 </script>
 <style scoped>
-img.card {
+img.paper {
   margin: 1rem;
   box-shadow: 0.5rem 0.5rem 0.5rem 0.01rem;
   border:solid 0.1rem black;

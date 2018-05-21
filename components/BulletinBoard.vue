@@ -1,11 +1,11 @@
 <template>
   <section>
-    <Card v-for="(card, cardId) in cards" :key="cardId" :cardId="cardId" />
+    <Paper v-for="(paper, paperId) in papers" :key="paperId" :paperId="paperId+''" />
   </section>
 </template>
 
 <script>
-import Card from '~/components/Card.vue'
+import Paper from '~/components/Paper.vue'
 import { mapState } from 'vuex'
 export default {
   data () {
@@ -14,11 +14,11 @@ export default {
   },
   computed: {
     ...mapState({
-      cards: 'cards'
+      papers: 'papers'
     })
   },
   components: {
-    Card
+    Paper
   }
 }
 </script>

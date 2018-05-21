@@ -1,5 +1,5 @@
 export const state = () => ({
-  cards: [{
+  papers: [{
     imgUrl: '/test-page-001.jpg',
     x: 0,
     y: 0
@@ -7,8 +7,8 @@ export const state = () => ({
 })
 
 export const mutations = {
-  move (state, { cardId, x, y }) {
-    state.cards[cardId].x = x
-    state.cards[cardId].y = y
+  move (state, { paperId, x, y }) {
+    state.papers[paperId].x = x
+    state.papers[paperId].y = y
   }
 }
