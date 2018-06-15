@@ -1,5 +1,6 @@
 import express from 'express'
 import { Nuxt, Builder } from 'nuxt'
+import expressWs from 'express-ws'
 
 import api from './api'
 
@@ -11,6 +12,14 @@ app.set('port', port)
 
 // Import API Routes
 app.use('/api', api)
+
+//Websocketを使う
+expressWs(app)
+app.ws('/ws',function(ws,req){
+  ws.on('message', function(msg) {
+    console.log('from server: ' + msg)
+  })
+})
 
 // Import and Set Nuxt.js options
 let config = require('../nuxt.config.js')
