@@ -3,6 +3,7 @@ import { Nuxt, Builder } from 'nuxt'
 import expressWs from 'express-ws'
 
 import api from './api'
+import websocket from './websocket'
 
 const app = express()
 const host = process.env.HOST || '127.0.0.1'
@@ -15,11 +16,7 @@ app.use('/api', api)
 
 //Websocketを使う
 expressWs(app)
-app.ws('/ws',function(ws,req){
-  ws.on('message', function(msg) {
-    console.log('from server: ' + msg)
-  })
-})
+app.use('/ws',websocket)
 
 // Import and Set Nuxt.js options
 let config = require('../nuxt.config.js')
