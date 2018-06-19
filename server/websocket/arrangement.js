@@ -4,10 +4,10 @@ import expressWs from 'express-ws'
 const router = Router()
 expressWs(router)
 
-router.ws('/arrangement',function(ws,req){
-  console.log('arrangement')
+router.ws('/move',function(ws,req){
   ws.on('message', function(msg) {
     console.log('from server: ' + msg)
+    ws.send(msg)
   })
 })
 
