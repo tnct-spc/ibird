@@ -1,9 +1,12 @@
 <template>
-  <img class="paper" :src="paper.imgUrl" 
-    alt="" :style="{left: x, top: y}">
+  <div @mousedown="mousedown">
+    <p v-show="this.paper.isSelected">{{ this.paperId }}</p>
+    <img class="paper" :src="paper.imgUrl" 
+      alt="" :style="{left: x, top: y}">
+  </div>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 export default {
   props: {
     paperId: String
@@ -20,6 +23,31 @@ export default {
     },
     y () {
       return this.paper.y + 'px'
+    }
+  },
+  methods: {
+    ...mapMutations({
+      move: 'move',
+      selectedcard: 'selectCard'
+    }),
+    mousedown: function(e){
+      console.log(e.x)
+      this.selectedcard({paperId: this.paperId})
+      document.addEventListener('mousemove',this.mousemove)
+      document.addEventListener('mouseup',this.mouseup)
+    },
+    mousemove: function(e){
+      if(this.paper.isSelected){
+        this.move({
+          paperId: this.paperId,
+          x: e.x,
+          y: e.y
+        })
+      }
+    },
+    mouseup: function(e){
+      document.removeEventListener('mousemove',this.mousemove)
+      document.removeEventListener('mouseup',this.mouseup)
     }
   }
 }
