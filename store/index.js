@@ -1,9 +1,3 @@
-import { w3cwebsocket } from 'websocket'
-const W3cwebsocket = w3cwebsocket
-var client = new W3cwebsocket('ws://localhost:3000/ws/move')
-client.onmessage = function (e) {
-  console.log(e)
-}
 
 export const state = () => ({
   papers: [{
@@ -20,12 +14,17 @@ export const state = () => ({
   ]
 })
 
+export const actions = {
+  move ({commit}, { paperId, x, y, client }) {
+    commit('move', {paperId, x, y})
+    client.send(JSON.stringify({ paperId, x, y }))
+  }
+}
+
 export const mutations = {
   move (state, { paperId, x, y }) {
     state.papers[paperId].x = x
     state.papers[paperId].y = y
-
-    client.send({ paperId, x, y })
   },
   selectCard (state, {paperId}) {
     for (let i in state.papers) {

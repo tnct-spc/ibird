@@ -6,10 +6,11 @@
   </div>
 </template>
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
   props: {
-    paperId: String
+    "paperId": String,
+    "wsClient": {}
   },
   computed: {
     ...mapState({
@@ -27,9 +28,12 @@ export default {
   },
   methods: {
     ...mapMutations({
-      move: 'move',
       selectedcard: 'selectCard'
     }),
+    ...mapActions({
+      move: 'move'
+    }),
+
     mousedown: function(e){
       console.log(e.x)
       this.selectedcard({paperId: this.paperId})
@@ -41,7 +45,8 @@ export default {
         this.move({
           paperId: this.paperId,
           x: e.x,
-          y: e.y
+          y: e.y,
+          client: this.wsClient
         })
       }
     },
