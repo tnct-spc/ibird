@@ -9,7 +9,7 @@ import BulletinBoard from '~/components/BulletinBoard.vue'
 export default {
   components: {
     BulletinBoard
-  }
+  },
 }
 </script>
 
