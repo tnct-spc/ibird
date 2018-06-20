@@ -6,7 +6,7 @@ expressWs(router)
 
 const receivers = []
 const state = []
-router.ws('/ws/move',function(ws, req){
+router.ws('/move',function(ws, req){
   const idx = receivers.push(ws)-1
   ws.on('message', msg => {
     const parsedMsg = JSON.parse(msg)

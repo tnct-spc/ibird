@@ -19,7 +19,7 @@ export default {
     }
   },
   created () {
-    axios.get('/all-positions').then((res)=>{
+    axios.get('/ws/all-positions').then((res)=>{
       const defaultPositions = res.data
       for(let p of defaultPositions){
         this.move(p)
