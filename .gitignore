@@ -13,6 +13,4 @@ dist
 # Backpack build
 build
 
-# IDE
-
-.idea
+.idea/
