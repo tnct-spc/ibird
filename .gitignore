@@ -1,6 +1,9 @@
 # dependencies
 node_modules
 
+#pdf
+pdf
+
 # logs
 npm-debug.log
 
