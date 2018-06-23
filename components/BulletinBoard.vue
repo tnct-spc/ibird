@@ -1,5 +1,6 @@
 <template>
   <section>
+    <p>alert</p>>
     <Paper v-for="(paper, paperId) in papers" :key="paperId" :paper-id="paperId+''" :ws-client="client" />
   </section>
 </template>
