@@ -16,7 +16,13 @@ module.exports = {
   /*
   ** Global CSS
   */
-  css: ['~/assets/css/main.css'],
+  css: [
+      '@/assets/scss/app.scss',
+      '~/assets/css/main.css'
+  ],
+  modules: [
+  ['bootstrap-vue/nuxt', { css: false }]
+  ],
   /*
   ** Add axios globally
   */

@@ -1,6 +1,7 @@
 <template>
   <section>
-    <p v-show="this.message != null">{{this.message}}</p>
+    <div class="bg-danger"  v-show="this.message != null"><p>{{this.message}}</p>
+    </div>
   </section>
 </template>
 <script>
