@@ -1,9 +1,8 @@
 <template>
   <section>
-    <p >{{this.message}}</p>
+    <p v-show="this.message != null">{{this.message}}</p>
   </section>
 </template>
-
 <script>
 
 import { w3cwebsocket } from 'websocket'
@@ -23,6 +22,12 @@ export default {
       console.log("message add")
       console.log(this.message)
 
+      var delete_alert = function () {
+        this.message = null
+        console.log("message deleted")
+      }
+      console.log(this.message)
+      setTimeout(() => {this.message=null},1000*60*5)
     }
   },
 }
