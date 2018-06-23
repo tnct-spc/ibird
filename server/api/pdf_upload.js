@@ -1,21 +1,25 @@
 import { Router } from 'express'
 import app from 'express'
 
-import parser from 'body-parser'
 import multer from 'multer'
 
 const router = Router()
-const upload = multer({ dest: './pdf/' });
 
-router.use(parser.urlencoded({
-    extended: true
-}));
-router.use(parser.json());
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, './pdf/')
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + '-' + Date.now() + '.pdf')
+  }
+})
 
-router.post('/users', upload.single('pdf'), (req, res, next) => {
-  console.log(req.body.grade)
-  console.log(req.body.cls)
-  console.log('success')
+const upload = multer({ storage: storage })
+
+router.post('/pdf', upload.single('pdf'), (req, res, next) => {
+  console.log(req.body)
+  res.send(req.body)
+  //grade , cls , coordinate
 })
 
 export default router
