@@ -1,7 +1,7 @@
 <template>
   <div @mousedown="mousedown">
     <p v-show="this.paper.isSelected">{{ this.paperId }}</p>
-    <img class="paper" :src="paper.imgUrl" 
+    <img class="paper" :src="paper.imgUrl"
       alt="" :style="{left: x, top: y}">
   </div>
 </template>
@@ -53,6 +53,7 @@ export default {
     mouseup: function(e){
       document.removeEventListener('mousemove',this.mousemove)
       document.removeEventListener('mouseup',this.mouseup)
+      this.selectedcard({paperId: null})
     }
   }
 }
