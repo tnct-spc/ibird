@@ -7,7 +7,7 @@ const router = Router()
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, './pdf/')
+    cb(null, '.pdf/')
   },
   filename: (req, file, cb) => {
     cb(null, file.fieldname + '-' + Date.now() + '.pdf')

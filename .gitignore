@@ -2,7 +2,7 @@
 node_modules
 
 #pdf
-.pdf
+.pdf/
 
 # logs
 npm-debug.log
