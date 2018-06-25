@@ -1,7 +1,7 @@
 <template>
   <section class="container">
-    <Alert />
     <BulletinBoard />
+    <Alert />
   </section>
 </template>
 

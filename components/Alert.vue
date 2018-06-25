@@ -1,6 +1,7 @@
 <template>
   <section>
-    <div class="bg-danger"  v-show="this.message != null"><p>{{this.message}}</p>
+    <div class="bg-danger alert"  v-show="this.message != null">
+      <p class="h1 text-light">{{this.message}}</p>
     </div>
   </section>
 </template>
@@ -35,5 +36,14 @@ export default {
 </script>
 <style scoped>
 section {
+}
+.alert {
+  height:100%;
+  width:100%;
+  left:0;
+  right:0;
+  top:0;
+  bottom:0;
+  position:absolute;
 }
 </style>
