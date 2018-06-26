@@ -1,22 +1,21 @@
 import { Router } from 'express'
 
 import multer from 'multer'
-import converter from 'office-converter'
+import Converter from 'office-convert'
 
 const router = Router()
+const converter = Converter.createConverter();
 
 //拡張子(.で切って一番最後の要素)を返す関数
 var extension = (filename) => {
   return filename.split('.').pop()
 }
 
-//wordファイルをpdfに変換する関数
+//officeファイルをpdfに変換する関数
 function doxToPdf(filepath){
-  converter().generatePdf(filepath, function(err, result) {
-    if (result.status === 0) {
-      console.log('Output File located at ' + result.outputFile);
-    }
-  });
+  var output = filepath.slice(0, filepath.lastIndexOf('.')) + '.pdf'
+  converter.generate(filepath, 'pdf', output)
+    .then(console.log).catch(console.error)
 }
 
 const storage = multer.diskStorage({
