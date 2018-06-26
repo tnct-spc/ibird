@@ -41,8 +41,10 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage })
 
 router.post('/upload-file', upload.single('file'), (req, res, next) => {
-  console.log(req.file.path)
-  doxToPdf(req.file.path)
+  var ext = extension(req.file.path)
+  if(ext === 'docx' || ext === 'doc'){
+    doxToPdf(req.file.path)
+  }
   res.send(req.body)
 })
 
