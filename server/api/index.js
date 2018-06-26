@@ -1,12 +1,12 @@
 import { Router } from 'express'
 
 import users from './users'
-import pdf_upload from './pdf_upload'
+import upload_file from './upload-file'
 
 const router = Router()
 
 // Add USERS Routes
 router.use(users)
-router.use(pdf_upload)
+router.use(upload_file)
 
 export default router

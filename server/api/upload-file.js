@@ -1,15 +1,17 @@
 import { Router } from 'express'
-import app from 'express'
 
 import multer from 'multer'
-import { extname } from 'path';
 
 const router = Router()
 
+//拡張子(.で切って一番最後の要素)を返す関数
+var extension = (filename) => {
+  return filename.split('.').pop()
+}
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    //拡張子(.で切って一番最後の要素)をみる
-    switch(file.originalname.split('.').pop()){
+    switch(extension(file.originalname)){
       case 'pdf':
         cb(null, '.document/pdf')
         break;
@@ -22,14 +24,13 @@ const storage = multer.diskStorage({
     }
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + '.' + file.originalname.split('.').pop())
+    cb(null, Date.now() + '.' + extension(file.originalname))
   }
 })
 
 const upload = multer({ storage: storage })
 
 router.post('/upload-file', upload.single('file'), (req, res, next) => {
-  console.log(req.body)
   res.send(req.body)
 })
 
