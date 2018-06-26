@@ -5,6 +5,8 @@ node_modules
 *.pdf
 #docx
 *.docx
+#unknown directory
+.document/unknown
 
 # logs
 npm-debug.log
