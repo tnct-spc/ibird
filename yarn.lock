@@ -4972,9 +4972,9 @@ object.pick@^1.3.0:
   dependencies:
     isobject "^3.0.1"
 
-office-converter@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/office-converter/-/office-converter-1.0.2.tgz#0227aee36b170e9a7d002ad3571caf2a7798f5ad"
+office-convert@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/office-convert/-/office-convert-0.2.2.tgz#8e419e8b65b6ba07d3274ec22ea689b3c04e7da4"
 
 on-finished@^2.3.0, on-finished@~2.3.0:
   version "2.3.0"
