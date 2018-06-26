@@ -1,12 +1,22 @@
 import { Router } from 'express'
 
 import multer from 'multer'
+import converter from 'office-converter'
 
 const router = Router()
 
 //拡張子(.で切って一番最後の要素)を返す関数
 var extension = (filename) => {
   return filename.split('.').pop()
+}
+
+//wordファイルをpdfに変換する関数
+function doxToPdf(filepath){
+  converter().generatePdf(filepath, function(err, result) {
+    if (result.status === 0) {
+      console.log('Output File located at ' + result.outputFile);
+    }
+  });
 }
 
 const storage = multer.diskStorage({
@@ -31,6 +41,8 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage })
 
 router.post('/upload-file', upload.single('file'), (req, res, next) => {
+  console.log(req.file.path)
+  doxToPdf(req.file.path)
   res.send(req.body)
 })
 
