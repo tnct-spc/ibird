@@ -13,7 +13,7 @@ var extension = (filename) => {
 }
 
 //officeファイルをpdfに変換する関数
-function officeToPDF(filepath){
+var officeToPDF = (filepath) => {
   var output = filepath.slice(0, filepath.lastIndexOf('.')) + '.pdf'
   converter.generate(filepath, 'pdf', output)
     .then(console.log).catch(console.error)
@@ -50,7 +50,7 @@ const upload = multer({ storage: storage })
 
 router.post('/upload-file', upload.single('file'), (req, res, next) => {
   var ext = extension(req.file.path)
-  if(ext === 'docx' || ext === 'doc'){
+  if(office_extensions.indexOf(ext) >= 0){
     officeToPDF(req.file.path)
   }
   res.send(req.body)

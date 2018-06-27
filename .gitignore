@@ -4,9 +4,15 @@ node_modules
 #pdf
 *.pdf
 #office
+*.docx
+*.doc
+*.xls
+*.xlsx
+*.ppt
+*.pptx
 
 #unknown directory
-.document/unknown
+.document/unknown/*
 
 # logs
 npm-debug.log
