@@ -13,10 +13,9 @@ var extension = (filename) => {
 }
 
 //officeファイルをpdfに変換する関数
-var officeToPDF = (filepath) => {
+var officeToPDF = async (filepath) => {
   var output = filepath.slice(0, filepath.lastIndexOf('.')) + '.pdf'
-  converter.generate(filepath, 'pdf', output)
-    .then(console.log).catch(console.error)
+  await converter.generate(filepath, 'pdf', output).then(console.log).catch(console.log)
 }
 
 const storage = multer.diskStorage({
@@ -51,9 +50,10 @@ const upload = multer({ storage: storage })
 router.post('/upload-file', upload.single('file'), (req, res, next) => {
   var ext = extension(req.file.path)
   if(office_extensions.indexOf(ext) >= 0){
-    officeToPDF(req.file.path)
+    officeToPDF(req.file.path).then( ()=> { res.send(req.body) })
+  }else{
+    res.send(req.body)
   }
-  res.send(req.body)
 })
 
 export default router
