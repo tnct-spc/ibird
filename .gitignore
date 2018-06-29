@@ -2,7 +2,17 @@
 node_modules
 
 #pdf
-.pdf/
+*.pdf
+#office
+*.docx
+*.doc
+*.xls
+*.xlsx
+*.ppt
+*.pptx
+
+#unknown directory
+.document/unknown/*
 
 # logs
 npm-debug.log
