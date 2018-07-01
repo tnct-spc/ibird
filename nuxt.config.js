@@ -41,5 +41,8 @@ module.exports = {
         })
       }
     }
+  },
+  env: {
+    mainUrl: process.env.MAIN_URL || 'localhost:3000'
   }
 }
