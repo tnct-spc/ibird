@@ -15,8 +15,8 @@ $ npm run dev
 $ npm start
 ```
 or
-Dockerでも動く          
-Dockerが何かわからない人は[ggrks](http://lmgtfy.com/?q=docker+%E8%A7%A3%E8%AA%AC)
+Dockerでも動く  
+Dockerが何かわからない人は[ggrks](http://lmgtfy.com/?q=docker+%E8%A7%A3%E8%AA%AC)  
 Docker 18.03.1-ce で動作確認しています
 ```bash
 #起動
