@@ -43,6 +43,6 @@ module.exports = {
     }
   },
   env: {
-    wsUrl: process.env.WS_URL || 'ws://localhost:3000'
+    mainUrl: process.env.MAIN_URL || 'localhost:3000'
   }
 }
