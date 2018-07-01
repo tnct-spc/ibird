@@ -18,7 +18,7 @@ export default {
     }
   },
   created () {
-    this.client = new W3cwebsocket('ws://localhost:3000/ws/alert')
+    this.client = new W3cwebsocket(process.env.wsUrl+'/ws/alert')
     this.client.onmessage=({data})=>{
       this.message = JSON.parse(data).message;
       console.log("message add")

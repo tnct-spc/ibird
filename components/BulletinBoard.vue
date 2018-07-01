@@ -17,7 +17,7 @@ export default {
     }
   },
   created () {
-    this.client = new W3cwebsocket('ws://localhost:3000/ws/move')
+    this.client = new W3cwebsocket(process.env.wsUrl+'/ws/move')
     this.client.onmessage=({data})=>{
       this.move(JSON.parse(data))
     }

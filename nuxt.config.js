@@ -41,5 +41,8 @@ module.exports = {
         })
       }
     }
+  },
+  env: {
+    wsUrl: process.env.WS_URL || 'ws://localhost:3000'
   }
 }
