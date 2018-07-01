@@ -1,0 +1,12 @@
+version: '2'
+services:
+  node_express:
+    image: node:8.11-alpine
+    container_name: node_express
+    hostname: localhost
+    volumes:
+      - ".:/src"
+    working_dir: /src
+    command: [sh, -c, yarn install && yarn run dev]
+    ports:
+      - "3000:3000"
