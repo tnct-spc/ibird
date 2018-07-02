@@ -59,11 +59,11 @@ router.post('/upload-file', upload.single('file'), (req, res, next) => {
   var ext = extension(req.file.path)
   if(office_extensions.indexOf(ext) >= 0){
     officeToPDF(req.file.path).then( (output)=> {
-      console.log(output.outputFile)
       pdfToJpg(output.outputFile)
       res.send(req.body)
     })
   }else{
+    pdfToJpg(req.file.path)
     res.send(req.body)
   }
 })
