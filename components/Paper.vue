@@ -2,12 +2,19 @@
   <div @mousedown="mousedown">
     <p v-show="this.paper.isSelected">{{ this.paperId }}</p>
     <img class="paper" :src="paper.imgUrl"
-      alt="" :style="{left: x, top: y}">
+      alt="" :style="{left: _x, top: _y}">
   </div>
 </template>
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
+  data:function(){
+    return{
+      x: null,
+      y: null,
+      cursorStartPos: null,
+    }
+  },
   props: {
     "paperId": String,
     "wsClient": {}
@@ -19,11 +26,11 @@ export default {
     paper () {
       return this.papers[this.paperId]
     },
-    x () {
-      return this.paper.x + 'px'
+    _x () {
+      return `${this.paper.x}px`
     },
-    y () {
-      return this.paper.y + 'px'
+    _y () {
+      return `${this.paper.y}px`
     }
   },
   methods: {
@@ -44,13 +51,14 @@ export default {
       if(this.paper.isSelected){
         this.move({
           paperId: this.paperId,
-          x: e.x,
-          y: e.y,
+          x: e.x-100,
+          y: e.y-100,
           client: this.wsClient
         })
       }
     },
     mouseup: function(e){
+      this.cursorStartPos = null
       document.removeEventListener('mousemove',this.mousemove)
       document.removeEventListener('mouseup',this.mouseup)
       this.selectedcard({paperId: null})
@@ -65,5 +73,9 @@ img.paper {
   border:solid 0.1rem black;
   max-height: calc(50vh - 1rem);
   position: absolute;
+}
+img.paper:hover{
+  box-shadow: 0.5rem 0.5rem 0.5rem 0.01rem;
+  color: #AA0000;
 }
 </style>
