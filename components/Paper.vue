@@ -12,7 +12,7 @@ export default {
     return{
       x: null,
       y: null,
-      cursorStartPos: null,
+      cursorOffset: {x:0,y:0},
     }
   },
   props: {
@@ -46,19 +46,21 @@ export default {
       this.selectedcard({paperId: this.paperId})
       document.addEventListener('mousemove',this.mousemove)
       document.addEventListener('mouseup',this.mouseup)
+      this.cursorOffset.x = e.offsetX
+      this.cursorOffset.y = e.offsetY
     },
     mousemove: function(e){
       if(this.paper.isSelected){
         this.move({
           paperId: this.paperId,
-          x: e.x-100,
-          y: e.y-100,
+          x: e.x-this.cursorOffset.x,
+          y: e.y-this.cursorOffset.y,
           client: this.wsClient
         })
       }
+
     },
     mouseup: function(e){
-      this.cursorStartPos = null
       document.removeEventListener('mousemove',this.mousemove)
       document.removeEventListener('mouseup',this.mouseup)
       this.selectedcard({paperId: null})
