@@ -27,3 +27,5 @@ dist
 build
 
 .idea/
+
+db/data
