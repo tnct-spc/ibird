@@ -11,7 +11,7 @@ services:
     ports:
       - "3000:3000"
   postgres:
-    image: postgres:10.4
+    build: ./db
     container_name: postgre
     hostname: localhost
     environment:
