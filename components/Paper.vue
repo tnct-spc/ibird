@@ -6,6 +6,7 @@
   </div>
 </template>
 <script>
+let c=1
 import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
   data:function(){
@@ -44,8 +45,9 @@ export default {
     mousedown: function(e){
       console.log(e.x)
       this.selectedcard({paperId: this.paperId})
-      document.addEventListener('mousemove',this.mousemove)
-      document.addEventListener('mouseup',this.mouseup)
+      if(c%2==1)document.addEventListener('mousemove',this.mousemove)
+      else document.addEventListener('mouseup',this.mouseup)
+      c++
       this.cursorOffset.x = e.offsetX
       this.cursorOffset.y = e.offsetY
     },
@@ -58,7 +60,6 @@ export default {
           client: this.wsClient
         })
       }
-
     },
     mouseup: function(e){
       document.removeEventListener('mousemove',this.mousemove)
@@ -78,6 +79,6 @@ img.paper {
 }
 img.paper:hover{
   box-shadow: 0.5rem 0.5rem 0.5rem 0.01rem;
-  color: #AA0000;
+  color: #0000CC;
 }
 </style>
