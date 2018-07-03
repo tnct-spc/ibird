@@ -8,13 +8,13 @@ const converter = Converter.createConverter();
 const office_extensions = ['docx','doc','xls','xlsx','ppt','pptx']
 
 //拡張子(.で切って一番最後の要素)を返す関数
-var extension = (filename) => {
+let extension = (filename) => {
   return filename.split('.').pop()
 }
 
 //officeファイルをpdfに変換する関数
-var officeToPDF = async (filepath) => {
-  var output = filepath.slice(0, filepath.lastIndexOf('.')) + '.pdf'
+let officeToPDF = async (filepath) => {
+  let output = filepath.slice(0, filepath.lastIndexOf('.')) + '.pdf'
   await converter.generate(filepath, 'pdf', output).then(console.log).catch(console.log)
 }
 
@@ -48,10 +48,11 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage })
 
 router.post('/upload-file', upload.single('file'), (req, res, next) => {
-  var ext = extension(req.file.path)
+  let ext = extension(req.file.path)
   if(office_extensions.indexOf(ext) >= 0){
     officeToPDF(req.file.path).then( ()=> { res.send(req.body) })
   }else{
+    console.log(req.body)
     res.send(req.body)
   }
 })
