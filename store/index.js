@@ -1,14 +1,32 @@
-export const state = () => ({
-  papers: [{
-    imgUrl: '/test-page-001.jpg',
-    x: 0,
-    y: 0
-  }]
-})
+<template>
+  <section>
+    <Paper v-for="(paper, paperId) in papers" :key="paperId" :paperId="paperId+''" />
+  </section>
+</template>
 
-export const mutations = {
-  move (state, { paperId, x, y }) {
-    state.papers[paperId].x = x
-    state.papers[paperId].y = y
+<script>
+import Paper from '~/components/Paper.vue'
+import { mapState } from 'vuex'
+export default {
+  data () {
+    return {
+    }
+  },
+  computed: {
+    ...mapState({
+      papers: 'papers'
+    })
+  },
+  components: {
+    Paper
   }
 }
+</script>
+<style scoped>
+section {
+ paper{
+   width:562px;
+   height:795px;
+   }
+}
+</style>
