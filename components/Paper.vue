@@ -6,7 +6,6 @@
   </div>
 </template>
 <script>
-let c=1
 import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
   data:function(){
@@ -45,9 +44,8 @@ export default {
     mousedown: function(e){
       console.log(e.x)
       this.selectedcard({paperId: this.paperId})
-      if(c%2==1)document.addEventListener('mousemove',this.mousemove)
-      else document.addEventListener('mouseup',this.mouseup)
-      c++
+      if(this.paper.isSelected==true)document.addEventListener('mousemove',this.mousemove)
+      if(this.paper.isSelected==false)document.addEventListener('mouseup',this.mouseup)
       this.cursorOffset.x = e.offsetX
       this.cursorOffset.y = e.offsetY
     },
