@@ -6,6 +6,7 @@ services:
     hostname: localhost
     volumes:
       - ".:/src"
+      - "./node_modules_docker:/src/node_modules"
     working_dir: /src
     command: [sh, -c, yarn install && yarn run dev]
     ports:
