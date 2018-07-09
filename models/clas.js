@@ -2,7 +2,7 @@
 module.exports = (sequelize, DataTypes) => {
   var clas = sequelize.define('clas', {
     name: DataTypes.TEXT,
-    doc: DataTypes.TEXT[]
+    doc: DataTypes.ARRAY(DataTypes.TEXT)
   }, {});
   clas.associate = function(models) {
     // associations can be defined here
