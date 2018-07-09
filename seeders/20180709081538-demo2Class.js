@@ -7,15 +7,15 @@ module.exports = {
         "x":0,
         "y":0
       }
-      return queryInterface.bulkInsert('classes', [{
-        classname: 'demo2-class',
-        document: [JSON.stringify(doc),JSON.stringify(doc)],
+      return queryInterface.bulkInsert('clas', [{
+        name: 'demo2-class',
+        doc: [JSON.stringify(doc),JSON.stringify(doc)],
         createdAt:new Date(),
         updatedAt: new Date(),
       }], {});
   },
 
   down: (queryInterface, Sequelize) => {
-      return queryInterface.bulkDelete('classes', null, {});
+      return queryInterface.bulkDelete('clas', null, {});
   }
 };
