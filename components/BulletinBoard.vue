@@ -46,7 +46,11 @@ export default {
   }
 }
 </script>
+<style>
+  body{
+    background-image: url("img/background.png")
+  }  
+</style>
 <style scoped>
-section {
-}
+ 
 </style>
