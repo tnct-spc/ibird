@@ -12,7 +12,7 @@ module.exports = {
         type: Sequelize.TEXT
       },
       doc: {
-        type: Sequelize.TEXT[]
+        type: Sequelize.ARRAY(Sequelize.TEXT)
       },
       createdAt: {
         allowNull: false,
