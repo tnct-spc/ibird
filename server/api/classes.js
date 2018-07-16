@@ -7,25 +7,18 @@ const sequelize = new Sequelize('ibird', 'postgres', 'password',{
     host: 'postgres',
     dialect: 'postgres',
 })
-// const classes = sequelize.define('classes', {
-//     name: {
-//       type: Sequelize.STRING
-//     },
-//     douments: {
-//         type: Sequelize.JSON
-//     }
-//   },{
-//       timestamps: true
-//   });
+const classes = sequelize.define('classes', {
+    name: Sequelize.STRING,
+    douments: Sequelize.JSON
+  },{
+      timestamps: false
+  });
 
 router.get('/classes', (req, res, next) => {
-    sequelize.authenticate()
-        .then(() => {
-            console.log('Connection has been established successfully.');
-        })
-        .catch(err => {
-            console.error('Unable to connect to the database:', err);
-        });
+    classes.findAll().then(one_class => {
+        const data = JSON.stringify(one_class)
+        console.log(data)
+    })
     res.sendStatus(200)
 })
 
