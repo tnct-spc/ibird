@@ -6,6 +6,7 @@ const router = Router()
 const sequelize = new Sequelize('ibird', 'postgres', 'password',{
     host: 'postgres',
     dialect: 'postgres',
+    operatorsAliases: false
 })
 const classes = sequelize.define('classes', {
     name: Sequelize.STRING,
