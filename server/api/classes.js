@@ -16,7 +16,14 @@ const classes = sequelize.define('classes', {
   });
 
 router.put('/add-doc', (req, res, next) => {
-
+    classes.update(
+            {name: Date()},
+            {where: {id: '20160401'}}
+    ).then(result =>{
+        console.log(result)
+    }).catch(err =>{
+        console.log(err)
+    })
     res.sendStatus(200)
 })
 
