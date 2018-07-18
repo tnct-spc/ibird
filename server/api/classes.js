@@ -15,12 +15,21 @@ const classes = sequelize.define('classes', {
       timestamps: false
   });
 
+router.put('/add-doc', (req, res, next) => {
+
+    res.sendStatus(200)
+})
+
+router.delete('/rm-doc', (req, res, next) => {
+
+    res.sendStatus(200)
+})
+
 router.get('/classes', (req, res, next) => {
     classes.findAll().then(one_class => {
         const data = JSON.stringify(one_class)
-        console.log(data)
+        res.json(data)
     })
-    res.sendStatus(200)
 })
 
 export default router
