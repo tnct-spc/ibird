@@ -32,7 +32,8 @@ router.get('/getFileList', function (req, res) {
 
 // 最終的に表示するJSONのタイムテーブルを返すAPI
 router.get('/sendTable', function (req, res) {
-  res.json()
+  console.log(req.query)
+  res.json(req.query)
 })
 
 function getlist () {
