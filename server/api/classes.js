@@ -10,7 +10,7 @@ const sequelize = new Sequelize('ibird', 'postgres', 'password',{
 })
 const classes = sequelize.define('classes', {
     name: Sequelize.STRING,
-    douments: Sequelize.JSON
+    douments: Sequelize.ARRAY(Sequelize.TEXT)
   },{
       timestamps: false
   });

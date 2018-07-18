@@ -6,10 +6,9 @@ CREATE DATABASE ibird;
 CREATE TABLE classes (
   id integer primary key,
   name text,
-  douments json
+  douments text[]
 );
 
-INSERT INTO classes
-VALUES  (1, 'A', '{"a": "b", "c": "d"}'),
-        (2, 'B', '{"a": "b", "c": "d"}'),
-        (3, 'C', '{"a": "b", "c": "d"}');
+INSERT INTO classes VALUES  ('20160401', '3J',  '{"00000001", "00000002", "00000003"}');
+INSERT INTO classes VALUES  ('20170401', '2J',  '{"00000002", "00000003", "00000004"}');
+INSERT INTO classes VALUES  ('20180401', '1-5', '{"00000003", "00000004", "00000005"}');
