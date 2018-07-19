@@ -18,18 +18,22 @@ const classes = sequelize.define('classes', {
       timestamps: false
   });
 
+//クラスのidを渡したらドキュメントのリストを返してくれます
+const doc_list = (class_id)=>{
+    return classes.findById(class_id).then( c =>{
+        var list = []
+        for(var i of Object.values(c.douments)) list.push(i)
+        return list
+    })
+}
+
 router.put('/add-doc', (req, res, next) => {
     const id = req.body.id
     const doc = req.body.doc
 
-    classes.findById(id).then( c =>{
-        //いいかんじにJSONをつくって追加
-        var list = []
-        for(var i of Object.values(c.douments)) list.push(i)
-        
+    doc_list(id).then(list =>{
+        //listをいい感じに変更してデータベース更新
         list.push(doc)
-        return list
-    }).then(list =>{
         return classes.update(
             {douments: list}, 
             {where: {id: id}}
@@ -50,7 +54,8 @@ router.delete('/rm-doc', (req, res, next) => {
 
 router.get('/classes', (req, res, next) => {
     classes.findAll().then(one_class => {
-        const data = JSON.stringify(one_class)
+        const data = JSON.parse(one_class)
+        console.log(data)
         res.json(data)
     })
 })
