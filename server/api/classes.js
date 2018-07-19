@@ -1,7 +1,10 @@
 import { Router } from 'express'
 import Sequelize from 'sequelize'
+import parser from 'body-parser'
 
 const router = Router()
+router.use(parser.urlencoded({ extended: false }));
+router.use(parser.json());
 
 const sequelize = new Sequelize('ibird', 'postgres', 'password',{
     host: 'postgres',
@@ -16,15 +19,28 @@ const classes = sequelize.define('classes', {
   });
 
 router.put('/add-doc', (req, res, next) => {
-    classes.update(
-            {name: Date()},
-            {where: {id: '20160401'}}
-    ).then(result =>{
+    const id = req.body.id
+    const doc = req.body.doc
+
+    classes.findById(id).then( c =>{
+        //いいかんじにJSONをつくって追加
+        var list = []
+        for(var i of Object.values(c.douments)) list.push(i)
+        
+        list.push(doc)
+        return list
+    }).then(list =>{
+        return classes.update(
+            {douments: list}, 
+            {where: {id: id}}
+        )
+    }).then(result =>{
         console.log(result)
+        res.sendStatus(200)
     }).catch(err =>{
         console.log(err)
+        res.sendStatus(400)
     })
-    res.sendStatus(200)
 })
 
 router.delete('/rm-doc', (req, res, next) => {
