@@ -30,6 +30,17 @@ router.get('/getFileList', function (req, res) {
 })
 
 // 最終的に表示するJSONのタイムテーブルを返すAPI
+/*
+  このAPIのRequestで受け取るパラメータは、
+  {
+    "file":["ファイル名","ファイル名",...]
+  }
+  のような形式のJSONをQueryで送ります。狭間駅のサンプルで動かす場合は(平日に)、
+  {
+    "file"=["weekdays_22900_0.json","weekdays_22900_1.json"]
+  }
+  のようになります。
+*/
 router.get('/sendTable', function (req, res) {
   list.length = 0
   for (var i = 0; i < req.query.file.length; i++) {
