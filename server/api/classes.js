@@ -54,9 +54,7 @@ router.delete('/rm-doc', (req, res, next) => {
 
 router.get('/classes', (req, res, next) => {
     classes.findAll().then(one_class => {
-        const data = JSON.parse(one_class)
-        console.log(data)
-        res.json(data)
+        res.json(one_class)
     })
 })
 
