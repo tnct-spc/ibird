@@ -31,3 +31,37 @@ app.use(nuxt.render)
 // Listen the server
 app.listen(port, host)
 console.log('Server listening on ' + host + ':' + port) // eslint-disable-line no-console
+<template>
++  <section class="container">
++    <img src="~assets/img/logo.png" alt="Nuxt.js Logo" class="logo" />
++  </section>
++</template>
++
++<script>
++import axios from '~/plugins/axios'
++export default {
++  name: 'id',
++  asyncData ({ params, error }) {
++    return axios.get('/api/users/' + params.id)
++      .then((res) => {
++        return { user: res.data }
++      })
++      .catch((e) => {
++        error({ statusCode: 404, message: 'User not found' })
++      })
++  },
++  head () {
++    return {
++      title: `User: ${this.user.name}`
++    }
++  }
++}
++</script>
++<style>
++img{
++  width:562px;
++  headth:795px;
++}
++</style>
+
+10  server/api/index.js
