@@ -16,7 +16,6 @@
     "body-parser": "^1.18.3",
     "cheerio": "^1.0.0-rc.2",
     "cross-env": "^5.0.1",
-    "date-utils": "^1.2.21",
     "express": "^4.15.3",
     "express-ws": "^4.0.0",
     "nuxt": "^1.4.0",

@@ -1,20 +1,20 @@
 import { Router } from 'express'
-import 'date-utils'
 import { readdirSync, readFileSync } from 'fs'
 import { resolve } from 'path'
 
 const router = Router()
-const date = new Date()
 var dirPath = resolve('assets', '../assets') // assetsのパスを設定
 var list = []
 
 // 駅のタイムテーブルを取得してJSONを生成するAPI
-router.get('/creatTable', function (req, res) {
-  res.send('設定ファイルの作成に成功しました')
+router.get('/createtable', function (req, res) {
+  var date = new Date().getDay()
+  console.log(date)
+  res.json(date)
 })
 
 // 表示できるJSONファイルの情報を返すAPI
-router.get('/getFileList', function (req, res) {
+router.get('/getfilelist', function (req, res) {
   var fileInfo = JSON.parse(readFileSync(dirPath + '/filename.json', 'utf8'))
   var todayFile = []
   list.length = 0
@@ -33,33 +33,31 @@ router.get('/getFileList', function (req, res) {
 /*
   このAPIのRequestで受け取るパラメータは、
   {
-    "file":["ファイル名","ファイル名",...]
+    "file":"ファイル名"
   }
-  のような形式のJSONをQueryで送ります。狭間駅のサンプルで動かす場合は(平日に)、
+  のような形式のJSONをQueryで送ります。また、1回のRequestで送るファイル名は1つだけです。
+  狭間駅のサンプルで平日に新宿方面を表示したい場合は、
   {
-    "file"=["weekdays_22900_0.json","weekdays_22900_1.json"]
+    "file":"weekdays_22900_1532075866616.json"
   }
   のようになります。
 */
-router.get('/sendTable', function (req, res) {
-  list.length = 0
-  for (var i = 0; i < req.query.file.length; i++) {
-    list.push(JSON.parse(readFileSync(dirPath + '/' + req.query.file[i], 'utf8')))
-  }
-  res.json(list)
+router.get('/sendtable', function (req, res) {
+  var timeTableData = JSON.parse(readFileSync(dirPath + '/' + req.query.file, 'utf8'))
+  res.json(timeTableData)
 })
 
 function getlist (todayFileList) {
   var filelist = readdirSync(dirPath) // 全ファイルのリストを生成
-  var dt = date.toFormat('DDDD')
+  var dt = new Date().getDay()
 
-  if (dt === 'Sunday') {
+  if (dt === 0) {
     for (var i = 0; i < filelist.length; i++) {
       if (filelist[i].match(/holidays/)) {
         todayFileList.push(filelist[i])
       }
     }
-  } else if (dt === 'Saturday') {
+  } else if (dt === 6) {
     for (var j = 0; j < filelist.length; j++) {
       if (filelist[j].match(/weekenddays/)) {
         todayFileList.push(filelist[j])
