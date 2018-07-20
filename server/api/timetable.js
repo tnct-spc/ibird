@@ -3,12 +3,12 @@ import { readdirSync, readFileSync } from 'fs'
 import { resolve } from 'path'
 
 const router = Router()
-var dirPath = resolve('assets', '../assets') // assetsのパスを設定
+var dirPath = resolve('.timetable', '../.timetable') // jsonのパスを設定
 var list = []
 
 // 駅のタイムテーブルを取得してJSONを生成するAPI
 router.get('/createtable', function (req, res) {
-  var date = new Date().getDay()
+  var date = new Date().getTime()
   console.log(date)
   res.json(date)
 })
