@@ -1,12 +1,23 @@
 <template>
-  <img class="paper" :src="paper.imgUrl" 
-    alt="" :style="{left: x, top: y}">
+  <div @mousedown="mousedown">
+    <p v-show="this.paper.isSelected">{{ this.paperId }}</p>
+    <img class="paper" :src="paper.imgUrl" id="drag"
+      alt="" :style="{left: _x, top: _y}" ondragstart="return false;">
+  </div>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
+  data:function(){
+    return{
+      x: null,
+      y: null,
+      cursorOffset: {x:0,y:0},
+    }
+  },
   props: {
-    paperId: String
+    "paperId": String,
+    "wsClient": {}
   },
   computed: {
     ...mapState({
@@ -15,11 +26,43 @@ export default {
     paper () {
       return this.papers[this.paperId]
     },
-    x () {
-      return this.paper.x + 'px'
+    _x () {
+      return `${this.paper.x}px`
     },
-    y () {
-      return this.paper.y + 'px'
+    _y () {
+      return `${this.paper.y}px`
+    }
+  },
+  methods: {
+    ...mapMutations({
+      selectedcard: 'selectCard'
+    }),
+    ...mapActions({
+      move: 'move'
+    }),
+
+    mousedown: function(e){
+      console.log(e.x)
+      this.selectedcard({paperId: this.paperId})
+      this.cursorOffset.x = e.offsetX
+      this.cursorOffset.y = e.offsetY
+      document.addEventListener('mousemove',this.mousemove)
+    },
+    mousemove: function(e){
+      if(this.paper.isSelected){
+        this.move({
+          paperId: this.paperId,
+          x: e.x-this.cursorOffset.x,
+          y: e.y-this.cursorOffset.y,
+          client: this.wsClient
+        })
+      }
+      document.addEventListener('mouseup',this.mouseup)
+    },
+    mouseup: function(e){
+      document.removeEventListener('mousemove',this.mousemove)
+      document.removeEventListener('mouseup',this.mouseup)
+      this.selectedcard({paperId: null})
     }
   }
 }
@@ -31,5 +74,9 @@ img.paper {
   border:solid 0.1rem black;
   max-height: calc(50vh - 1rem);
   position: absolute;
+}
+img.paper:hover{
+  box-shadow: 0.5rem 0.5rem 0.5rem 0.01rem;
+  color: #0000CC;
 }
 </style>
