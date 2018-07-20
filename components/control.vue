@@ -1,7 +1,7 @@
 <template>
   <section>
 　<div id="overlay" @dragleave.prevent="onDragLeave" @dragover.prevent="onDragOver" @drop.prevent="onDrop">
-  あああああ
+  管理者ページ
 </div>
   </section>
 </template>
@@ -29,12 +29,11 @@ export default{
     overlay.classList.remove("dropover")
     files = event.dataTransfer.files
     formData = new FormData()
-    formData.append( 'file', files[0] );
-    axios.post('http://localhost:3000/api/upload-file',formData)
+    formData.append( 'file', files[0] )
+    axios.post('api/upload-file',formData)
     .then((response) => {
-        overlay.innerHTML="sucess"
+        overlay.innerHTML="success"
         console.log(response.data)
-        res.render('index', response.data)
     })
     .catch((error) => {
         overlay.innerHTML="error"
@@ -51,6 +50,7 @@ export default{
   left: 0;
   width: 100%;
   height: 100%;
+  text-align: center;
 }
 .dropover {
   background-color: #46fb43;
