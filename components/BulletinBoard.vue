@@ -8,6 +8,8 @@
 import Paper from '~/components/Paper.vue'
 import { mapState, mapMutations } from 'vuex'
 import { w3cwebsocket } from 'websocket'
+import axios from 'axios'
+
 const W3cwebsocket = w3cwebsocket
 
 export default {
@@ -17,7 +19,13 @@ export default {
     }
   },
   created () {
-    this.client = new W3cwebsocket('ws://localhost:3000/ws/move')
+    axios.get('/ws/all-positions').then((res)=>{
+      const defaultPositions = res.data
+      for(let p of defaultPositions){
+        this.move(p)
+      }
+    })
+    this.client = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/move')
     this.client.onmessage=({data})=>{
       this.move(JSON.parse(data))
     }
@@ -38,7 +46,11 @@ export default {
   }
 }
 </script>
+<style>
+  body{
+    background-image: url("img/background.png")
+  }  
+</style>
 <style scoped>
-section {
-}
+ 
 </style>

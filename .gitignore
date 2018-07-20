@@ -1,6 +1,21 @@
 # dependencies
 node_modules
 
+#pdf
+*.pdf
+#office
+*.docx
+*.doc
+*.xls
+*.xlsx
+*.ppt
+*.pptx
+
+#unknown directory
+.document/unknown/*
+
+*.jpg
+
 # logs
 npm-debug.log
 
