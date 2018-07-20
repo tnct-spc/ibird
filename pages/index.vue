@@ -1,20 +1,20 @@
 <template>
   <section class="container">
+    <Control />
     <BulletinBoard />
     <Alert />
-    <control />
   </section>
 </template>
 
 <script>
 import BulletinBoard from '~/components/BulletinBoard.vue'
 import Alert from '~/components/Alert.vue'
-import control from '~/pages/control.vue'
+import Control from '~/pages/Control.vue'
 export default {
   components: {
     BulletinBoard,
     Alert,
-    control
+    Control
   },
 }
 </script>
