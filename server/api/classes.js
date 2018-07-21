@@ -28,21 +28,19 @@ const doc_list = (class_id)=>{
 }
 
 router.put('/add-doc', (req, res, next) => {
-    const id = req.body.id
+    const class_id = req.body.classId
     const doc = req.body.doc
 
-    doc_list(id).then(list =>{
+    doc_list(class_id).then(list =>{
         //listをいい感じに変更してデータベース更新
         list.push(doc)
         return classes.update(
             {douments: list}, 
-            {where: {id: id}}
+            {where: {id: class_id}}
         )
     }).then(result =>{
-        console.log(result)
         res.sendStatus(200)
     }).catch(err =>{
-        console.log(err)
         res.sendStatus(400)
     })
 })
@@ -60,13 +58,10 @@ router.delete('/rm-doc', (req, res, next) => {
             {where: {id: class_id}}
         )
     }).then(result =>{
-        console.log(result)
         res.sendStatus(200)
     }).catch(err =>{
-        console.log(err)
         res.sendStatus(400)
     })
-
 })
 
 router.get('/classes', (req, res, next) => {
