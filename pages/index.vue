@@ -1,6 +1,5 @@
 <template>
   <section class="container">
-    <Control />
     <BulletinBoard />
     <Alert />
   </section>
@@ -9,12 +8,10 @@
 <script>
 import BulletinBoard from '~/components/BulletinBoard.vue'
 import Alert from '~/components/Alert.vue'
-import Control from '~/pages/Control.vue'
 export default {
   components: {
     BulletinBoard,
-    Alert,
-    Control
+    Alert
   },
 }
 </script>

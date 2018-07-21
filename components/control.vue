@@ -5,7 +5,6 @@
 </div>
   </section>
 </template>
-
 <script>
 import axios from 'axios'
 let files
@@ -25,11 +24,16 @@ export default{
   },
   onDrop:(event) => {
     event.preventDefault()
-    //event.dataTransfer.dropEffect="copy"
+    event.dataTransfer.dropEffect="copy"
     overlay.classList.remove("dropover")
-    files = event.dataTransfer.files
+    files = event.dataTransfer.files[0]
+    if(!files.type.match('application/pdf')&&!files.type.match('application/vnd.*'))
+    {
+      overlay.innerHTML="ファイル形式に対応してません"
+      return
+    }
     formData = new FormData()
-    formData.append( 'file', files[0] )
+    formData.append( 'file', files )
     axios.post('api/upload-file',formData)
     .then((response) => {
         overlay.innerHTML="success"
