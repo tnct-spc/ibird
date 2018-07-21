@@ -12,15 +12,19 @@ const sequelize = new Sequelize('ibird', 'postgres', 'password',{
     operatorsAliases: false
 })
 const classes = sequelize.define('classes', {
+    classid: {
+        type: Sequelize.STRING,
+        primaryKey: true,
+    },
     name: Sequelize.STRING,
     douments: Sequelize.JSON
   },{
       timestamps: false
   });
 
-//クラスのidを渡したらドキュメントのリストを返してくれます
-const doc_list = (class_id)=>{
-    return classes.findById(class_id).then( c =>{
+//classidを渡したらドキュメントのリストを返してくれます
+const docList = (classid)=>{
+    return classes.findById(classid).then( c =>{
         var list = []
         for(var i of Object.values(c.douments)) list.push(i)
         return list
@@ -28,15 +32,15 @@ const doc_list = (class_id)=>{
 }
 
 router.put('/add-doc', (req, res, next) => {
-    const class_id = req.body.classId
+    const classid = req.body.classid
     const doc = req.body.doc
 
-    doc_list(class_id).then(list =>{
+    docList(classid).then(list =>{
         //listをいい感じに変更してデータベース更新
         list.push(doc)
         return classes.update(
             {douments: list}, 
-            {where: {id: class_id}}
+            {where: {classid: classid}}
         )
     }).then(result =>{
         res.sendStatus(200)
@@ -46,16 +50,16 @@ router.put('/add-doc', (req, res, next) => {
 })
 
 router.delete('/rm-doc', (req, res, next) => {
-    const class_id = req.query.classId
-    const doc_id = req.query.docId
+    const classid = req.query.classid
+    const docid = req.query.docid
 
-    doc_list(class_id).then(list =>{
-        //doc_idが同じdocumetを省く
-        return list.filter(value => value.id !== doc_id)
-    }).then(new_list =>{
+    docList(classid).then(list =>{
+        //docidが同じdocumetを省く
+        return list.filter(value => value.docid !== docid)
+    }).then(newList =>{
         return classes.update(
-            {douments: new_list}, 
-            {where: {id: class_id}}
+            {douments: newList}, 
+            {where: {classid: classid}}
         )
     }).then(result =>{
         res.sendStatus(200)
@@ -65,8 +69,8 @@ router.delete('/rm-doc', (req, res, next) => {
 })
 
 router.get('/classes', (req, res, next) => {
-    classes.findAll().then(one_class => {
-        res.json(one_class)
+    classes.findAll().then(c => {
+        res.json(c)
     })
 })
 
