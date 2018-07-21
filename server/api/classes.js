@@ -48,8 +48,25 @@ router.put('/add-doc', (req, res, next) => {
 })
 
 router.delete('/rm-doc', (req, res, next) => {
+    const class_id = req.query.classId
+    const doc_id = req.query.docId
 
-    res.sendStatus(200)
+    doc_list(class_id).then(list =>{
+        //doc_idが同じdocumetを省く
+        return list.filter(value => value.id !== doc_id)
+    }).then(new_list =>{
+        return classes.update(
+            {douments: new_list}, 
+            {where: {id: class_id}}
+        )
+    }).then(result =>{
+        console.log(result)
+        res.sendStatus(200)
+    }).catch(err =>{
+        console.log(err)
+        res.sendStatus(400)
+    })
+
 })
 
 router.get('/classes', (req, res, next) => {
