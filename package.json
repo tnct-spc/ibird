@@ -25,7 +25,8 @@
     "sass-loader": "^7.0.3",
     "source-map-support": "^0.4.15",
     "vue": "^2.5.16",
-    "websocket": "^1.0.26"
+    "websocket": "^1.0.26",
+    "wscat": "^2.2.1"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
