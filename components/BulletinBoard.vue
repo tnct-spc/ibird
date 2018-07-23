@@ -48,7 +48,7 @@ export default {
 </script>
 <style>
   body{
-    background-image: url("img/background.png")
+    background-color: #d0ae88ff
   }  
 </style>
 <style scoped>
