@@ -29,3 +29,6 @@ dist
 build
 
 .idea/
+
+db/data
+yarn-error.log
