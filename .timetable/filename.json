@@ -1,0 +1,8 @@
+[   
+    {"name":"holidays_22900_1532075748963.json","station":"狭間駅","derection":"高尾山口方面","line":"京王高尾線"},
+    {"name":"holidays_22900_1532075792594.json","station":"狭間駅","derection":"新宿方面","line":"京王高尾線"},
+    {"name":"weekdays_22900_1532076326046.json","station":"狭間駅","derection":"高尾山口方面","line":"京王高尾線"},
+    {"name":"weekdays_22900_1532075866616.json","station":"狭間駅","derection":"新宿方面","line":"京王高尾線"},
+    {"name":"weekenddays_22900_1532076033115.json","station":"狭間駅","derection":"高尾山口方面","line":"京王高尾線"},
+    {"name":"weekenddays_22900_1532076061582.json","station":"狭間駅","derection":"新宿方面","line":"京王高尾線"}
+]
