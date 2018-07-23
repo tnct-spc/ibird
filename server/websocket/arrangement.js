@@ -5,18 +5,30 @@ const router = Router()
 expressWs(router)
 
 const receivers = []
+const state = []
 router.ws('/move',function(ws, req){
   const idx = receivers.push(ws)-1
   ws.on('message', msg => {
-    console.log('from server: ' + msg)
+    const parsedMsg = JSON.parse(msg)
+    state[parsedMsg.paperId] = parsedMsg
     receivers.forEach((receiver,receiverId)=>{
-      if(receiverId!==idx){receiver.send(msg)}
+      if(receiverId!==idx){
+        try{
+          receiver.send(msg)
+        }catch(e){
+          console.log(e)
+          receivers.splice(receiverId,1)
+        }
+      }
     })
   })
   ws.on('close', ()=>{
     console.log("closed connection")
     receivers.splice(idx,1)
   })
+})
+router.get('/all-positions',(req, res)=>{
+  res.json(Object.values(state))
 })
 
 export default router

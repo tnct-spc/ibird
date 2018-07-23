@@ -11,7 +11,7 @@ import Alert from '~/components/Alert.vue'
 export default {
   components: {
     BulletinBoard,
-    Alert,
+    Alert
   },
 }
 </script>

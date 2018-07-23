@@ -14,6 +14,8 @@ node_modules
 #unknown directory
 .document/unknown/*
 
+*.jpg
+
 # logs
 npm-debug.log
 

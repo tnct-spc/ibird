@@ -14,9 +14,9 @@ app.set('port', port)
 // Import API Routes
 app.use('/api', api)
 
-//Websocketを使う
+// Websocketを使う
 expressWs(app)
-app.use('/ws',websocket)
+app.use('/ws', websocket)
 
 // Import and Set Nuxt.js options
 let config = require('../nuxt.config.js')
