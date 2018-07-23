@@ -4,7 +4,7 @@
     </section>
 </template>
 <script>
-import control from '~/components/control.vue'
+import control from '~/components/Control.vue'
 export default {
   components: {
     control
