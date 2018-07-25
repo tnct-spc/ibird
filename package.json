@@ -14,7 +14,7 @@
   "dependencies": {
     "axios": "^0.16.2",
     "body-parser": "^1.18.3",
-    "cheerio": "^1.0.0-rc.2",
+    "cheerio-httpcli": "^0.7.3",
     "cross-env": "^5.0.1",
     "express": "^4.15.3",
     "express-ws": "^4.0.0",

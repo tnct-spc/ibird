@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { readdirSync, readFileSync } from 'fs'
 import { resolve } from 'path'
+import { fetch } from 'cheerio-httpcli'
 
 const router = Router()
 var dirPath = resolve('.timetable', '../.timetable') // jsonのパスを設定
@@ -8,9 +9,13 @@ var list = []
 
 // 駅のタイムテーブルを取得してJSONを生成するAPI
 router.get('/createtable', function (req, res) {
-  var date = new Date().getTime()
-  console.log(date)
-  res.json(date)
+  var yeah
+  fetch('https://transit.yahoo.co.jp/station/time/22900/?gid=3071&kind=1&done=time').then(function (result) {
+    var $ = result.$
+    yeah = $.html('.yj100per-2 .tblDiaDetail')
+    console.log(yeah)
+  })
+  res.json(yeah)
 })
 
 // 表示できるJSONファイルの情報を返すAPI
