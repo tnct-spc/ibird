@@ -4,8 +4,9 @@ const router = Router()
 expressWs(router)
 
 let url = "http://svir.jp/eew/data.json"
-let result,c=0
-function {
+let result = null
+
+function httpRequest(){
   setInterval("request(url)",5000)
 }
 
@@ -14,18 +15,15 @@ function request(url) {
   request.open("GET",url)
   request.onreadystatechange = function(){httpresponse(request)}
   request.send(null)
+  return result
+
 }
 
 function httpresponse(request){
   if(request.readyState!=4){
-    }else if(request.status!=200){
-      console.log("200")
-    }else{
-      let confirmation = request.responseText
-      c++
-      if(c!=0&&confirmation!=result){
-        result = confirmation
-      }
-    }
+  }else if(request.status!=200){
+    console.log("200")
+  }else{
+    let result = request.responseText
   }
 }
