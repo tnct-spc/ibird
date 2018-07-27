@@ -6,7 +6,7 @@
 <script>
 import control from '~/components/Control.vue'
 export default {
-  components: {
+  components:{
     control
   },
 }

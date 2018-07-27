@@ -49,8 +49,8 @@ export default {
 <style>
   body{
     background-image: url("img/background.png")
-  }  
+  }
 </style>
 <style scoped>
- 
+
 </style>

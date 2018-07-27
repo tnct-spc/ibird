@@ -1,11 +1,17 @@
 <template>
-    <h1>Hello World</h1>
+  <section>
+    <classes/>
+  </section>
 </template>
 
 <script>
-
+import classes from '~/components/Classes.vue'
+export default{
+  components:{
+  classes
+ },
+}
 </script>
 
 <style scoped>
-
 </style>
