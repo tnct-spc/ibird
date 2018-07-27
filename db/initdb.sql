@@ -6,7 +6,7 @@ CREATE DATABASE ibird;
 CREATE TABLE classes (
   classid integer primary key,
   name text,
-  douments json
+  documents json
 );
 
 INSERT INTO classes VALUES  ('20160401', '3J',  '[{"docid": "20180401","x": 100,"y": 200},{"docid": "20180402","x": 100,"y": 200},{"docid": "20180403","x": 100,"y": 200}]');
