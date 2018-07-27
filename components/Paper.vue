@@ -1,7 +1,7 @@
 <template>
   <div @mousedown="mousedown">
     <p v-show="this.paper.isSelected">{{ this.paperId }}</p>
-    <img class="paper" :src="paper.imgUrl" id="drag"
+    <img class="paper" :src="paper.imgUrl" id="drag"  
       alt="" :style="{left: _x, top: _y}" ondragstart="return false;">
   </div>
 </template>
@@ -78,5 +78,9 @@ img.paper {
 img.paper:hover{
   box-shadow: 0.5rem 0.5rem 0.5rem 0.01rem;
   color: #0000CC;
+}
+#drag {
+  width: "15%";
+  height: "37%";
 }
 </style>
