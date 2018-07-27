@@ -68,9 +68,17 @@ router.delete('/rm-doc', (req, res, next) => {
     })
 })
 
-router.get('/classes', (req, res, next) => {
+router.get('/classes-list', (req, res, next) => {
     classes.findAll().then(c => {
         res.json(c)
+    })
+})
+
+router.get('/class-docs', (req, res, next) => {
+    const classid = req.query.classid
+    console.log("classid")
+    docList(classid).then(list =>{
+        res.json(list)
     })
 })
 
