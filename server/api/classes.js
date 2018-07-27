@@ -70,7 +70,12 @@ router.delete('/rm-doc', (req, res, next) => {
 
 router.get('/classes-list', (req, res, next) => {
     classes.findAll().then(c => {
-        res.json(c)
+        const list = []
+        c.forEach((value, index, array) =>{
+            delete value.dataValues.douments
+            list.push(value.dataValues)
+        })
+        res.json(list)
     })
 })
 
