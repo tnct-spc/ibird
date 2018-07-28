@@ -6,7 +6,7 @@
 </template>
 
 <script>
-// import classes from '~/components/Classes.vue'
+import classes from '~/components/Classes.vue'
 import axios from 'axios'
 
 export default {
@@ -31,7 +31,7 @@ export default {
     })
   },
   components:{
-    // classes
+    classes
   },
 }
 </script>
