@@ -1,12 +1,12 @@
 <template>
   <section>
-    <classes/>
+    <Homeroom/>
     <p>{{classes}}</p>
   </section>
 </template>
 
 <script>
-import classes from '~/components/Classes.vue'
+import Homeroom from '~/components/Homeroom.vue'
 import axios from 'axios'
 
 export default {
@@ -31,7 +31,7 @@ export default {
     })
   },
   components:{
-    classes
+    Homeroom
   },
 }
 </script>
