@@ -1,7 +1,6 @@
 <template>
   <section>
-    <Homeroom/>
-    <p>{{classes}}</p>
+    <Homeroom :classid="classid"/>
   </section>
 </template>
 
@@ -12,6 +11,7 @@ import axios from 'axios'
 export default {
   data () {
     return {
+      classid: '',
       classes: {}
     }
   },
@@ -25,7 +25,10 @@ export default {
       });
       if(eflag) throw new URIError("URIちがうよ");
 
-      return {classes: classlist}
+      return {
+        classid: params.hr,
+        classes: classlist
+      }
     }).catch(err =>{
       error({ statusCode: 404, message: 'ページが見つかりません' })
     })
