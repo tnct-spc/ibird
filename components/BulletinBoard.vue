@@ -1,18 +1,21 @@
 <template>
   <section>
-    <Paper v-for="(paper, paperId) in papers" :key="paperId" :paper-id="paperId+''" :ws-client="client" />
+    <Paper v-for="(paper, paperId) in this.papers(classid)" :key="paperId" :classid=classid :paper-id="paperId+''" :ws-client="client" />
   </section>
 </template>
 
 <script>
 import Paper from '~/components/Paper.vue'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapGetters } from 'vuex'
 import { w3cwebsocket } from 'websocket'
 import axios from 'axios'
 
 const W3cwebsocket = w3cwebsocket
 
 export default {
+  props: {
+    "classid": String,
+  },
   data () {
     return {
       client: {}
@@ -31,10 +34,9 @@ export default {
     }
   },
   computed: {
-    ...mapState({
+    ...mapGetters({
       papers: 'papers'
     }),
-
   },
   methods:{
     ...mapMutations({

@@ -1,6 +1,6 @@
 <template>
   <section class="container">
-    <BulletinBoard />
+    <BulletinBoard :classid=classid />
     <Alert />
     <p>{{classid}}</p>
   </section>
