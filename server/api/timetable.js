@@ -9,13 +9,20 @@ var list = []
 
 // 駅のタイムテーブルを取得してJSONを生成するAPI
 router.get('/createtable', function (req, res) {
-  var yeah
+  var timetable, station, direction, line
   fetch('https://transit.yahoo.co.jp/station/time/22900/?gid=3071&kind=1&done=time').then(function (result) {
     var $ = result.$
-    yeah = $.html('.yj100per-2 .tblDiaDetail')
-    console.log(yeah)
+    // timetable = $('.yj100per-2 tr#hh_5')
+    var catPass = $('#cat-pass strong').text().split(' ')
+    station = catPass[0]
+    line = catPass[1]
+    direction = catPass[2]
+    // console.log(timetable)
+    console.log(station)
+    console.log(line)
+    console.log(direction)
   })
-  res.json(yeah)
+  res.send('ok')
 })
 
 // 表示できるJSONファイルの情報を返すAPI
