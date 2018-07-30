@@ -30,7 +30,7 @@ export default {
         var documents = []
         res.data.forEach(document => {
           document['isSelected'] = false
-          document['imgUrl'] = '.document/jpg/' + document.docid + '.jpg'
+          document['imgUrl'] = '/jpg/' + document.docid + '.jpg'
           documents.push(document)
         });
         this.fixPapers({classid: this.classid, documents: documents})
