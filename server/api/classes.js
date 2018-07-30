@@ -81,7 +81,6 @@ router.get('/classes-list', (req, res, next) => {
 
 router.get('/class-docs', (req, res, next) => {
     const classid = req.query.classid
-    console.log("classid")
     docList(classid).then(list =>{
         res.json(list)
     })
