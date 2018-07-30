@@ -12,12 +12,44 @@ router.get('/createtable', function (req, res) {
   var timetable, station, direction, line
   fetch('https://transit.yahoo.co.jp/station/time/22900/?gid=3071&kind=1&done=time').then(function (result) {
     var $ = result.$
-    // timetable = $('.yj100per-2 tr#hh_5')
-    var catPass = $('#cat-pass strong').text().split(' ')
-    station = catPass[0]
-    line = catPass[1]
-    direction = catPass[2]
-    // console.log(timetable)
+
+    var testlist = JSON.parse('{}')
+    var testlist2 = JSON.parse('{}')
+    $('#timeNotice1 li').each(function () {
+      var test = $(this).text().split('：')
+      testlist[test[0]] = test[1]
+    })
+    $('#timeNotice2 li').each(function () {
+      var test = $(this).text().split('：')
+      testlist2[test[0]] = test[1]
+    })
+    console.log(testlist)
+    console.log(testlist2)
+
+    var timedata = []
+    var trainType = []
+    var trainFor = []
+    $('tr#hh_18 .timeNumb').each(function () {
+      timedata.push($(this).find('dt').text())
+      if ($(this).find('.trainType').length) {
+        trainType.push($(this).find('.trainType').test())
+      } else {
+        trainType.push(testlist.無印)
+      }
+      if ($(this).find('.trainFor').length) {
+        trainFor.push($(this).find('.trainFor').test())
+      } else {
+        trainFor.push(testlist2.無印)
+      }
+    })
+    console.log(timedata)
+    console.log(trainType)
+    console.log(trainFor)
+
+    var anotherData = $('#cat-pass strong').text().split(' ')
+    station = anotherData[0]
+    line = anotherData[1]
+    direction = anotherData[2]
     console.log(station)
     console.log(line)
     console.log(direction)
