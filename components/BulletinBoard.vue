@@ -22,6 +22,21 @@ export default {
     }
   },
   created () {
+    axios.get('http://' +process.env.mainUrl + '/api/class-docs',{
+        params: {
+          classid: this.classid
+        }
+      }).then(res =>{
+        var documents = []
+        res.data.forEach(document => {
+          document['isSelected'] = false
+          document['imgUrl'] = '.document/jpg/' + document.docid + '.jpg'
+          documents.push(document)
+        });
+        this.fixPapers({classid: this.classid, documents: documents})
+    }).catch(err =>{
+      console.log(err)
+    })
     axios.get('/ws/all-positions').then((res)=>{
       const defaultPositions = res.data
       for(let p of defaultPositions){
@@ -40,7 +55,8 @@ export default {
   },
   methods:{
     ...mapMutations({
-      move: 'move'
+      move: 'move',
+      fixPapers: 'fixPapers'
     })
   },
   components: {

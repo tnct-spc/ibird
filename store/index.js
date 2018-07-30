@@ -51,5 +51,10 @@ export const mutations = {
       state.papers[classid][i].isSelected = false
     }
     state.papers[classid][paperId].isSelected = true
+  },
+  fixPapers (state, {classid, documents}) {
+    console.log(state.papers[classid])
+    state.papers[classid] = documents
+    console.log(state.papers[classid])
   }
 }
