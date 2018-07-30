@@ -21,7 +21,7 @@ export const getters = {
 
 export const mutations = {
   move (state, { classid, paperId, x, y }) {
-    if(state.papers[classid]){
+    if (state.papers[classid]) {
       state.papers[classid][paperId].x = x
       state.papers[classid][paperId].y = y
     }
