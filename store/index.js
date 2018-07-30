@@ -1,3 +1,4 @@
+import Vue from 'vue'
 
 export const state = () => ({
   papers: {
@@ -53,8 +54,6 @@ export const mutations = {
     state.papers[classid][paperId].isSelected = true
   },
   fixPapers (state, {classid, documents}) {
-    console.log(state.papers[classid])
-    state.papers[classid] = documents
-    console.log(state.papers[classid])
+    Vue.set(state.papers, classid, documents)
   }
 }
