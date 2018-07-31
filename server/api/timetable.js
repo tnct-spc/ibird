@@ -39,19 +39,21 @@ router.get('/createtable', function (req, res) {
       }
     })
     for (var i = 1; i <= 24; i++) {
-      var fullariveHour = i.toString()
+      var fullHour = i.toString()
       for (var j = 0; j < ariveHour.length; j++) {
         if (ariveHour[j] === ariveHour[ariveHour.length - 1]) {
-          if (fullariveHour === '24') {
-            console.log('end' + ': ' + fullariveHour + ' == ' + ariveHour[j])
+          if (fullHour === '24') {
+            console.log('end' + ': ' + fullHour + ' == ' + ariveHour[j])
           } else {
-            timetable[fullariveHour] = []
+            timetable[fullHour] = []
             console.log('last' + ': ' + ariveHour[ariveHour.length - 1])
           }
-        } else if (fullariveHour === ariveHour[j]) {
-          console.log('match' + ': ' + fullariveHour + ' == ' + ariveHour[j])
-          /* $('#' + ariveHour[j] + ' .timeNumb').each(function () {
-            timetable[i.toString] = $(this).find('dt').text()
+        } else if (fullHour === ariveHour[j]) {
+          console.log('match' + ': ' + fullHour + ' == ' + ariveHour[j])
+          var minList = []
+          $('#hh_' + ariveHour[j] + ' .timeNumb').each(function () {
+            minList.push($(this).find('dt').text())
+            // timetable[fullHour] = $(this).find('dt').text()
             /* if ($(this).find('.trainType').length) {
               trainType.push($(this).find('.trainType').test())
             } else {
@@ -61,11 +63,12 @@ router.get('/createtable', function (req, res) {
               trainFor.push($(this).find('.trainFor').test())
             } else {
               trainFor.push(testlist2.無印)
-            }
-          }) */
+            } */
+          })
+          timetable[fullHour] = minList
           break
         } else {
-          console.log('nomatch' + ': ' + fullariveHour + ' != ' + ariveHour[j])
+          console.log('nomatch' + ': ' + fullHour + ' != ' + ariveHour[j])
         }
       }
     }
