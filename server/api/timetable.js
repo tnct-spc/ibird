@@ -30,26 +30,27 @@ router.get('/createtable', function (req, res) {
     var timedata = []
     var trainType = []
     var trainFor = []
-    var hour = []
+    var ariveHour = []
     $('.tblDiaDetail tr').each(function (i) {
       var id = $(this).attr('id')
       if (id) {
-        hour.push(id)
+        var idToNum = id.replace('hh_', '')
+        ariveHour.push(idToNum)
       }
     })
     for (var i = 1; i <= 24; i++) {
-      var yeah = 'hh_' + i.toString()
-      for (var j = 0; j < hour.length; j++) {
-        if (hour[j] === hour[hour.length - 1]) {
-          if (yeah === 'hh_24') {
-            console.log('end' + ': ' + yeah + ' + ' + hour[j])
+      var fullariveHour = i.toString()
+      for (var j = 0; j < ariveHour.length; j++) {
+        if (ariveHour[j] === ariveHour[ariveHour.length - 1]) {
+          if (fullariveHour === '24') {
+            console.log('end' + ': ' + fullariveHour + ' == ' + ariveHour[j])
           } else {
-            timetable[i.toString()] = []
-            console.log('last' + ': ' + hour[hour.length - 1])
+            timetable[fullariveHour] = []
+            console.log('last' + ': ' + ariveHour[ariveHour.length - 1])
           }
-        } else if (yeah === hour[j]) {
-          console.log('match' + ': ' + yeah + ' + ' + hour[j])
-          /* $('#' + hour[j] + ' .timeNumb').each(function () {
+        } else if (fullariveHour === ariveHour[j]) {
+          console.log('match' + ': ' + fullariveHour + ' == ' + ariveHour[j])
+          /* $('#' + ariveHour[j] + ' .timeNumb').each(function () {
             timetable[i.toString] = $(this).find('dt').text()
             /* if ($(this).find('.trainType').length) {
               trainType.push($(this).find('.trainType').test())
@@ -64,7 +65,7 @@ router.get('/createtable', function (req, res) {
           }) */
           break
         } else {
-          console.log('nomatch' + ':' + yeah + '+' + hour[j])
+          console.log('nomatch' + ': ' + fullariveHour + ' != ' + ariveHour[j])
         }
       }
     }
@@ -82,11 +83,6 @@ router.get('/createtable', function (req, res) {
   })
   res.send('ok')
 })
-
-function test (t, list) {
-  list[t.toString()] = []
-  t++
-}
 
 // 表示できるJSONファイルの情報を返すAPI
 router.get('/getfilelist', function (req, res) {
