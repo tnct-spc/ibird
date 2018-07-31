@@ -27,9 +27,6 @@ router.get('/createtable', function (req, res) {
     console.log(testlist)
     console.log(testlist2)
 
-    var timedata = []
-    var trainType = []
-    var trainFor = []
     var ariveHour = []
     $('.tblDiaDetail tr').each(function (i) {
       var id = $(this).attr('id')
@@ -41,29 +38,28 @@ router.get('/createtable', function (req, res) {
     for (var i = 1; i <= 24; i++) {
       var fullHour = i.toString()
       for (var j = 0; j < ariveHour.length; j++) {
-        if (ariveHour[j] === ariveHour[ariveHour.length - 1]) {
-          if (fullHour !== '24') {
-            timetable[fullHour] = []
-            console.log('last' + ': ' + ariveHour[ariveHour.length - 1])
-          }
+        if (ariveHour[j] === ariveHour[ariveHour.length - 1] && fullHour !== '24') {
+          timetable[fullHour] = []
         }
         if (fullHour === ariveHour[j]) {
-          console.log('match' + ': ' + fullHour + ' == ' + ariveHour[j])
           var hourList = []
           $('#hh_' + ariveHour[j] + ' .timeNumb').each(function () {
-            hourList.push($(this).find('dt').text())
-            /* if ($(this).find('.trainType').length) {
-              trainType.push($(this).find('.trainType').test())
+            var trainData = JSON.parse('{}')
+            trainData['min'] = ($(this).find('dt').text())
+            if ($(this).find('.trainType').length) {
+              trainData['kind'] = $(this).find('.trainType').text()
             } else {
-              trainType.push(testlist.無印)
-            } */
-          /* if ($(this).find('.trainFor').length) {
-              trainFor.push($(this).find('.trainFor').test())
+              trainData['kind'] = testlist.無印
+            }
+            if ($(this).find('.trainFor').length) {
+              trainData['going'] = $(this).find('.trainFor').text()
             } else {
-              trainFor.push(testlist2.無印)
-            } */
+              trainData['going'] = testlist2.無印
+            }
+            hourList.push(trainData)
           })
           timetable[fullHour] = hourList
+          console.log('match' + ': ' + fullHour + ' == ' + ariveHour[j])
           break
         } else {
           console.log('nomatch' + ': ' + fullHour + ' != ' + ariveHour[j])
@@ -71,8 +67,6 @@ router.get('/createtable', function (req, res) {
       }
     }
     console.log(timetable)
-    // console.log(trainType)
-    // console.log(trainFor)
 
     var anotherData = $('#cat-pass strong').text().split(' ')
     station = anotherData[0]
