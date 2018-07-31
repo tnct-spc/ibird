@@ -9,7 +9,8 @@ var list = []
 
 // 駅のタイムテーブルを取得してJSONを生成するAPI
 router.get('/createtable', function (req, res) {
-  var timetable, station, direction, line
+  var timetable = JSON.parse('{}')
+  var station, direction, line
   fetch('https://transit.yahoo.co.jp/station/time/22900/?gid=3071&kind=1&done=time').then(function (result) {
     var $ = result.$
 
@@ -29,22 +30,47 @@ router.get('/createtable', function (req, res) {
     var timedata = []
     var trainType = []
     var trainFor = []
-    $('tr#hh_18 .timeNumb').each(function () {
-      timedata.push($(this).find('dt').text())
-      if ($(this).find('.trainType').length) {
-        trainType.push($(this).find('.trainType').test())
-      } else {
-        trainType.push(testlist.無印)
-      }
-      if ($(this).find('.trainFor').length) {
-        trainFor.push($(this).find('.trainFor').test())
-      } else {
-        trainFor.push(testlist2.無印)
+    var hour = []
+    $('.tblDiaDetail tr').each(function (i) {
+      var id = $(this).attr('id')
+      if (id) {
+        hour.push(id)
       }
     })
-    console.log(timedata)
-    console.log(trainType)
-    console.log(trainFor)
+    for (var i = 1; i <= 24; i++) {
+      var yeah = 'hh_' + i.toString()
+      for (var j = 0; j < hour.length; j++) {
+        if (hour[j] === hour[hour.length - 1]) {
+          if (yeah === 'hh_24') {
+            console.log('end' + ': ' + yeah + ' + ' + hour[j])
+          } else {
+            timetable[i.toString()] = []
+            console.log('last' + ': ' + hour[hour.length - 1])
+          }
+        } else if (yeah === hour[j]) {
+          console.log('match' + ': ' + yeah + ' + ' + hour[j])
+          /* $('#' + hour[j] + ' .timeNumb').each(function () {
+            timetable[i.toString] = $(this).find('dt').text()
+            /* if ($(this).find('.trainType').length) {
+              trainType.push($(this).find('.trainType').test())
+            } else {
+              trainType.push(testlist.無印)
+            } */
+          /* if ($(this).find('.trainFor').length) {
+              trainFor.push($(this).find('.trainFor').test())
+            } else {
+              trainFor.push(testlist2.無印)
+            }
+          }) */
+          break
+        } else {
+          console.log('nomatch' + ':' + yeah + '+' + hour[j])
+        }
+      }
+    }
+    console.log(timetable)
+    // console.log(trainType)
+    // console.log(trainFor)
 
     var anotherData = $('#cat-pass strong').text().split(' ')
     station = anotherData[0]
@@ -56,6 +82,11 @@ router.get('/createtable', function (req, res) {
   })
   res.send('ok')
 })
+
+function test (t, list) {
+  list[t.toString()] = []
+  t++
+}
 
 // 表示できるJSONファイルの情報を返すAPI
 router.get('/getfilelist', function (req, res) {
