@@ -50,6 +50,7 @@ router.get('/sendtable', function (req, res) {
   res.json(timeTableData)
 })
 
+// 実行したの日の曜日に合わせてサーバー内にあるファイルのリストを返す関数
 function getlist (todayFileList) {
   var filelist = readdirSync(dirPath) // 全ファイルのリストを生成
   var dt = new Date().getDay()
@@ -75,6 +76,7 @@ function getlist (todayFileList) {
   }
 }
 
+// Yahooから時刻表と駅のデータをスクレイピングする関数
 function fetchYahoo (fullTimetableData, url, callback) {
   fullTimetableData = JSON.parse('{}')
   fetch(url).then(function (result) {
@@ -145,28 +147,49 @@ function fetchYahoo (fullTimetableData, url, callback) {
   })
 }
 
+// fetchYahooのコールバックで呼び出すファイルを作成する関数
 function createJsonFile (jsonData, URL) {
-  var filename = '/'
+  var filename
   var dt = new Date().getDay()
 
   if (dt === 0) {
-    filename += 'holiday_'
+    filename = 'holiday_'
   } else if (dt === 6) {
-    filename += 'weekendday_'
+    filename = 'weekendday_'
   } else {
-    filename += 'weekday_'
+    filename = 'weekday_'
   }
   var stationID = parse(URL).pathname.split('/')
   filename += stationID[3] + '_'
   filename += parse(URL, true).query.gid + '.json'
 
-  writeJson(dirPath + filename, jsonData, {spaces: 2},
+  writeJson(dirPath + '/' + filename, jsonData, {spaces: 2},
     function (error) {
       if (error) {
         console.log('Failed writeJson : ' + error)
       }
     }
   )
+
+  var filelist = readdirSync(dirPath)
+  var fileInfo = JSON.parse(readFileSync(dirPath + '/filename.json', 'utf8'))
+  var jsonInfo = JSON.parse('{}')
+  jsonInfo['name'] = filename
+  jsonInfo['station'] = jsonData.station
+  jsonInfo['direction'] = jsonData.direction
+  jsonInfo['line'] = jsonData.line
+  if (filelist.length - 1 === fileInfo.length) {
+    fileInfo.push(jsonInfo)
+    writeJson(dirPath + '/filename.json', jsonInfo, {spaces: 2},
+      function (error) {
+        if (error) {
+          console.log('Failed writeJsonFilename : ' + error)
+        }
+      }
+    )
+  }/* else if (filelist.length > fileInfo.length) {
+  } else {
+  } */
 }
 
 export default router
