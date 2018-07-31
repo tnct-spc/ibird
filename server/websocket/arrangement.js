@@ -23,7 +23,6 @@ router.ws('/move',function(ws, req){
     })
   })
   ws.on('close', ()=>{
-    console.log("closed connection")
     receivers.splice(idx,1)
   })
 })
