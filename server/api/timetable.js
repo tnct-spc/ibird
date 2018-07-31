@@ -9,10 +9,14 @@ var list = []
 
 // 駅のタイムテーブルを取得してJSONを生成するAPI
 router.get('/createtable', function (req, res) {
-  var timetable = JSON.parse('{}')
-  var station, direction, line
   fetch('https://transit.yahoo.co.jp/station/time/22900/?gid=3071&kind=1&done=time').then(function (result) {
     var $ = result.$
+    var fullTimetableData = JSON.parse('{}')
+
+    var anotherData = $('#cat-pass strong').text().split(' ')
+    fullTimetableData['station'] = anotherData[0]
+    fullTimetableData['direction'] = anotherData[2]
+    fullTimetableData['line'] = anotherData[1]
 
     var testlist = JSON.parse('{}')
     var testlist2 = JSON.parse('{}')
@@ -35,6 +39,8 @@ router.get('/createtable', function (req, res) {
         ariveHour.push(idToNum)
       }
     })
+
+    var timetable = JSON.parse('{}')
     for (var i = 1; i <= 24; i++) {
       var fullHour = i.toString()
       for (var j = 0; j < ariveHour.length; j++) {
@@ -47,12 +53,15 @@ router.get('/createtable', function (req, res) {
             var trainData = JSON.parse('{}')
             trainData['min'] = ($(this).find('dt').text())
             if ($(this).find('.trainType').length) {
-              trainData['kind'] = $(this).find('.trainType').text()
+              var trainType = $(this).find('.trainType').text().replace('[', '')
+                .replace(']', '')
+              trainData['kind'] = testlist[trainType]
             } else {
               trainData['kind'] = testlist.無印
             }
             if ($(this).find('.trainFor').length) {
-              trainData['going'] = $(this).find('.trainFor').text()
+              var trainFor = $(this).find('.trainFor').text()
+              trainData['going'] = testlist2[trainFor]
             } else {
               trainData['going'] = testlist2.無印
             }
@@ -66,15 +75,9 @@ router.get('/createtable', function (req, res) {
         }
       }
     }
+    fullTimetableData['timetable'] = timetable
+    console.log(fullTimetableData)
     console.log(timetable)
-
-    var anotherData = $('#cat-pass strong').text().split(' ')
-    station = anotherData[0]
-    line = anotherData[1]
-    direction = anotherData[2]
-    console.log(station)
-    console.log(line)
-    console.log(direction)
   })
   res.send('ok')
 })
