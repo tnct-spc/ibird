@@ -8,15 +8,12 @@ const receivers = []
 router.ws('/move',function(ws, req){
   const idx = receivers.push(ws)-1
   ws.on('message', msg => {
-    const parsedMsg = JSON.parse(msg)
     receivers.forEach((receiver,receiverId)=>{
-      if(receiverId!==idx){
-        try{
-          receiver.send(msg)
-        }catch(e){
-          console.log(e)
-          receivers.splice(receiverId,1)
-        }
+      try{
+        receiver.send(msg)
+      }catch(e){
+        console.log(e)
+        receivers.splice(receiverId,1)
       }
     })
   })

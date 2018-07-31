@@ -6,7 +6,6 @@ export const state = () => ({
 
 export const actions = {
   move ({commit}, { classid, paperId, x, y, client }) {
-    commit('move', {classid, paperId, x, y})
     client.send(JSON.stringify({ classid, paperId, x, y }))
   }
 }
