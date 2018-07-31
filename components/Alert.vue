@@ -21,14 +21,10 @@ export default {
     this.client = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/alert')
     this.client.onmessage=({data})=>{
       this.message = JSON.parse(data).message;
-      console.log("message add")
-      console.log(this.message)
 
       var delete_alert = function () {
         this.message = null
-        console.log("message deleted")
       }
-      console.log(this.message)
       setTimeout(() => {this.message=null},1000*60*5)
     }
   },

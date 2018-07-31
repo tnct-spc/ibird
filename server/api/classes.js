@@ -9,7 +9,8 @@ router.use(parser.json());
 const sequelize = new Sequelize('ibird', 'postgres', 'password',{
     host: 'postgres',
     dialect: 'postgres',
-    operatorsAliases: false
+    operatorsAliases: false,
+    logging: false
 })
 const classes = sequelize.define('classes', {
     classid: {
