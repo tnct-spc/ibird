@@ -26,7 +26,7 @@ export const mutations = {
     }
   },
   selectCard (state, {classid, paperId}) {
-    for (let i in getters.papers(classid)) {
+    for (var i = 0; i < state.papers[classid].length; i++) {
       state.papers[classid][i].isSelected = false
     }
     state.papers[classid][paperId].isSelected = true
