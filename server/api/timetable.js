@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { readdirSync, readFileSync } from 'fs'
+import { readdirSync, readFileSync, writeJson } from 'fs-extra'
 import { resolve } from 'path'
 import { fetch } from 'cheerio-httpcli'
 
@@ -9,76 +9,9 @@ var list = []
 
 // 駅のタイムテーブルを取得してJSONを生成するAPI
 router.get('/createtable', function (req, res) {
-  fetch('https://transit.yahoo.co.jp/station/time/22900/?gid=3071&kind=1&done=time').then(function (result) {
-    var $ = result.$
-    var fullTimetableData = JSON.parse('{}')
-
-    var anotherData = $('#cat-pass strong').text().split(' ')
-    fullTimetableData['station'] = anotherData[0]
-    fullTimetableData['direction'] = anotherData[2]
-    fullTimetableData['line'] = anotherData[1]
-
-    var testlist = JSON.parse('{}')
-    var testlist2 = JSON.parse('{}')
-    $('#timeNotice1 li').each(function () {
-      var test = $(this).text().split('：')
-      testlist[test[0]] = test[1]
-    })
-    $('#timeNotice2 li').each(function () {
-      var test = $(this).text().split('：')
-      testlist2[test[0]] = test[1]
-    })
-    console.log(testlist)
-    console.log(testlist2)
-
-    var ariveHour = []
-    $('.tblDiaDetail tr').each(function (i) {
-      var id = $(this).attr('id')
-      if (id) {
-        var idToNum = id.replace('hh_', '')
-        ariveHour.push(idToNum)
-      }
-    })
-
-    var timetable = JSON.parse('{}')
-    for (var i = 1; i <= 24; i++) {
-      var fullHour = i.toString()
-      for (var j = 0; j < ariveHour.length; j++) {
-        if (ariveHour[j] === ariveHour[ariveHour.length - 1] && fullHour !== '24') {
-          timetable[fullHour] = []
-        }
-        if (fullHour === ariveHour[j]) {
-          var hourList = []
-          $('#hh_' + ariveHour[j] + ' .timeNumb').each(function () {
-            var trainData = JSON.parse('{}')
-            trainData['min'] = ($(this).find('dt').text())
-            if ($(this).find('.trainType').length) {
-              var trainType = $(this).find('.trainType').text().replace('[', '')
-                .replace(']', '')
-              trainData['kind'] = testlist[trainType]
-            } else {
-              trainData['kind'] = testlist.無印
-            }
-            if ($(this).find('.trainFor').length) {
-              var trainFor = $(this).find('.trainFor').text()
-              trainData['going'] = testlist2[trainFor]
-            } else {
-              trainData['going'] = testlist2.無印
-            }
-            hourList.push(trainData)
-          })
-          timetable[fullHour] = hourList
-          console.log('match' + ': ' + fullHour + ' == ' + ariveHour[j])
-          break
-        } else {
-          console.log('nomatch' + ': ' + fullHour + ' != ' + ariveHour[j])
-        }
-      }
-    }
-    fullTimetableData['timetable'] = timetable
-    console.log(fullTimetableData)
-    console.log(timetable)
-  })
+  var scrapeData
+  fetchYahoo(scrapeData)
+  console.log(scrapeData)
   res.send('ok')
 })
 
@@ -139,6 +72,72 @@ function getlist (todayFileList) {
       }
     }
   }
+}
+
+function fetchYahoo (fullTimetableData) {
+  fullTimetableData = JSON.parse('{}')
+  fetch('https://transit.yahoo.co.jp/station/time/22900/?gid=3071&kind=1&done=time').then(function (result) {
+    var $ = result.$
+
+    var anotherData = $('#cat-pass strong').text().split(' ')
+    fullTimetableData['station'] = anotherData[0]
+    fullTimetableData['direction'] = anotherData[2]
+    fullTimetableData['line'] = anotherData[1]
+
+    var kindList = JSON.parse('{}')
+    var goingList = JSON.parse('{}')
+    $('#timeNotice1 li').each(function () {
+      var kind = $(this).text().split('：')
+      kindList[kind[0]] = kind[1]
+    })
+    $('#timeNotice2 li').each(function () {
+      var going = $(this).text().split('：')
+      goingList[going[0]] = going[1]
+    })
+
+    var ariveHour = []
+    $('.tblDiaDetail tr').each(function (i) {
+      var id = $(this).attr('id')
+      if (id) {
+        var idToNum = id.replace('hh_', '')
+        ariveHour.push(idToNum)
+      }
+    })
+
+    var timetable = JSON.parse('{}')
+    for (var i = 1; i <= 24; i++) {
+      var fullHour = i.toString()
+      for (var j = 0; j < ariveHour.length; j++) {
+        if (ariveHour[j] === ariveHour[ariveHour.length - 1] && fullHour !== '24') {
+          timetable[fullHour] = []
+        }
+        if (fullHour === ariveHour[j]) {
+          var hourList = []
+          $('#hh_' + ariveHour[j] + ' .timeNumb').each(function () {
+            var trainData = JSON.parse('{}')
+            trainData['min'] = ($(this).find('dt').text())
+            if ($(this).find('.trainType').length) {
+              var trainType = $(this).find('.trainType').text().replace('[', '')
+                .replace(']', '')
+              trainData['kind'] = kindList[trainType]
+            } else {
+              trainData['kind'] = kindList.無印
+            }
+            if ($(this).find('.trainFor').length) {
+              var trainFor = $(this).find('.trainFor').text()
+              trainData['going'] = goingList[trainFor]
+            } else {
+              trainData['going'] = goingList.無印
+            }
+            hourList.push(trainData)
+          })
+          timetable[fullHour] = hourList
+          break
+        }
+      }
+    }
+    fullTimetableData['timetable'] = timetable
+  })
 }
 
 export default router
