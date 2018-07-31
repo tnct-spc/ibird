@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { readdirSync, readFileSync, writeJson } from 'fs-extra'
 import { resolve } from 'path'
 import { fetch } from 'cheerio-httpcli'
+import { parse } from 'url'
 
 const router = Router()
 var dirPath = resolve('.timetable', '../.timetable') // jsonのパスを設定
@@ -10,7 +11,8 @@ var list = []
 // 駅のタイムテーブルを取得してJSONを生成するAPI
 router.get('/createtable', function (req, res) {
   var scrapeData
-  fetchYahoo(scrapeData, createJsonFile)
+  var fetchURL = 'https://transit.yahoo.co.jp/station/time/22900/?gid=3071&done=time&tab=time'
+  fetchYahoo(scrapeData, fetchURL, createJsonFile)
   res.send('ok')
 })
 
@@ -73,10 +75,13 @@ function getlist (todayFileList) {
   }
 }
 
-function fetchYahoo (fullTimetableData, callback) {
+function fetchYahoo (fullTimetableData, url, callback) {
   fullTimetableData = JSON.parse('{}')
-  fetch('https://transit.yahoo.co.jp/station/time/22900/?done=time&tab=time').then(function (result) {
+  fetch(url).then(function (result) {
     var $ = result.$
+    if (result.error) {
+      console.log('Failed fetchYahoo : ' + result.error)
+    }
 
     var anotherData = $('#cat-pass strong').text().split(' ')
     fullTimetableData['station'] = anotherData[0]
@@ -136,15 +141,32 @@ function fetchYahoo (fullTimetableData, callback) {
       }
     }
     fullTimetableData['timetable'] = timetable
-    callback(fullTimetableData)
+    callback(fullTimetableData, url)
   })
 }
 
-function createJsonFile (jsonData) {
-  writeJson(dirPath + '/test.json', jsonData, {spaces: 2},
+function createJsonFile (jsonData, URL) {
+  var filename = '/'
+  var dt = new Date().getDay()
+
+  if (dt === 0) {
+    filename += 'holiday_'
+  } else if (dt === 6) {
+    filename += 'weekendday_'
+  } else {
+    filename += 'weekday_'
+  }
+  var stationID = parse(URL).pathname.split('/')
+  filename += stationID[3] + '_'
+  filename += parse(URL, true).query.gid + '.json'
+
+  writeJson(dirPath + filename, jsonData, {spaces: 2},
     function (error) {
-      console.log('Failed createJsonFile :' + error)
-    })
+      if (error) {
+        console.log('Failed writeJson : ' + error)
+      }
+    }
+  )
 }
 
 export default router
