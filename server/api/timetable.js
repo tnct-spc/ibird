@@ -10,8 +10,7 @@ var list = []
 // 駅のタイムテーブルを取得してJSONを生成するAPI
 router.get('/createtable', function (req, res) {
   var scrapeData
-  fetchYahoo(scrapeData)
-  console.log(scrapeData)
+  fetchYahoo(scrapeData, createJsonFile)
   res.send('ok')
 })
 
@@ -74,9 +73,9 @@ function getlist (todayFileList) {
   }
 }
 
-function fetchYahoo (fullTimetableData) {
+function fetchYahoo (fullTimetableData, callback) {
   fullTimetableData = JSON.parse('{}')
-  fetch('https://transit.yahoo.co.jp/station/time/22900/?gid=3071&kind=1&done=time').then(function (result) {
+  fetch('https://transit.yahoo.co.jp/station/time/22900/?done=time&tab=time').then(function (result) {
     var $ = result.$
 
     var anotherData = $('#cat-pass strong').text().split(' ')
@@ -137,7 +136,15 @@ function fetchYahoo (fullTimetableData) {
       }
     }
     fullTimetableData['timetable'] = timetable
+    callback(fullTimetableData)
   })
+}
+
+function createJsonFile (jsonData) {
+  writeJson(dirPath + '/test.json', jsonData, {spaces: 2},
+    function (error) {
+      console.log('Failed createJsonFile :' + error)
+    })
 }
 
 export default router
