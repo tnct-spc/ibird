@@ -42,18 +42,16 @@ router.get('/createtable', function (req, res) {
       var fullHour = i.toString()
       for (var j = 0; j < ariveHour.length; j++) {
         if (ariveHour[j] === ariveHour[ariveHour.length - 1]) {
-          if (fullHour === '24') {
-            console.log('end' + ': ' + fullHour + ' == ' + ariveHour[j])
-          } else {
+          if (fullHour !== '24') {
             timetable[fullHour] = []
             console.log('last' + ': ' + ariveHour[ariveHour.length - 1])
           }
-        } else if (fullHour === ariveHour[j]) {
+        }
+        if (fullHour === ariveHour[j]) {
           console.log('match' + ': ' + fullHour + ' == ' + ariveHour[j])
-          var minList = []
+          var hourList = []
           $('#hh_' + ariveHour[j] + ' .timeNumb').each(function () {
-            minList.push($(this).find('dt').text())
-            // timetable[fullHour] = $(this).find('dt').text()
+            hourList.push($(this).find('dt').text())
             /* if ($(this).find('.trainType').length) {
               trainType.push($(this).find('.trainType').test())
             } else {
@@ -65,7 +63,7 @@ router.get('/createtable', function (req, res) {
               trainFor.push(testlist2.無印)
             } */
           })
-          timetable[fullHour] = minList
+          timetable[fullHour] = hourList
           break
         } else {
           console.log('nomatch' + ': ' + fullHour + ' != ' + ariveHour[j])
