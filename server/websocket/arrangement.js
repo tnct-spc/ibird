@@ -5,12 +5,10 @@ const router = Router()
 expressWs(router)
 
 const receivers = []
-const state = []
 router.ws('/move',function(ws, req){
   const idx = receivers.push(ws)-1
   ws.on('message', msg => {
     const parsedMsg = JSON.parse(msg)
-    state[parsedMsg.paperId] = parsedMsg
     receivers.forEach((receiver,receiverId)=>{
       if(receiverId!==idx){
         try{
@@ -25,9 +23,6 @@ router.ws('/move',function(ws, req){
   ws.on('close', ()=>{
     receivers.splice(idx,1)
   })
-})
-router.get('/all-positions',(req, res)=>{
-  res.json(Object.values(state))
 })
 
 export default router

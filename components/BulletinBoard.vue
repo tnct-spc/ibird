@@ -37,14 +37,6 @@ export default {
     }).catch(e =>{
       console.log(e)
     })
-    axios.get('/ws/all-positions').then((res)=>{
-      const defaultPositions = res.data
-      for(let p of defaultPositions){
-        this.move(p)
-      }
-    }).catch(e => {
-      console.log(e)
-    })
     this.client = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/move')
     this.client.onmessage=({data})=>{
       this.move(JSON.parse(data))
