@@ -13,62 +13,50 @@ const extension = (filename) => {
   return filename.split('.').pop()
 }
 
+//ファイルの名前だけ取る関数
+const filename = (filename) => {
+  return filename.slice(filename.lastIndexOf('/') - filename.length+1)
+}
+
 //officeファイルをpdfに変換する関数
 const officeToPDF = (filepath) => {
   const output = filepath.slice(0, filepath.lastIndexOf('.')) + '.pdf'
   return converter.generate(filepath, 'pdf', output)
 }
 
-const pdfToJpg = (pdfname) => {
-  var filename = pdfname.slice(0,-4) + ".jpg"
-  filename = filename.slice(filename.lastIndexOf('/') - filename.length+1) //(jpg拡張子つきの)ファイル名だけ取り出す
-  filename = 'static/jpg/' + filename
-  child_process.exec('convert -density 300  ' + pdfname.slice(0,-4) + ".pdf " + filename, (err, stdout, stderr) => {
-    if (err) { console.log(err); }
-    console.log(stdout)
-  });
+//pdfをjpgに変換する関数
+const pdfToJpg = (pdfPath) => {
+  var jpgPath = pdfPath.slice(0,-4) + ".jpg"
+  jpgPath = 'static/jpg/' + filename(jpgPath)
+  return child_process.execSync('convert -density 300  ' + pdfPath.slice(0,-4) + ".pdf " + jpgPath)
 }
 
-const storage = multer.diskStorage({
+const upload = multer({ storage: multer.diskStorage({
   destination: (req, file, cb) => {
-    switch(extension(file.originalname)){
-      case 'pdf':
-        cb(null, '.document/pdf')
-        break;
-      case 'docx':
-      case 'doc':
-        cb(null, '.document/docx')
-        break
-      case 'xls':
-      case 'xlsx':
-        cb(null, '.document/xlsx')
-        break
-      case 'ppt':
-      case 'pptx':
-        cb(null, '.document/pptx')
-        break
-      default:
-        cb(null, '.document/unknown')
-    }
+    cb(null, '.document/')
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + '.' + extension(file.originalname))
   }
-})
+})})
 
-const upload = multer({ storage: storage })
+async function run(path){
+  //拡張子がofficeだったらconvertしてpathにpdfのpathを入れる
+  if(office_extensions.indexOf(extension(path)) >= 0){
+    const result = await officeToPDF(path)
+    path = result.outputFile
+  }
+  pdfToJpg(path)
+  return path
+}
 
 router.post('/upload-file', upload.single('file'), (req, res, next) => {
-  const ext = extension(req.file.path)
-  if(office_extensions.indexOf(ext) >= 0){
-    officeToPDF(req.file.path).then( (output)=> {
-      pdfToJpg(output.outputFile)
-      res.send(req.body)
-    })
-  }else{
-    pdfToJpg(req.file.path)
-    res.send(req.body)
-  }
+  run(req.file.path).then(() =>{
+    res.sendStatus(200)
+  }).catch(e =>{
+    console.log(e)
+    res.sendStatus(400)
+  })
 })
 
 export default router
