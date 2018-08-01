@@ -38,7 +38,7 @@ export default {
     },
     mousemove: function(e){
       if(this.paper.isSelected){
-        this.client.send(JSON.stringify({
+        this.wsClient.send(JSON.stringify({
           classid: this.classid,
           paperId: this.paperId,
           x: e.x-this.cursorOffset.x,
