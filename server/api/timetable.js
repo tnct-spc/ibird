@@ -11,7 +11,7 @@ var list = []
 // 駅のタイムテーブルを取得してJSONを生成するAPI
 router.get('/createtable', function (req, res) {
   var scrapeData
-  var fetchURL = 'https://transit.yahoo.co.jp/station/time/22900/?gid=3071&done=time&tab=time'
+  var fetchURL = 'https://transit.yahoo.co.jp/station/time/22900/?gid=3070&done=time&tab=time'
   fetchYahoo(scrapeData, fetchURL, createJsonFile)
   res.send('ok')
 })
@@ -172,24 +172,32 @@ function createJsonFile (jsonData, URL) {
   )
 
   var filelist = readdirSync(dirPath)
+  filelist.some(function (v, i) {
+    if (v === 'filename.json') {
+      filelist.splice(i, 1)
+    }
+  })
   var fileInfo = JSON.parse(readFileSync(dirPath + '/filename.json', 'utf8'))
   var jsonInfo = JSON.parse('{}')
   jsonInfo['name'] = filename
   jsonInfo['station'] = jsonData.station
   jsonInfo['direction'] = jsonData.direction
   jsonInfo['line'] = jsonData.line
-  if (filelist.length - 1 === fileInfo.length) {
-    fileInfo.push(jsonInfo)
-    writeJson(dirPath + '/filename.json', jsonInfo, {spaces: 2},
-      function (error) {
-        if (error) {
-          console.log('Failed writeJsonFilename : ' + error)
-        }
+  for (var i = 0; i < fileInfo.length; i++) {
+    if (fileInfo[i].name === filename) {
+      break
+    }
+    if (fileInfo[i].name !== filename && fileInfo[fileInfo.length - 1] === fileInfo[i]) {
+      fileInfo.push(jsonInfo)
+    }
+  }
+  writeJson(dirPath + '/filename.json', fileInfo, {spaces: 2},
+    function (error) {
+      if (error) {
+        console.log('Failed writeJson : ' + error)
       }
-    )
-  }/* else if (filelist.length > fileInfo.length) {
-  } else {
-  } */
+    }
+  )
 }
 
 export default router
