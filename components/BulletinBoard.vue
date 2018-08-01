@@ -6,7 +6,7 @@
 
 <script>
 import Paper from '~/components/Paper.vue'
-import { mapState, mapMutations, mapGetters } from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 import { w3cwebsocket } from 'websocket'
 import axios from 'axios'
 

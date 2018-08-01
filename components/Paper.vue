@@ -6,7 +6,7 @@
   </div>
 </template>
 <script>
-import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 export default {
   data:function(){
     return{
@@ -30,10 +30,6 @@ export default {
     ...mapMutations({
       selectedcard: 'selectCard'
     }),
-    ...mapActions({
-      move: 'move'
-    }),
-
     mousedown: function(e){
       this.selectedcard({classid: this.classid, paperId: this.paperId})
       this.cursorOffset.x = e.offsetX
@@ -42,13 +38,12 @@ export default {
     },
     mousemove: function(e){
       if(this.paper.isSelected){
-        this.move({
+        this.client.send(JSON.stringify({
           classid: this.classid,
           paperId: this.paperId,
           x: e.x-this.cursorOffset.x,
           y: e.y-this.cursorOffset.y,
-          client: this.wsClient
-        })
+        }))
       }
       document.addEventListener('mouseup',this.mouseup)
     },

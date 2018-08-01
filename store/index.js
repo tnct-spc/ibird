@@ -4,12 +4,6 @@ export const state = () => ({
   papers: { }
 })
 
-export const actions = {
-  move ({commit}, { classid, paperId, x, y, client }) {
-    client.send(JSON.stringify({ classid, paperId, x, y }))
-  }
-}
-
 export const getters = {
   papers (state) {
     return classid => {
