@@ -9,7 +9,8 @@ router.use(parser.json());
 const sequelize = new Sequelize('ibird', 'postgres', 'password',{
     host: 'postgres',
     dialect: 'postgres',
-    operatorsAliases: false
+    operatorsAliases: false,
+    logging: false
 })
 const classes = sequelize.define('classes', {
     classid: {
@@ -17,7 +18,7 @@ const classes = sequelize.define('classes', {
         primaryKey: true,
     },
     name: Sequelize.STRING,
-    douments: Sequelize.JSON
+    documents: Sequelize.JSON
   },{
       timestamps: false
   });
@@ -26,7 +27,7 @@ const classes = sequelize.define('classes', {
 const docList = (classid)=>{
     return classes.findById(classid).then( c =>{
         var list = []
-        for(var i of Object.values(c.douments)) list.push(i)
+        for(var i of Object.values(c.documents)) list.push(i)
         return list
     })
 }
@@ -39,7 +40,7 @@ router.put('/add-doc', (req, res, next) => {
         //listをいい感じに変更してデータベース更新
         list.push(doc)
         return classes.update(
-            {douments: list}, 
+            {documents: list}, 
             {where: {classid: classid}}
         )
     }).then(result =>{
@@ -54,11 +55,11 @@ router.delete('/rm-doc', (req, res, next) => {
     const docid = req.query.docid
 
     docList(classid).then(list =>{
-        //docidが同じdocumetを省く
+        //docidが同じdocumentを省く
         return list.filter(value => value.docid !== docid)
     }).then(newList =>{
         return classes.update(
-            {douments: newList}, 
+            {documents: newList}, 
             {where: {classid: classid}}
         )
     }).then(result =>{
@@ -68,9 +69,21 @@ router.delete('/rm-doc', (req, res, next) => {
     })
 })
 
-router.get('/classes', (req, res, next) => {
+router.get('/classes-list', (req, res, next) => {
     classes.findAll().then(c => {
-        res.json(c)
+        const list = []
+        c.forEach((value, index, array) =>{
+            delete value.dataValues.documents
+            list.push(value.dataValues)
+        })
+        res.json(list)
+    })
+})
+
+router.get('/class-docs', (req, res, next) => {
+    const classid = req.query.classid
+    docList(classid).then(list =>{
+        res.json(list)
     })
 })
 

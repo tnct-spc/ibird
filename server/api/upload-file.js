@@ -22,7 +22,6 @@ const officeToPDF = (filepath) => {
 const pdfToJpg = (pdfname) => {
   child_process.exec('convert -density 300  ' + pdfname.slice(0,-4) + ".pdf "+pdfname.slice(0,-4) + ".jpg", (err, stdout, stderr) => {
     if (err) { console.log(err); }
-    console.log(stdout);
   });
 }
 

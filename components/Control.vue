@@ -37,7 +37,6 @@ export default{
     axios.post('api/upload-file',formData)
     .then((response) => {
         overlay.innerHTML="success"
-        console.log(response.data)
     })
     .catch((error) => {
         overlay.innerHTML="error"
