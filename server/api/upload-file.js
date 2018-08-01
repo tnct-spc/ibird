@@ -3,6 +3,7 @@ import { Router } from 'express'
 import multer from 'multer'
 import Converter from 'office-convert'
 import child_process from 'child_process'
+import axios from 'axios'
 
 const router = Router()
 const converter = Converter.createConverter();
@@ -28,7 +29,20 @@ const officeToPDF = (filepath) => {
 const pdfToJpg = (pdfPath) => {
   var jpgPath = pdfPath.slice(0,-4) + ".jpg"
   jpgPath = 'static/jpg/' + filename(jpgPath)
-  return child_process.execSync('convert -density 300  ' + pdfPath.slice(0,-4) + ".pdf " + jpgPath)
+  child_process.execSync('convert -density 300  ' + pdfPath.slice(0,-4) + ".pdf " + jpgPath)
+  return filename(jpgPath)
+}
+
+//特定のクラスにdocumentを追加する関数
+const runAddAPI = (classid, docid) => {
+  return axios.put('http://localhost:3000/api/add-doc', {
+    classid: classid,
+    doc: {
+      docid: docid,
+      x: 100,
+      y: 100
+    }
+  })
 }
 
 const upload = multer({ storage: multer.diskStorage({
@@ -40,18 +54,23 @@ const upload = multer({ storage: multer.diskStorage({
   }
 })})
 
-async function run(path){
+async function run(path, classid){
   //拡張子がofficeだったらconvertしてpathにpdfのpathを入れる
   if(office_extensions.indexOf(extension(path)) >= 0){
     const result = await officeToPDF(path)
     path = result.outputFile
   }
-  pdfToJpg(path)
+  var docid = pdfToJpg(path)
+  docid = docid.slice(0, -4)
+
+  console.log(classid)
+  console.log(docid)
+  if(classid) await runAddAPI(classid, docid)
   return path
 }
 
 router.post('/upload-file', upload.single('file'), (req, res, next) => {
-  run(req.file.path).then(() =>{
+  run(req.file.path, req.body.classid).then(() =>{
     res.sendStatus(200)
   }).catch(e =>{
     console.log(e)
