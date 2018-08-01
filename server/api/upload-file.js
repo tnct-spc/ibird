@@ -20,8 +20,12 @@ const officeToPDF = (filepath) => {
 }
 
 const pdfToJpg = (pdfname) => {
-  child_process.exec('convert -density 300  ' + pdfname.slice(0,-4) + ".pdf "+pdfname.slice(0,-4) + ".jpg", (err, stdout, stderr) => {
+  var filename = pdfname.slice(0,-4) + ".jpg"
+  filename = filename.slice(filename.lastIndexOf('/') - filename.length+1) //(jpg拡張子つきの)ファイル名だけ取り出す
+  filename = 'static/jpg/' + filename
+  child_process.exec('convert -density 300  ' + pdfname.slice(0,-4) + ".pdf " + filename, (err, stdout, stderr) => {
     if (err) { console.log(err); }
+    console.log(stdout)
   });
 }
 
