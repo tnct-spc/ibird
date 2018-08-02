@@ -56,15 +56,19 @@ export default {
 }
 </script>
 <style scoped>
-img.paper {
+#drag {
   margin: 1rem;
   box-shadow: 0.5rem 0.5rem 0.5rem 0.01rem;
   border:solid 0.1rem black;
   max-height: calc(50vh - 1rem);
   position: absolute;
 }
-img.paper:hover{
+#drag {
   box-shadow: 0.5rem 0.5rem 0.5rem 0.01rem;
   color: #0000CC;
+}
+img.paper {
+    width: "15%";
+    height: "37%";
 }
 </style>
