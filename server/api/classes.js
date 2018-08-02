@@ -55,7 +55,7 @@ router.put('/fix-position', (req, res, next) => {
     const docid = req.body.docid
     const x = req.body.x
     const y = req.body.y
-
+    
     docList(classid).then(list =>{
         //listをいい感じに変更してデータベース更新
         list.forEach(v => {
@@ -64,7 +64,6 @@ router.put('/fix-position', (req, res, next) => {
                 v.y = y
             }
         })
-        console.log(list)
         return classes.update(
             {documents: list}, 
             {where: {classid: classid}}

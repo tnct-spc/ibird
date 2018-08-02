@@ -7,6 +7,8 @@
 </template>
 <script>
 import { mapMutations, mapGetters } from 'vuex'
+import axios from 'axios'
+
 export default {
   data:function(){
     return{
@@ -34,6 +36,7 @@ export default {
       this.cursorOffset.x = e.offsetX
       this.cursorOffset.y = e.offsetY
       if (this.paper.isSelected) {
+        this.savePosition()
         document.removeEventListener('mousemove',this.mousemove)
         this.selectedcard({classid: this.classid, paperId: null})
       } else {
@@ -50,6 +53,16 @@ export default {
       }))
       document.addEventListener('mouseup',this.mouseup)
     },
+    savePosition: function(){
+        axios.put('http://' +process.env.mainUrl + '/api/fix-position', {
+          classid: this.classid,
+          docid: this.paper.docid,
+          x: this.paper.x,
+          y: this.paper.y
+        }).catch(e =>{
+          console.log(e)
+        })
+    }
   }
 }
 </script>
