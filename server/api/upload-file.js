@@ -27,7 +27,7 @@ const pdfToJpg = (pdfname) => {
 }
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
+  destination: (req, file, cb)
     switch(extension(file.originalname)){
       case 'pdf':
         cb(null, '.document/pdf')
@@ -67,5 +67,10 @@ router.post('/upload-file', upload.single('file'), (req, res, next) => {
     res.send(req.body)
   }
 })
+
+const PdfReader = (pdfName) =>{
+
+
+}
 
 export default router
