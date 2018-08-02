@@ -7,6 +7,8 @@
 </template>
 <script>
 import { mapMutations, mapGetters } from 'vuex'
+import axios from 'axios'
+
 export default {
   data:function(){
     return{
@@ -31,26 +33,35 @@ export default {
       selectedcard: 'selectCard'
     }),
     mousedown: function(e){
-      this.selectedcard({classid: this.classid, paperId: this.paperId})
       this.cursorOffset.x = e.offsetX
       this.cursorOffset.y = e.offsetY
-      document.addEventListener('mousemove',this.mousemove)
+      if (this.paper.isSelected) {
+        this.savePosition()
+        document.removeEventListener('mousemove',this.mousemove)
+        this.selectedcard({classid: this.classid, paperId: null})
+      } else {
+        document.addEventListener('mousemove',this.mousemove)
+        this.selectedcard({classid: this.classid, paperId: this.paperId})
+      }
     },
     mousemove: function(e){
-      if(this.paper.isSelected){
-        this.wsClient.send(JSON.stringify({
-          classid: this.classid,
-          paperId: this.paperId,
-          x: e.x-this.cursorOffset.x,
-          y: e.y-this.cursorOffset.y,
-        }))
-      }
+      this.wsClient.send(JSON.stringify({
+        classid: this.classid,
+        paperId: this.paperId,
+        x: e.x-this.cursorOffset.x,
+        y: e.y-this.cursorOffset.y,
+      }))
       document.addEventListener('mouseup',this.mouseup)
     },
-    mouseup: function(e){
-      document.removeEventListener('mousemove',this.mousemove)
-      document.removeEventListener('mouseup',this.mouseup)
-      this.selectedcard({classid: this.classid, paperId: null})
+    savePosition: function(){
+        axios.put('http://' +process.env.mainUrl + '/api/fix-position', {
+          classid: this.classid,
+          docid: this.paper.docid,
+          x: this.paper.x,
+          y: this.paper.y
+        }).catch(e =>{
+          console.log(e)
+        })
     }
   }
 }
