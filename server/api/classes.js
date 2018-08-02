@@ -37,8 +37,34 @@ router.put('/add-doc', (req, res, next) => {
     const doc = req.body.doc
 
     docList(classid).then(list =>{
-        //listをいい感じに変更してデータベース更新
+        //listにいい感じに追加してデータベース更新
         list.push(doc)
+        return classes.update(
+            {documents: list}, 
+            {where: {classid: classid}}
+        )
+    }).then(result =>{
+        res.sendStatus(200)
+    }).catch(err =>{
+        res.sendStatus(400)
+    })
+})
+
+router.put('/fix-position', (req, res, next) => {
+    const classid = req.body.classid
+    const docid = req.body.docid
+    const x = req.body.x
+    const y = req.body.y
+
+    docList(classid).then(list =>{
+        //listをいい感じに変更してデータベース更新
+        list.forEach(v => {
+            if(v.docid == docid){
+                v.x = x
+                v.y = y
+            }
+        })
+        console.log(list)
         return classes.update(
             {documents: list}, 
             {where: {classid: classid}}
