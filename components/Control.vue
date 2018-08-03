@@ -12,7 +12,6 @@ let formData
 let overlay
 
 export default{
-  name: 'login-form',
   methods: {
   onDragOver:(event) => {
     event.preventDefault()
