@@ -68,9 +68,10 @@ async function run(path, classid){
   console.log(classid)
   console.log(docid)
   if(classid) await runAddAPI(classid, docid)
-  // const c = new W3cwebsocket('ws://localhost:3000/ws/refresh')
-  // console.log(c)
-  // c.send()
+  const c = new W3cwebsocket('ws://localhost:3000/ws/refresh')
+  c.onopen = () => {
+    c.send('{}')
+  }
   return path
 }
 
