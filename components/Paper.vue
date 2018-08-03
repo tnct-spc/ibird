@@ -8,6 +8,8 @@
 <script>
 import { mapMutations, mapGetters } from 'vuex'
 import axios from 'axios'
+import { w3cwebsocket } from 'websocket'
+const W3cwebsocket = w3cwebsocket
 
 export default {
   data:function(){
@@ -33,6 +35,10 @@ export default {
       selectedcard: 'selectCard'
     }),
     mousedown: function(e){
+      if (e.button == 1) {
+        this.remove()
+        return
+      }
       this.cursorOffset.x = e.offsetX
       this.cursorOffset.y = e.offsetY
       if (this.paper.isSelected) {
@@ -52,6 +58,19 @@ export default {
         y: e.y-this.cursorOffset.y,
       }))
       document.addEventListener('mouseup',this.mouseup)
+    },
+    remove: function(){
+      axios.delete('http://' +process.env.mainUrl + '/api/rm-doc', {
+        params: {
+          classid: this.classid,
+          docid: this.paper.docid
+        }
+      }).then( () => {
+        const c = new W3cwebsocket('ws://' +process.env.mainUrl + '/ws/refresh')
+        c.onopen = () => c.send('{}')
+      }).catch(e =>{
+        console.log(e)
+      })
     },
     savePosition: function(){
         axios.put('http://' +process.env.mainUrl + '/api/fix-position', {

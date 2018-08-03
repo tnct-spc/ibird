@@ -18,7 +18,8 @@ export default {
   },
   data () {
     return {
-      client: {}
+      client: {},
+      refreshClient: {}
     }
   },
   created () {
@@ -27,6 +28,8 @@ export default {
     this.client.onmessage=({data})=>{
       this.move(JSON.parse(data))
     }
+    this.refreshClient = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/refresh')
+    this.refreshClient.onmessage = d => this.refresh()
   },
   computed: {
     ...mapGetters({
