@@ -4,6 +4,8 @@ import multer from 'multer'
 import Converter from 'office-convert'
 import child_process from 'child_process'
 import axios from 'axios'
+import { w3cwebsocket } from 'websocket'
+const W3cwebsocket = w3cwebsocket
 
 const router = Router()
 const converter = Converter.createConverter();
@@ -66,6 +68,9 @@ async function run(path, classid){
   console.log(classid)
   console.log(docid)
   if(classid) await runAddAPI(classid, docid)
+  // const c = new W3cwebsocket('ws://localhost:3000/ws/refresh')
+  // console.log(c)
+  // c.send()
   return path
 }
 

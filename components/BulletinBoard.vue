@@ -18,7 +18,8 @@ export default {
   },
   data () {
     return {
-      client: {}
+      client: {},
+      refreshClient: {}
     }
   },
   created () {
@@ -26,6 +27,11 @@ export default {
     this.client = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/move')
     this.client.onmessage=({data})=>{
       this.move(JSON.parse(data))
+    }
+    this.refreshClient = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/refresh')
+    this.refreshClient.onmessage = d => {
+      console.log('a')
+      this.refresh()
     }
   },
   computed: {
