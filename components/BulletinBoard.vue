@@ -29,10 +29,7 @@ export default {
       this.move(JSON.parse(data))
     }
     this.refreshClient = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/refresh')
-    this.refreshClient.onmessage = d => {
-      console.log('a')
-      this.refresh()
-    }
+    this.refreshClient.onmessage = d => this.refresh()
   },
   computed: {
     ...mapGetters({
