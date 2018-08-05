@@ -11,8 +11,7 @@ var list = []
 // 駅のタイムテーブルを取得してJSONを生成するAPI
 router.get('/createtable', function (req, res) {
   var scrapeData
-  var fetchURL = 'https://transit.yahoo.co.jp/station/time/22900/?gid=3070&done=time&tab=time'
-  fetchYahoo(scrapeData, fetchURL, createJsonFile)
+  fetchYahoo(scrapeData, req.query.url, createJsonFile)
   res.send('ok')
 })
 
@@ -21,7 +20,7 @@ router.get('/getfilelist', function (req, res) {
   var fileInfo = JSON.parse(readFileSync(dirPath + '/filename.json', 'utf8'))
   var todayFile = []
   list.length = 0
-  getlist(todayFile)
+  getTodayList(todayFile)
   for (var i = 0; i < todayFile.length; i++) {
     for (var j = 0; j < fileInfo.length; j++) {
       if (todayFile[i] === fileInfo[j].name) {
@@ -51,8 +50,11 @@ router.get('/sendtable', function (req, res) {
 })
 
 // 実行したの日の曜日に合わせてサーバー内にあるファイルのリストを返す関数
-function getlist (todayFileList) {
+function getTodayList (todayFileList) {
   var filelist = readdirSync(dirPath) // 全ファイルのリストを生成
+  filelist.some(function (name, i) {
+    if (name === 'filename.json') filelist.splice(i, 1)
+  })
   var dt = new Date().getDay()
 
   if (dt === 0) {
@@ -80,16 +82,16 @@ function getlist (todayFileList) {
 function fetchYahoo (fullTimetableData, url, callback) {
   fullTimetableData = JSON.parse('{}')
   fetch(url).then(function (result) {
+    if (result.error) console.log('Failed fetchYahoo : ' + result.error)
     var $ = result.$
-    if (result.error) {
-      console.log('Failed fetchYahoo : ' + result.error)
-    }
 
+    // 駅名、行き先、何線かを取得
     var anotherData = $('#cat-pass strong').text().split(' ')
     fullTimetableData['station'] = anotherData[0]
     fullTimetableData['direction'] = anotherData[2]
     fullTimetableData['line'] = anotherData[1]
 
+    // 電車の車種と行き先のリストを作成
     var kindList = JSON.parse('{}')
     var goingList = JSON.parse('{}')
     $('#timeNotice1 li').each(function () {
@@ -101,6 +103,7 @@ function fetchYahoo (fullTimetableData, url, callback) {
       goingList[going[0]] = going[1]
     })
 
+    // 電車が止まる時間帯だけのリストを作成
     var ariveHour = []
     $('.tblDiaDetail tr').each(function (i) {
       var id = $(this).attr('id')
@@ -110,6 +113,7 @@ function fetchYahoo (fullTimetableData, url, callback) {
       }
     })
 
+    // 時刻表とその電車の車種、行き先を取得
     var timetable = JSON.parse('{}')
     for (var i = 1; i <= 24; i++) {
       var fullHour = i.toString()
@@ -152,31 +156,22 @@ function createJsonFile (jsonData, URL) {
   var filename
   var dt = new Date().getDay()
 
-  if (dt === 0) {
-    filename = 'holiday_'
-  } else if (dt === 6) {
-    filename = 'weekendday_'
-  } else {
-    filename = 'weekday_'
-  }
+  // ファイル名を作成
+  if (dt === 0) filename = 'holidays_'
+  else if (dt === 6) filename = 'weekenddays_'
+  else filename = 'weekdays_'
   var stationID = parse(URL).pathname.split('/')
   filename += stationID[3] + '_'
   filename += parse(URL, true).query.gid + '.json'
 
+  // 最終的なファイルを作成
   writeJson(dirPath + '/' + filename, jsonData, {spaces: 2},
     function (error) {
-      if (error) {
-        console.log('Failed writeJson : ' + error)
-      }
+      if (error) console.log('Failed writeJson : ' + error)
     }
   )
 
-  var filelist = readdirSync(dirPath)
-  filelist.some(function (v, i) {
-    if (v === 'filename.json') {
-      filelist.splice(i, 1)
-    }
-  })
+  // filename.jsonを更新
   var fileInfo = JSON.parse(readFileSync(dirPath + '/filename.json', 'utf8'))
   var jsonInfo = JSON.parse('{}')
   jsonInfo['name'] = filename
