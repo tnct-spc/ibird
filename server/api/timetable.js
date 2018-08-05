@@ -18,12 +18,12 @@ router.get('/createtable', function (req, res) {
 // 表示できるJSONファイルの情報を返すAPI
 router.get('/getfilelist', function (req, res) {
   var fileInfo = JSON.parse(readFileSync(dirPath + '/filename.json', 'utf8'))
-  var todayFile = []
   list.length = 0
-  getTodayList(todayFile)
-  for (var i = 0; i < todayFile.length; i++) {
+  console.log(getTodayList())
+  console.log(getTodayList().length)
+  for (var i = 0; i < getTodayList().length; i++) {
     for (var j = 0; j < fileInfo.length; j++) {
-      if (todayFile[i] === fileInfo[j].name) {
+      if (getTodayList()[i] === fileInfo[j].name) {
         list.push(fileInfo[j])
       }
     }
@@ -50,7 +50,8 @@ router.get('/sendtable', function (req, res) {
 })
 
 // 実行したの日の曜日に合わせてサーバー内にあるファイルのリストを返す関数
-function getTodayList (todayFileList) {
+var getTodayList = () => {
+  var todayFileList = []
   var filelist = readdirSync(dirPath) // 全ファイルのリストを生成
   filelist.some(function (name, i) {
     if (name === 'filename.json') filelist.splice(i, 1)
@@ -76,6 +77,7 @@ function getTodayList (todayFileList) {
       }
     }
   }
+  return todayFileList
 }
 
 // Yahooから時刻表と駅のデータをスクレイピングする関数
