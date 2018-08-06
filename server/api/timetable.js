@@ -6,7 +6,24 @@ import { parse } from 'url'
 
 const router = Router()
 var dirPath = resolve('.timetable', '../.timetable') // jsonのパスを設定
+var selectStation = 'https://transit.yahoo.co.jp/station/rail/22900/?kind=1'
 var list = []
+
+router.get('/searchstation', (req, res) => {
+  res.json()
+})
+
+router.get('/geturllist', (req, res) => {
+  fetch(selectStation)
+    .then(function (result) {
+      var $ = result.$
+
+      /* $('ul.elmSearchItem.direction li').each(function () {
+        if
+      }) */
+    })
+  res.sendStatus(200)
+})
 
 // 駅のタイムテーブルを取得してJSONを生成するAPI
 router.get('/createtable', (req, res) => {
@@ -55,7 +72,7 @@ router.get('/createtable', (req, res) => {
             var hourList = []
             $('#hh_' + ariveHour[j] + ' .timeNumb').each(function () {
               var trainData = JSON.parse('{}')
-              trainData['min'] = ($(this).find('dt').text())
+              trainData['min'] = $(this).find('dt').text().replace(/[^0-9]+/g, '')
               if ($(this).find('.trainType').length) {
                 var trainType = $(this).find('.trainType').text().replace('[', '')
                   .replace(']', '')
@@ -161,15 +178,15 @@ var getTodayList = () => {
 // fetchのプロミスで呼び出すファイルを作成する関数
 function createJsonFile (jsonData, URL) {
   var filename
-  var dt = new Date().getDay()
 
   // ファイル名を作成
-  if (dt === 0) filename = 'holidays_'
-  else if (dt === 6) filename = 'weekenddays_'
+  var q = parse(URL, true).query
+  if (q.kind === 4) filename = 'holidays_'
+  else if (q.kind === 2) filename = 'weekenddays_'
   else filename = 'weekdays_'
   var stationID = parse(URL).pathname.split('/')
   filename += stationID[3] + '_'
-  filename += parse(URL, true).query.gid + '.json'
+  filename += q.gid + '.json'
   // 最終的なファイルを作成
   writeJson(dirPath + '/' + filename, jsonData, {spaces: 2},
     function (error) {
