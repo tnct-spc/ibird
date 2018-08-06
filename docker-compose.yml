@@ -1,5 +1,15 @@
 version: '2'
 services:
+  nginx:
+    build:
+      context: ./docker/nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - "./docker/nginx/conf.d:/etc/nginx/conf.d"
+    links:
+      - node_express
   node_express:
     build:
       context: ./docker/node
