@@ -37,7 +37,7 @@ router.get('/yolp', function (req, res, next) {
         res.write(data)
         res.send()
     })
-    .catch(err => sendStatus(err))
+    .catch(err => console.err(err))
 })
 
 export default router
