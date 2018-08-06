@@ -10,5 +10,11 @@
     "station": "狭間駅",
     "direction": "高尾山口・高尾方面",
     "line": "京王高尾線"
+  },
+  {
+    "name": "weekdays_23318_3091.json",
+    "station": "本厚木駅",
+    "direction": "小田原・新松田方面",
+    "line": "小田急小田原線"
   }
 ]
