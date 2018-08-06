@@ -82,12 +82,12 @@ router.get('/createtable', (req, res) => {
       createJsonFile(fullTimetableData, req.query.url)
     })
     .then(function () {
-      res.status(200).end()
+      res.status(200).send('Success')
     })
     // エラー処理
     .catch(function (error) {
       console.log('Failed loadHTML: ' + error)
-      res.status(400)
+      res.status(400).send('BadRquest')
     })
 })
 
