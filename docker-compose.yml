@@ -1,7 +1,8 @@
 version: '2'
 services:
   node_express:
-    image: node:8.11-alpine
+    build:
+      context: ./docker/node
     container_name: node_express
     hostname: localhost
     volumes:
@@ -10,3 +11,17 @@ services:
     command: [sh, -c, yarn install && yarn run dev]
     ports:
       - "3000:3000"
+  postgres:
+    build:
+      context: ./docker/postgres
+    container_name: postgre
+    hostname: localhost
+    environment:
+      PGDATA: /var/lib/pgsql/data
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+    volumes:
+      - "./db/data:/var/lib/pgsql/data"
+    ports:
+      - "5432:5432"

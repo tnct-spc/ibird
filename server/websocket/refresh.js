@@ -5,11 +5,16 @@ const router = Router()
 expressWs(router)
 
 const receivers = []
-router.ws('/alert',function(ws, req){
+router.ws('/refresh',function(ws, req){
   const idx = receivers.push(ws)-1
   ws.on('message', msg => {
     receivers.forEach((receiver,receiverId)=>{
-      if(receiverId!==idx){receiver.send(msg)}
+      try{
+        receiver.send()
+      }catch(e){
+        console.log(e)
+        receivers.splice(receiverId,1)
+      }
     })
   })
   ws.on('close', ()=>{

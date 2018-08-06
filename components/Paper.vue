@@ -1,68 +1,86 @@
 <template>
   <div @mousedown="mousedown">
-    <p v-show="this.paper.isSelected">{{ this.paperId }}</p>
+    <p>{{ this.paper }}</p>
     <img class="paper" :src="paper.imgUrl" id="drag"
-      alt="" :style="{left: _x, top: _y}" ondragstart="return false;">
+      alt="" :style="{left: this.paper.x+'px', top: this.paper.y+'px'}" ondragstart="return false;">
   </div>
 </template>
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
+import axios from 'axios'
+import { w3cwebsocket } from 'websocket'
+const W3cwebsocket = w3cwebsocket
+
 export default {
   data:function(){
     return{
-      x: null,
-      y: null,
       cursorOffset: {x:0,y:0},
     }
   },
   props: {
+    "classid": String,
     "paperId": String,
     "wsClient": {}
   },
   computed: {
-    ...mapState({
+    ...mapGetters({
       papers: 'papers'
     }),
     paper () {
-      return this.papers[this.paperId]
+      return this.papers(this.classid)[this.paperId]
     },
-    _x () {
-      return `${this.paper.x}px`
-    },
-    _y () {
-      return `${this.paper.y}px`
-    }
   },
   methods: {
     ...mapMutations({
       selectedcard: 'selectCard'
     }),
-    ...mapActions({
-      move: 'move'
-    }),
-
     mousedown: function(e){
-      console.log(e.x)
-      this.selectedcard({paperId: this.paperId})
+      if (e.button == 1) {
+        this.remove()
+        return
+      }
       this.cursorOffset.x = e.offsetX
       this.cursorOffset.y = e.offsetY
-      document.addEventListener('mousemove',this.mousemove)
+      if (this.paper.isSelected) {
+        this.savePosition()
+        document.removeEventListener('mousemove',this.mousemove)
+        this.selectedcard({classid: this.classid, paperId: null})
+      } else {
+        document.addEventListener('mousemove',this.mousemove)
+        this.selectedcard({classid: this.classid, paperId: this.paperId})
+      }
     },
     mousemove: function(e){
-      if(this.paper.isSelected){
-        this.move({
-          paperId: this.paperId,
-          x: e.x-this.cursorOffset.x,
-          y: e.y-this.cursorOffset.y,
-          client: this.wsClient
-        })
-      }
+      this.wsClient.send(JSON.stringify({
+        classid: this.classid,
+        paperId: this.paperId,
+        x: e.x-this.cursorOffset.x,
+        y: e.y-this.cursorOffset.y,
+      }))
       document.addEventListener('mouseup',this.mouseup)
     },
-    mouseup: function(e){
-      document.removeEventListener('mousemove',this.mousemove)
-      document.removeEventListener('mouseup',this.mouseup)
-      this.selectedcard({paperId: null})
+    remove: function(){
+      axios.delete('http://' +process.env.mainUrl + '/api/rm-doc', {
+        params: {
+          classid: this.classid,
+          docid: this.paper.docid
+        }
+      }).then( () => {
+        const c = new W3cwebsocket('ws://' +process.env.mainUrl + '/ws/refresh')
+        c.onopen = () => c.send('{}')
+      }).catch(e =>{
+        console.log(e)
+      })
+    },
+    savePosition: function(){
+        axios.put('http://' +process.env.mainUrl + '/api/fix-position', {
+          classid: this.classid,
+          docid: this.paper.docid,
+          x: this.paper.x,
+          y: this.paper.y
+        }).catch(e =>{
+          console.log(e)
+        })
     }
   }
 }
