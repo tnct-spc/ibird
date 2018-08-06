@@ -1,9 +1,10 @@
 <template>
   <div @mousedown="mousedown">
     <p>{{ this.paper }}</p>
-    <img class="paper" :src="paper.imgUrl" id="drag"
-      alt="" :style="{left: this.paper.x+'px', top: this.paper.y+'px'}" ondragstart="return false;">
-  </div>
+     <img class="paper" :src="paper.imgUrl" id="drag"
+      alt="" :style="{left: this.paper.x+'px', top: this.paper.y+'px'}" ondragstart="return false;"
+       weight="15%" height="37%">
+  </div>    
 </template>
 <script>
 import { mapMutations, mapGetters } from "vuex";
@@ -58,19 +59,13 @@ export default {
 };
 </script>
 <style scoped>
-#drag {
-  margin: 1rem;
-  box-shadow: 0.5rem 0.5rem 0.5rem 0.01rem;
-  border: solid 0.1rem black;
-  max-height: calc(50vh - 1rem);
-  position: absolute;
-}
-#drag {
-  box-shadow: 0.5rem 0.5rem 0.5rem 0.01rem;
-  color: #0000cc;
-}
 img.paper {
-  width: "15%";
-  height: "37%";
+  border: solid 0.1rem rgb(1, 1, 1);
+  position: absolute;
+  display: table-cell;
+}
+#drag {
+  box-shadow: 0.1rem 0.3rem 0.1rem 0.3rem ;
+  color: #cc000000;
 }
 </style>
