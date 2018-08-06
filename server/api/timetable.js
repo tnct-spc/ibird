@@ -82,12 +82,12 @@ router.get('/createtable', (req, res) => {
       createJsonFile(fullTimetableData, req.query.url)
     })
     .then(function () {
-      res.status(200).send('Success')
+      res.sendStatus(200)
     })
     // エラー処理
     .catch(function (error) {
       console.log('Failed loadHTML: ' + error)
-      res.status(400).send('BadRquest')
+      res.sendStatus(400)
     })
 })
 
@@ -123,7 +123,7 @@ router.get('/sendtable', (req, res) => {
     var timeTableData = JSON.parse(readFileSync(dirPath + '/' + req.query.file, 'utf8'))
     res.json(timeTableData)
   } else {
-    res.status(400).send('BadRquest')
+    res.sendStatus(400)
   }
 })
 
