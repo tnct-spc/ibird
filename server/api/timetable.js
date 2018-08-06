@@ -77,22 +77,19 @@ router.get('/createtable', (req, res) => {
         }
       }
       fullTimetableData['timetable'] = timetable
-      console.log('createjson')
     })
     .then(function () {
       createJsonFile(fullTimetableData, req.query.url)
-      console.log('createFile')
     })
 
     // エラー処理
     .catch(function (error) {
       console.log('Failed loadHTML: ' + error)
-      res.send('サーバー内でエラーが起きました')
+      res.send('BadRequest')
     })
 
     // 成功
     .finally(function () {
-      console.log('end')
       res.send('ok')
     })
 })
@@ -125,8 +122,12 @@ router.get('/getfilelist', (req, res) => {
   のようになります。
 */
 router.get('/sendtable', (req, res) => {
-  var timeTableData = JSON.parse(readFileSync(dirPath + '/' + req.query.file, 'utf8'))
-  res.json(timeTableData)
+  if (req.query.file) {
+    var timeTableData = JSON.parse(readFileSync(dirPath + '/' + req.query.file, 'utf8'))
+    res.json(timeTableData)
+  } else {
+    res.send('BadRequest')
+  }
 })
 
 // 実行したの日の曜日に合わせてサーバー内にあるファイルのリストを返す関数
@@ -160,7 +161,7 @@ var getTodayList = () => {
   return todayFileList
 }
 
-// fetchYahooのコールバックで呼び出すファイルを作成する関数
+// fetchのプロミスで呼び出すファイルを作成する関数
 function createJsonFile (jsonData, URL) {
   var filename
   var dt = new Date().getDay()
@@ -172,7 +173,6 @@ function createJsonFile (jsonData, URL) {
   var stationID = parse(URL).pathname.split('/')
   filename += stationID[3] + '_'
   filename += parse(URL, true).query.gid + '.json'
-
   // 最終的なファイルを作成
   writeJson(dirPath + '/' + filename, jsonData, {spaces: 2},
     function (error) {
@@ -180,28 +180,27 @@ function createJsonFile (jsonData, URL) {
     }
   )
 
-  /* // filename.jsonを更新
-  var fileInfo = JSON.parse(readFileSync(dirPath + '/filename.json', 'utf8'))
+  // 上で作ったファイルのデータをまとめる
   var jsonInfo = JSON.parse('{}')
   jsonInfo['name'] = filename
   jsonInfo['station'] = jsonData.station
   jsonInfo['direction'] = jsonData.direction
   jsonInfo['line'] = jsonData.line
-  for (var i = 0; i < fileInfo.length; i++) {
-    if (fileInfo[i].name === filename) {
-      break
+  // 今現在のfilename.jsonの状態と比べる
+  var nowData = JSON.parse(readFileSync(dirPath + '/filename.json', 'utf8'))
+  if (nowData.length) {
+    for (var i = 0; i < nowData.length; i++) {
+      if (nowData[i].name === filename) break // すでに登録しているファイルなら上書き
+      if (nowData[i].name !== filename && nowData[nowData.length - 1] === nowData[i]) nowData.push(jsonInfo) // 一致するものがなかったら追加
     }
-    if (fileInfo[i].name !== filename && fileInfo[fileInfo.length - 1] === fileInfo[i]) {
-      fileInfo.push(jsonInfo)
-    }
+  } else {
+    nowData.push(jsonInfo)
   }
-  writeJson(dirPath + '/filename.json', fileInfo, {spaces: 2},
+  writeJson(dirPath + '/filename.json', nowData, {spaces: 2},
     function (error) {
-      if (error) {
-        console.log('Failed writeFilename : ' + error)
-      }
+      if (error) console.log('Failed writeFilename : ' + error)
     }
-  ) */
+  )
 }
 
 export default router
