@@ -21,13 +21,13 @@ router.get('/yolp', function (req, res, next) {
     const now = new Date()
     const year = String(alignment(now.getFullYear()))
     const month = String(alignment(now.getMonth() + 1))
-    const day = String(alignment(now.getDay()))
+    const date = String(alignment(now.getDate()))
     const hour = String(alignment(now.getHours()))
     const minute = String(alignment(now.getMinutes()))
 
-    const url = 'https://map.yahooapis.jp/map/V1/static?appid=dj0zaiZpPXVZaDlrczVieXNFYSZzPWNvbnN1bWVyc2VjcmV0Jng9ZGE-&lat=' + lat + '&lon=' + lon + '&z=' + z + '&width=' + width + '&height=' + height + '&mode=map&overlay=type:rainfall|date:' + year + month + day + hour + minute + '|datelabel:on&output=jpeg'
+    const url = 'https://map.yahooapis.jp/map/V1/static?appid=dj0zaiZpPXVZaDlrczVieXNFYSZzPWNvbnN1bWVyc2VjcmV0Jng9ZGE-&lat=' + lat + '&lon=' + lon + '&z=' + z + '&width=' + width + '&height=' + height + '&mode=map&overlay=type:rainfall|date:' + year + month + date + hour + minute + '|datelabel:on&output=jpeg'
 
-    console.log(year,month,day,hour,minute)
+    console.log(year,month,date,hour,minute)
     console.log(url)
 
     fetch(url)
