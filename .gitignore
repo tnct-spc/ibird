@@ -30,5 +30,6 @@ build
 
 .idea/
 
+.timetable/
 db/data
 yarn-error.log
