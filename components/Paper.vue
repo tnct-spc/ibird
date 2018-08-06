@@ -1,71 +1,101 @@
 <template>
   <div @mousedown="mousedown">
     <p>{{ this.paper }}</p>
-     <img class="paper" :src="paper.imgUrl" id="drag"
-      alt="" :style="{left: this.paper.x+'px', top: this.paper.y+'px'}" ondragstart="return false;"
-       weight="15%" height="37%">
-  </div>    
+    <img class="paper" :src="paper.imgUrl" id="drag"
+      alt="" :style="{left: this.paper.x+'px', top: this.paper.y+'px'}" ondragstart="return false;">>
+  </div>
 </template>
 <script>
-import { mapMutations, mapGetters } from "vuex";
+import { mapMutations, mapGetters } from 'vuex'
+import axios from 'axios'
+import { w3cwebsocket } from 'websocket'
+const W3cwebsocket = w3cwebsocket
 export default {
-  data: function() {
-    return {
-      cursorOffset: { x: 0, y: 0 }
-    };
+  data:function(){
+    return{
+      cursorOffset: {x:0,y:0},
+    }
   },
   props: {
-    classid: String,
-    paperId: String,
-    wsClient: {}
+    "classid": String,
+    "paperId": String,
+    "wsClient": {}
   },
   computed: {
     ...mapGetters({
-      papers: "papers"
+      papers: 'papers'
     }),
-    paper() {
-      return this.papers(this.classid)[this.paperId];
-    }
+    paper () {
+      return this.papers(this.classid)[this.paperId]
+    },
   },
   methods: {
     ...mapMutations({
-      selectedcard: "selectCard"
+      selectedcard: 'selectCard'
     }),
-    mousedown: function(e) {
-      this.selectedcard({ classid: this.classid, paperId: this.paperId });
-      this.cursorOffset.x = e.offsetX;
-      this.cursorOffset.y = e.offsetY;
-      document.addEventListener("mousemove", this.mousemove);
-    },
-    mousemove: function(e) {
-      if (this.paper.isSelected) {
-        this.wsClient.send(
-          JSON.stringify({
-            classid: this.classid,
-            paperId: this.paperId,
-            x: e.x - this.cursorOffset.x,
-            y: e.y - this.cursorOffset.y
-          })
-        );
+    mousedown: function(e){
+      if (e.button == 1) {
+        this.remove()
+        return
       }
-      document.addEventListener("mouseup", this.mouseup);
+      this.cursorOffset.x = e.offsetX
+      this.cursorOffset.y = e.offsetY
+      if (this.paper.isSelected) {
+        this.savePosition()
+        document.removeEventListener('mousemove',this.mousemove)
+        this.selectedcard({classid: this.classid, paperId: null})
+      } else {
+        document.addEventListener('mousemove',this.mousemove)
+        this.selectedcard({classid: this.classid, paperId: this.paperId})
+      }
     },
-    mouseup: function(e) {
-      document.removeEventListener("mousemove", this.mousemove);
-      document.removeEventListener("mouseup", this.mouseup);
-      this.selectedcard({ classid: this.classid, paperId: null });
+    mousemove: function(e){
+      this.wsClient.send(JSON.stringify({
+        classid: this.classid,
+        paperId: this.paperId,
+        x: e.x-this.cursorOffset.x,
+        y: e.y-this.cursorOffset.y,
+      }))
+      document.addEventListener('mouseup',this.mouseup)
+    },
+    remove: function(){
+      axios.delete('http://' +process.env.mainUrl + '/api/rm-doc', {
+        params: {
+          classid: this.classid,
+          docid: this.paper.docid
+        }
+      }).then( () => {
+        const c = new W3cwebsocket('ws://' +process.env.mainUrl + '/ws/refresh')
+        c.onopen = () => c.send('{}')
+      }).catch(e =>{
+        console.log(e)
+      })
+    },
+    savePosition: function(){
+        axios.put('http://' +process.env.mainUrl + '/api/fix-position', {
+          classid: this.classid,
+          docid: this.paper.docid,
+          x: this.paper.x,
+          y: this.paper.y
+        }).catch(e =>{
+          console.log(e)
+        })
     }
   }
-};
+}
 </script>
 <style scoped>
 img.paper {
-  border: solid 0.1rem rgb(1, 1, 1);
+  width: 15%;
+  height: 37%;
+  margin: 1rem;
+  box-shadow: 0.5rem 0.5rem 0.5rem 0.01rem;
+  border:solid 0.1rem black;
+  max-height: calc(50vh - 1rem);
   position: absolute;
-  display: table-cell;
 }
-#drag {
-  box-shadow: 0.1rem 0.3rem 0.1rem 0.3rem ;
-  color: #cc000000;
+img.paper:hover{
+  box-shadow: 0.5rem 0.5rem 0.5rem 0.01rem;
+  color: #0000CC;
 }
 </style>
