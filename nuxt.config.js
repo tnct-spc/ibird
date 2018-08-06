@@ -43,6 +43,6 @@ module.exports = {
     }
   },
   env: {
-    mainUrl: process.env.MAIN_URL || '192.168.1.171'
+    mainUrl: process.env.MAIN_URL || 'ibird.ml'
   }
 }
