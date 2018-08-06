@@ -7,16 +7,13 @@
 </template>
 <script>
 import axios from 'axios'
-let files
-let formData
-let overlay
 
 export default{
   methods: {
   onDragOver:(event) => {
     event.preventDefault()
     event.dataTransfer.dropEffect = "copy"
-    overlay = document.getElementById("overlay")
+    let overlay = document.getElementById("overlay")
     overlay.classList.add("dropover")
   },
   onDragLeave:(event) => {
@@ -25,13 +22,13 @@ export default{
     event.preventDefault()
     event.dataTransfer.dropEffect="copy"
     overlay.classList.remove("dropover")
-    files = event.dataTransfer.files[0]
+    let files = event.dataTransfer.files[0]
     if(!files.type.match('application/pdf')&&!files.type.match('application/vnd.*'))
     {
       overlay.innerHTML="ファイル形式に対応してません"
       return
     }
-    formData = new FormData()
+    let formData = new FormData()
     formData.append( 'file', files )
     axios.post('api/upload-file',formData)
     .then((response) => {
@@ -47,8 +44,8 @@ export default{
 </script>
 <style scoped>
 #overlay {
-  position: fixed;
-  top: 0;
+  /*position: fixed;
+  */top: 0;
   left: 0;
   width: 100%;
   height: 100%;

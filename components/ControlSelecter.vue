@@ -1,60 +1,61 @@
 <template>
   <div id="grid" style="margin-left:5px;margin-right:5px">
-    <p v-for="item in list" @click="ihi" class="sitayose">
+    <button v-for="item in list" @click="switchingClass()" class="sitayose p">
       {{item.classes}}
-    </p>
-    <P v-for="item in list2" @click="ihi">
+    </button>
+    <button v-for="item in list2" @click="switchingClass()" class="p">
       {{item.cource}}
-    </P>
+    </button>
+    <div style="text-align:center">
+      {{message}}
+    </div>
   </div>
 </template>
 
 <script>
 export default{
+  props: ["v", "val"],
   data:()=>{
     return{
+    text:"",
+    message:"",
     list:[
-      {classes:"1年"},
-      {classes:"2年"},
-      {classes:"3年"},
-      {classes:"4年"},
-      {classes:"5年"}
+      {id:1,classes:"1年"},
+      {id:2,classes:"2年"},
+      {id:3,classes:"3年"},
+      {id:4,classes:"4年"},
+      {id:5,classes:"5年"}
     ],
     list2:[
-      {cource:"J"},
-      {cource:"D"},
-      {cource:"E"},
-      {cource:"M"},
-      {cource:"C"}
-    ]
+      {id:1,cource:"J"},
+      {id:2,cource:"D"},
+      {id:3,cource:"E"},
+      {id:4,cource:"M"},
+      {id:5,cource:"C"}
+    ],
+    v:0
     }
   },
   methods:{
-    ihi(){
-    }
+    switchingClass(){
+     }
   },
 }
 </script>
 
 <style>
 body{
-  background-color: #d0ae88ff
+  background-color: #d0ae88ff;
 }
 </style>
 
 <style scoped>
-p{
+.p{
   border: 2px solid orange;
   background-color: yellow;
 }
 .sitayose{
-  margin-top: 5%;
-}
-.hidariyose{
-  margin-right: 5%;
-}
-.migiyose{
-  margin-left: 5%;
+  margin-top: 17%;
 }
 #grid{
   display: grid;
