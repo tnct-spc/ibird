@@ -1,19 +1,34 @@
-import { Router } from 'express'
+import Router from 'express'
+
+import fetch from 'node-fetch'
 
 const router = Router()
 
-const fetch = require('node-fetch')
-
-router.get("/yolp", function (req, res, next) {
-    const yahooAppId = "dj0zaiZpPXVZaDlrczVieXNFYSZzPWNvbnN1bWVyc2VjcmV0Jng9ZGE-"
+router.get('/yolp', function (req, res, next) {
     const lat = req.query.lat
     const lon = req.query.lon
     const z = req.query.z
     const width = req.query.width
     const height = req.query.height
-    const yyyymmdd = req.query.yyyymmdd
-    
-    const url = "https://map.yahooapis.jp/map/V1/static?appid=" + yahooAppId + "&lat=" + lat + "&lon=" + lon + "&z=" + z + "&width=" + width + "&height=" + height + "&mode=map&overlay=type:rainfall|date:" + yyyymmdd + "1200|datelabel:on&output=jpeg"
+
+    const alignment = function(number) {
+        if (number < 10) {
+            number = "0" + number
+        }
+        return number
+    }
+
+    const now = new Date()
+    const year = String(alignment(now.getFullYear()))
+    const month = String(alignment(now.getMonth() + 1))
+    const date = String(alignment(now.getDate()))
+    const hour = String(alignment(now.getHours()))
+    const minute = String(alignment(now.getMinutes()))
+
+    const url = 'https://map.yahooapis.jp/map/V1/static?appid=dj0zaiZpPXVZaDlrczVieXNFYSZzPWNvbnN1bWVyc2VjcmV0Jng9ZGE-&lat=' + lat + '&lon=' + lon + '&z=' + z + '&width=' + width + '&height=' + height + '&mode=map&overlay=type:rainfall|date:' + year + month + date + hour + minute + '|datelabel:on&output=jpeg'
+
+    console.log(year,month,date,hour,minute)
+    console.log(url)
 
     fetch(url)
     .then(data => data.buffer())
