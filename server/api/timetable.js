@@ -6,7 +6,7 @@ import { parse } from 'url'
 
 const router = Router()
 var dirPath = resolve('.timetable', '../.timetable') // jsonのパスを設定
-var selectStation = 'https://transit.yahoo.co.jp/station/rail/22900/?kind=1'
+var selectStation = 'https://transit.yahoo.co.jp/station/rail/22741/?q=%E6%96%B0%E5%AE%BF&kind=1&done=time'
 var list = []
 
 router.get('/searchstation', (req, res) => {
@@ -14,15 +14,23 @@ router.get('/searchstation', (req, res) => {
 })
 
 router.get('/geturllist', (req, res) => {
+  var executeList = []
   fetch(selectStation)
     .then(function (result) {
       var $ = result.$
-
-      /* $('ul.elmSearchItem.direction li').each(function () {
-        if
-      }) */
+      $('.elmSearchItem.direction li').each(function () {
+        $(this).find('li').each(function () {
+          executeList.push($(this).find('a').attr('href'))
+        })
+      })
+      /* for (var i = 0; i < executeList.length; i++) {
+        var urlObject = parse(executeList[i], true)
+      } */
     })
-  res.sendStatus(200)
+    .then(function () {
+      console.log(executeList)
+      res.sendStatus(200)
+    })
 })
 
 // 駅のタイムテーブルを取得してJSONを生成するAPI
@@ -52,7 +60,7 @@ router.get('/createtable', (req, res) => {
 
       // 電車が止まる時間帯だけのリストを作成
       var ariveHour = []
-      $('.tblDiaDetail tr').each(function (i) {
+      $('.tblDiaDetail tr').each(function () {
         var id = $(this).attr('id')
         if (id) {
           var idToNum = id.replace('hh_', '')
