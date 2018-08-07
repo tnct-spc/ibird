@@ -12,9 +12,21 @@ let list = []
 
 router.get('/searchstation', (req, res) => {
   if (req.query.station) {
-    var urlObject = parse(searchBaseURL, true)
-    urlObject.search = undefined
-    Object.assign()
+    var baseURL = parse(searchBaseURL, true)
+    fetch(updateQuery(baseURL, {q: req.query.station}))
+      .then(function (result) {
+        var $ = result.$
+        console.log($('.mainWrp').find('.staKana').text())
+      })
+      // 成功
+      .then(function () {
+        res.sendStatus(200)
+      })
+      // エラー処理
+      .catch(function (error) {
+        console.log('Failed searchstation: ' + error)
+        res.sendStatus(400)
+      })
   } else {
     console.log('駅名が入力されていません')
     res.sendStatus(400)
@@ -32,10 +44,10 @@ router.get('/geturllist', (req, res) => {
         })
       })
       for (var i = 0; i < executeList.length; i++) {
-        var urlObject = parse(executeList[i], true)
-        if (urlObject.query.kind === '1') {
-          executeList.push(updateQuery(urlObject, {kind: 2}))
-          executeList.push(updateQuery(urlObject, {kind: 4}))
+        var url = parse(executeList[i], true)
+        if (url.query.kind === '1') {
+          executeList.push(updateQuery(url, {kind: 2}))
+          executeList.push(updateQuery(url, {kind: 4}))
         }
       }
     })
@@ -51,10 +63,10 @@ router.get('/geturllist', (req, res) => {
     })
 })
 
-var updateQuery = (url, object) => {
-  url.search = undefined
-  Object.assign(url.query, object)
-  return format(url)
+var updateQuery = (urlObject, object) => {
+  urlObject.search = undefined
+  Object.assign(urlObject.query, object)
+  return format(urlObject)
 }
 
 // 駅のタイムテーブルを取得してJSONを生成するAPI
