@@ -12,11 +12,22 @@ let list = []
 
 router.get('/searchstation', (req, res) => {
   if (req.query.station) {
+    selectStation = ''
     var baseURL = parse(searchBaseURL, true)
     fetch(updateQuery(baseURL, {q: req.query.station}))
       .then(function (result) {
         var $ = result.$
-        console.log($('.mainWrp').find('.staKana').text())
+        if ($('#cat-pass strong').text() === '駅の検索結果') {
+          if ($('.labelSmall .title').text() === '駅') {
+            console.log('駅やぞ')
+          } else {
+            console.log('該当する駅が存在しません')
+            res.sendStatus(400)
+          }
+        } else {
+          // apiを叩く予定
+          console.log('ok')
+        }
       })
       // 成功
       .then(function () {
@@ -62,12 +73,6 @@ router.get('/geturllist', (req, res) => {
       res.sendStatus(400)
     })
 })
-
-var updateQuery = (urlObject, object) => {
-  urlObject.search = undefined
-  Object.assign(urlObject.query, object)
-  return format(urlObject)
-}
 
 // 駅のタイムテーブルを取得してJSONを生成するAPI
 router.get('/createtable', (req, res) => {
@@ -188,6 +193,13 @@ router.get('/sendtable', (req, res) => {
     res.sendStatus(400)
   }
 })
+
+// urlのqueryをいじる関数
+var updateQuery = (urlObject, object) => {
+  urlObject.search = undefined
+  Object.assign(urlObject.query, object)
+  return format(urlObject)
+}
 
 // 実行したの日の曜日に合わせてサーバー内にあるファイルのリストを返す関数
 var getTodayList = () => {
