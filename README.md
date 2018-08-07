@@ -41,7 +41,8 @@ cd server
 #DB作成
 sequelize db:migrate
 #seed(初期データ)作成
-sequelize db:seed:all
+sequelize db:seed --seed seeders/20180807110914-year2.js
+sequelize db:seed:all(非推奨、動きません)
 ```
 とすればとりあえず動く
 一度実行したあとはDBの構造などが変更されない限りdokerの実行のみで動く
