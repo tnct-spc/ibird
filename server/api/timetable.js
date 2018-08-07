@@ -5,12 +5,20 @@ import { fetch } from 'cheerio-httpcli'
 import { parse, format } from 'url'
 
 const router = Router()
-var dirPath = resolve('.timetable', '../.timetable') // jsonのパスを設定
-var selectStation = 'https://transit.yahoo.co.jp/station/rail/22741/?q=%E6%96%B0%E5%AE%BF&kind=1&done=time'
-var list = []
+const dirPath = resolve('.timetable', '../.timetable') // jsonのパスを設定
+const searchBaseURL = 'https://transit.yahoo.co.jp/station/time/search?srtbl=on&kind=1&done=time'
+let selectStation = 'https://transit.yahoo.co.jp/station/rail/22900/?kind=1&done=time'
+let list = []
 
 router.get('/searchstation', (req, res) => {
-  res.json()
+  if (req.query.station) {
+    var urlObject = parse(searchBaseURL, true)
+    urlObject.search = undefined
+    Object.assign()
+  } else {
+    console.log('駅名が入力されていません')
+    res.sendStatus(400)
+  }
 })
 
 router.get('/geturllist', (req, res) => {
@@ -26,19 +34,28 @@ router.get('/geturllist', (req, res) => {
       for (var i = 0; i < executeList.length; i++) {
         var urlObject = parse(executeList[i], true)
         if (urlObject.query.kind === '1') {
-          urlObject.search = undefined
-          Object.assign(urlObject.query, {kind: 2})
-          executeList.push(format(urlObject))
-          Object.assign(urlObject.query, {kind: 4})
-          executeList.push(format(urlObject))
+          executeList.push(updateQuery(urlObject, {kind: 2}))
+          executeList.push(updateQuery(urlObject, {kind: 4}))
         }
       }
     })
+    // 成功
     .then(function () {
       console.log(executeList)
       res.sendStatus(200)
     })
+    // エラー処理
+    .catch(function (error) {
+      console.log('Failed GetURLList: ' + error)
+      res.sendStatus(400)
+    })
 })
+
+var updateQuery = (url, object) => {
+  url.search = undefined
+  Object.assign(url.query, object)
+  return format(url)
+}
 
 // 駅のタイムテーブルを取得してJSONを生成するAPI
 router.get('/createtable', (req, res) => {
@@ -113,6 +130,7 @@ router.get('/createtable', (req, res) => {
     .then(function () {
       createJsonFile(fullTimetableData, req.query.url)
     })
+    // 成功
     .then(function () {
       res.sendStatus(200)
     })
