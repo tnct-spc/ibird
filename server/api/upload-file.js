@@ -4,6 +4,8 @@ import multer from 'multer'
 import Converter from 'office-convert'
 import child_process from 'child_process'
 import axios from 'axios'
+import { w3cwebsocket } from 'websocket'
+const W3cwebsocket = w3cwebsocket
 
 const router = Router()
 const converter = Converter.createConverter();
@@ -69,13 +71,14 @@ async function run(path, classids){
   console.log('classids = ' + JSON.parse(classids))
   console.log('docid = ' + docid)
   if(classids) await runAddAPI(JSON.parse(classids), docid)
+  const c = new W3cwebsocket('ws://localhost:3000/ws/refresh')
+  c.onopen = () => c.send('{}')
   return docid
 }
 
 router.post('/upload-file', upload.single('file'), (req, res, next) => {
-  run(req.file.path, req.body.classids).then((result) =>{
-    console.log(result)
-    res.sendStatus(200)
+  run(req.file.path, req.body.classids).then((docid) =>{
+    res.status(200).json({docid: docid})
   }).catch(e =>{
     console.log(e)
     res.sendStatus(400)

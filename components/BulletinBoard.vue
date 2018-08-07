@@ -18,29 +18,18 @@ export default {
   },
   data () {
     return {
-      client: {}
+      client: {},
+      refreshClient: {}
     }
   },
   created () {
-    axios.get('http://' +process.env.mainUrl + '/api/class-docs',{
-      params: {
-        classid: this.classid
-      }
-    }).then(res =>{
-      var documents = []
-      res.data.forEach(document => {
-        document['isSelected'] = false
-        document['imgUrl'] = '/jpg/' + document.docid + '.jpg'
-        documents.push(document)
-      });
-      this.fixPapers({classid: this.classid, documents: documents})
-    }).catch(e =>{
-      console.log(e)
-    })
+    this.refresh()
     this.client = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/move')
     this.client.onmessage=({data})=>{
       this.move(JSON.parse(data))
     }
+    this.refreshClient = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/refresh')
+    this.refreshClient.onmessage = d => this.refresh()
   },
   computed: {
     ...mapGetters({
@@ -51,7 +40,22 @@ export default {
     ...mapMutations({
       move: 'move',
       fixPapers: 'fixPapers'
-    })
+    }),
+    refresh: function(){
+      axios.get('http://' +process.env.mainUrl + '/api/class-docs',{
+        params: { classid: this.classid }
+      }).then(res =>{
+        var documents = []
+        res.data.forEach(document => {
+          document['isSelected'] = false
+          document['imgUrl'] = '/jpg/' + document.docid + '.jpg'
+          documents.push(document)
+        });
+        this.fixPapers({classid: this.classid, documents: documents})
+      }).catch(e =>{
+        console.log(e)
+      })
+    }
   },
   components: {
     Paper
