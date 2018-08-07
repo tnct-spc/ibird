@@ -3,7 +3,7 @@ import { readdirSync, readFileSync, writeJson } from 'fs-extra'
 import { resolve } from 'path'
 import { fetch } from 'cheerio-httpcli'
 import { parse, format } from 'url'
-import { get } from 'request'
+const request = require('request-promise-native')
 
 const router = Router()
 const dirPath = resolve('.timetable', '../.timetable') // jsonのパスを設定
@@ -14,6 +14,7 @@ router.get('/searchstation', (req, res) => {
   if (req.query.station) {
     var stationList = JSON.parse('{}')
     var baseURL = parse(searchBaseURL, true)
+    var confirm = ''
     fetch(updateQuery(baseURL, {q: req.query.station}))
       .then(function (result) {
         var $ = result.$
@@ -27,17 +28,26 @@ router.get('/searchstation', (req, res) => {
             res.sendStatus(400)
           }
         } else {
-          get({
+          confirm = $('#cat-pass strong').text()
+          request({
             url: 'http://localhost:3000/api/geturllist',
+            method: 'GET',
             qs: {'url': updateQuery(baseURL, {q: req.query.station})}
           })
+            .then(function (response) {
+              res.send(response)
+            })
+            .catch(function (error) {
+              console.log(error)
+              res.sendStatus(500)
+            })
         }
       })
       // 成功
       .then(function () {
         if (Object.keys(stationList).length) {
           res.json(stationList)
-        } else {
+        } else if (confirm === undefined) {
           res.sendStatus(200)
         }
       })
@@ -72,8 +82,7 @@ router.get('/geturllist', (req, res) => {
     })
     // 成功
     .then(function () {
-      console.log(executeList)
-      res.sendStatus(200)
+      res.json(executeList)
     })
     // エラー処理
     .catch(function (error) {
