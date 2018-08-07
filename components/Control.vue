@@ -38,7 +38,7 @@ export default{
     }
     const formData = new FormData()
     formData.append( 'file', files )
-    axios.post('api/upload-file',formData)
+    axios.post('../api/upload-file',formData)
     .then((response)=>{
       overlay.innerHTML="success"
     })

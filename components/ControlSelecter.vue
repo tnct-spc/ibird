@@ -1,13 +1,13 @@
 <template>
   <div id="grid" style="margin-left:5px;margin-right:5px">
-    <button v-for="item in grade" @click="switchingClass()" class="sitayose p">
+    <button v-for="(item, index) in grade" @click="switchingClassTable(index)" class="sitayose p">
       {{item.classes}}
     </button>
-    <button v-for="item in classes.list0" @click="switchingClassTable()" class="p"
+    <a :href=item.classid v-for="(item, index) in classes.list0" @click="switchingClass(index)" class="p">
       {{item.cource}}
-    </button>
-    <div style="text-align:center">
-      {{homeroom}}
+    </a>
+    <div>
+      {{url}}
     </div>
   </div>
 </template>
@@ -16,18 +16,18 @@ import axios from 'axios'
 export default{
   data:()=>{
     return{
-    homeroom:"",
+    url:"",
     //dbからのclassidでやるべきだけどとりあえずの実装
     grade:[
-      {id:"list1",classes:"1年"},
-      {id:"list2",classes:"2年"},
-      {id:"list3",classes:"3年"},
-      {id:"list4",classes:"4年"},
-      {id:"list5",classes:"5年"}
+      {id:1,classes:"1年"},
+      {id:2,classes:"2年"},
+      {id:3,classes:"3年"},
+      {id:4,classes:"4年"},
+      {id:5,classes:"5年"}
     ],
     classes:{
     list0:[
-      {classid:"",cource:"学年を選択してください"},
+      {classid:"404",cource:"学年を選択してください"},
       {classid:"",cource:""},
       {classid:"",cource:""},
       {classid:"",cource:""},
@@ -68,39 +68,33 @@ export default{
       {classid:"",cource:"5-M"},
       {classid:"",cource:"5-C"}
     ]
-    },
-    v:0
+    }
     }
   },
   methods:{
-    switchingClass(){
+    switchingClassTable(element){
       this.classes.list0.forEach((e,i)=>{
-        this.classes.list0[i]=this.classes.list2[i]
+        switch (element) {
+          case 0:this.classes.list0[i].classid=this.classes.list1[i].classid
+                       this.classes.list0[i].cource=this.classes.list1[i].cource
+                       break
+          case 1:this.classes.list0[i].classid=this.classes.list2[i].classid
+                       this.classes.list0[i].cource=this.classes.list2[i].cource
+                       break
+          case 2:this.classes.list0[i].classid=this.classes.list3[i].classid
+                       this.classes.list0[i].cource=this.classes.list3[i].cource
+                       break
+          case 3:this.classes.list0[i].classid=this.classes.list4[i].classid
+                       this.classes.list0[i].cource=this.classes.list4[i].cource
+                       break
+          case 4:this.classes.list0[i].classid=this.classes.list5[i].classid
+                       this.classes.list0[i].cource=this.classes.list5[i].cource
+                       break
+        }
       })
-      //this.homeroom="aaa"
-      //this.classes.list0.forEach((e,i)=>{
-        //if(element[0].id==="list1"){
-        //   this.classes.list0[i]=this.classes.list2[i]
-        //}
-        /*switch (element[i].id) {
-          case 'list1':this.classes.list0[i]=this.classes.list1[i]
-                       break
-          case "list2":this.classes.list0[i]=this.classes.list2[i]
-                       break
-          case "list3":this.classes.list0[i]=this.classes.list3[i]
-                       break
-          case "list4":this.classes.list0[i]=this.classes.list4[i]
-                       break
-          case "list5":this.classes.list0[i]=this.classes.list5[i]
-                       break
-        }*/
-      //})
     },
-    switchingClassTable(){
-      this.list1[1].cource = "aa"
-      this.homeroom = this.items
-    },
-    refreshValue(element){
+    switchingClass(index){
+      this.url = this.classes.list0[index].classid
     }
   },
 }
