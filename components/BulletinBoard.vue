@@ -24,11 +24,11 @@ export default {
   },
   created () {
     this.refresh()
-    this.client = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/move')
+    this.client = new W3cwebsocket('wss://'+process.env.mainUrl+'/ws/move')
     this.client.onmessage=({data})=>{
       this.move(JSON.parse(data))
     }
-    this.refreshClient = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/refresh')
+    this.refreshClient = new W3cwebsocket('wss://'+process.env.mainUrl+'/ws/refresh')
     this.refreshClient.onmessage = d => this.refresh()
   },
   computed: {
@@ -42,7 +42,7 @@ export default {
       fixPapers: 'fixPapers'
     }),
     refresh: function(){
-      axios.get('http://' +process.env.mainUrl + '/api/class-docs',{
+      axios.get('https://' +process.env.mainUrl + '/api/class-docs',{
         params: { classid: this.classid }
       }).then(res =>{
         var documents = []
