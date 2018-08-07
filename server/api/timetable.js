@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { readdirSync, readFileSync, writeJson } from 'fs-extra'
 import { resolve } from 'path'
 import { fetch } from 'cheerio-httpcli'
-import { parse } from 'url'
+import { parse, format } from 'url'
 
 const router = Router()
 var dirPath = resolve('.timetable', '../.timetable') // jsonのパスを設定
@@ -23,9 +23,16 @@ router.get('/geturllist', (req, res) => {
           executeList.push($(this).find('a').attr('href'))
         })
       })
-      /* for (var i = 0; i < executeList.length; i++) {
+      for (var i = 0; i < executeList.length; i++) {
         var urlObject = parse(executeList[i], true)
-      } */
+        if (urlObject.query.kind === '1') {
+          urlObject.search = undefined
+          Object.assign(urlObject.query, {kind: 2})
+          executeList.push(format(urlObject))
+          Object.assign(urlObject.query, {kind: 4})
+          executeList.push(format(urlObject))
+        }
+      }
     })
     .then(function () {
       console.log(executeList)
