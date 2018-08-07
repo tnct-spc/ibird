@@ -46,7 +46,6 @@ async function runAddAPI(classids, docid) {
         y: 100
       }
     })
-    console.log(classid)
   }
 }
 
@@ -68,8 +67,6 @@ async function run(path, classids){
   var docid = pdfToJpg(path)
   docid = docid.slice(0, -4)
 
-  console.log('classids = ' + JSON.parse(classids))
-  console.log('docid = ' + docid)
   if(classids) await runAddAPI(JSON.parse(classids), docid)
   const c = new W3cwebsocket('ws://localhost:3000/ws/refresh')
   c.onopen = () => c.send('{}')
@@ -78,6 +75,7 @@ async function run(path, classids){
 
 router.post('/upload-file', upload.single('file'), (req, res, next) => {
   run(req.file.path, req.body.classids).then((docid) =>{
+    console.log(docid)
     res.status(200).json({docid: docid})
   }).catch(e =>{
     console.log(e)
