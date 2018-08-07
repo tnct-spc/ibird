@@ -3,16 +3,15 @@ import { readdirSync, readFileSync, writeJson } from 'fs-extra'
 import { resolve } from 'path'
 import { fetch } from 'cheerio-httpcli'
 import { parse, format } from 'url'
+import { get } from 'request'
 
 const router = Router()
 const dirPath = resolve('.timetable', '../.timetable') // jsonのパスを設定
 const searchBaseURL = 'https://transit.yahoo.co.jp/station/time/search?srtbl=on&kind=1&done=time'
-let selectStation = 'https://transit.yahoo.co.jp/station/rail/22900/?kind=1&done=time'
 let list = []
 
 router.get('/searchstation', (req, res) => {
   if (req.query.station) {
-    selectStation = ''
     var stationList = JSON.parse('{}')
     var baseURL = parse(searchBaseURL, true)
     fetch(updateQuery(baseURL, {q: req.query.station}))
@@ -28,8 +27,10 @@ router.get('/searchstation', (req, res) => {
             res.sendStatus(400)
           }
         } else {
-          // apiを叩く予定
-          console.log('ok')
+          get({
+            url: 'http://localhost:3000/api/geturllist',
+            qs: {'url': updateQuery(baseURL, {q: req.query.station})}
+          })
         }
       })
       // 成功
@@ -53,7 +54,7 @@ router.get('/searchstation', (req, res) => {
 
 router.get('/geturllist', (req, res) => {
   var executeList = []
-  fetch(selectStation)
+  fetch(req.query.url)
     .then(function (result) {
       var $ = result.$
       $('.elmSearchItem.direction li').each(function () {
