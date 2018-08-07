@@ -32,3 +32,6 @@ build
 
 db/data
 yarn-error.log
+
+#sslkey
+docker/nginx/sslkey/*

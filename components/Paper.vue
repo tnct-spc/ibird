@@ -60,20 +60,20 @@ export default {
       document.addEventListener('mouseup',this.mouseup)
     },
     remove: function(){
-      axios.delete('http://' +process.env.mainUrl + '/api/rm-doc', {
+      axios.delete('https://' +process.env.mainUrl + '/api/rm-doc', {
         params: {
           classid: this.classid,
           docid: this.paper.docid
         }
       }).then( () => {
-        const c = new W3cwebsocket('ws://' +process.env.mainUrl + '/ws/refresh')
+        const c = new W3cwebsocket('wss://' +process.env.mainUrl + '/ws/refresh')
         c.onopen = () => c.send('{}')
       }).catch(e =>{
         console.log(e)
       })
     },
     savePosition: function(){
-        axios.put('http://' +process.env.mainUrl + '/api/fix-position', {
+        axios.put('https://' +process.env.mainUrl + '/api/fix-position', {
           classid: this.classid,
           docid: this.paper.docid,
           x: this.paper.x,
