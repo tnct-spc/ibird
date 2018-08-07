@@ -18,7 +18,7 @@ const classes = sequelize.define('classes', {
         primaryKey: true,
     },
     documents: Sequelize.JSON,
-    yaer: Sequelize.TEXT,
+    year: Sequelize.TEXT,
     course: Sequelize.TEXT
   },{
       timestamps: false
