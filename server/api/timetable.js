@@ -13,13 +13,16 @@ let list = []
 router.get('/searchstation', (req, res) => {
   if (req.query.station) {
     selectStation = ''
+    var stationList = JSON.parse('{}')
     var baseURL = parse(searchBaseURL, true)
     fetch(updateQuery(baseURL, {q: req.query.station}))
       .then(function (result) {
         var $ = result.$
         if ($('#cat-pass strong').text() === '駅の検索結果') {
           if ($('.labelSmall .title').text() === '駅') {
-            console.log('駅やぞ')
+            $('.elmSearchItem li').each(function () {
+              stationList[$(this).text()] = $(this).find('a').attr('href')
+            })
           } else {
             console.log('該当する駅が存在しません')
             res.sendStatus(400)
@@ -31,7 +34,11 @@ router.get('/searchstation', (req, res) => {
       })
       // 成功
       .then(function () {
-        res.sendStatus(200)
+        if (Object.keys(stationList).length) {
+          res.json(stationList)
+        } else {
+          res.sendStatus(200)
+        }
       })
       // エラー処理
       .catch(function (error) {
