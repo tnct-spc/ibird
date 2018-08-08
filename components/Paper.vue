@@ -2,7 +2,7 @@
   <div @mousedown="mousedown">
     <p>{{ this.paper }}</p>
     <img class="paper" :src="paper.imgUrl" id="drag"
-      alt="" width="15%">>
+      alt="" :style="{left: this.paper.x+'px', top: this.paper.y+'px'}" ondragstart="return false;" width="15%">>
   </div>
 </template>
 <script>
