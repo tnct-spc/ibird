@@ -10,6 +10,7 @@ const dirPath = resolve('.timetable', '../.timetable') // jsonのパスを設定
 const searchBaseURL = 'https://transit.yahoo.co.jp/station/time/search?srtbl=on&kind=1&done=time'
 let list = []
 
+// 送られた文字列で検索して行き先の一覧を表示するURLを取得するAPI
 router.get('/searchstation', (req, res) => {
   if (req.query.station) {
     var stationList = JSON.parse('{}')
@@ -18,6 +19,7 @@ router.get('/searchstation', (req, res) => {
     fetch(updateQuery(baseURL, {q: req.query.station}))
       .then(function (result) {
         var $ = result.$
+        // Requestから駅を特定できないなら候補の一覧を返す
         if ($('#cat-pass strong').text() === '駅の検索結果') {
           if ($('.labelSmall .title').text() === '駅') {
             $('.elmSearchItem li').each(function () {
@@ -28,6 +30,7 @@ router.get('/searchstation', (req, res) => {
             res.sendStatus(400)
           }
         } else {
+          // Requestから駅を特定できたならリストの状態で返す
           confirm = $('#cat-pass strong').text()
           request({
             url: 'http://localhost:3000/api/geturllist',
@@ -62,6 +65,7 @@ router.get('/searchstation', (req, res) => {
   }
 })
 
+// 確定済みの駅のURLから行き先のリストを返すAPI
 router.get('/geturllist', (req, res) => {
   var executeList = []
   fetch(req.query.url)
