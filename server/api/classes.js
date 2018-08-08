@@ -106,11 +106,41 @@ router.get('/classes-list', (req, res, next) => {
     })
 })
 
-router.get('/class-docs', (req, res, next) => {
-    const classid = req.query.classid
-    docList(classid).then(list =>{
-        res.json(list)
-    })
+router.put('/sort-docs', (req, res, next) => {
+    const classid = req.body.classid
+    console.log(classid)
+    //並べる場所,今はてきとう
+    const cleanXYS = [
+      {x:0,y:0},
+      {x:10,y:0},
+      {x:20,y:0},
+      {x:30,y:0},
+      {x:40,y:0},
+      {x:50,y:0},
+      {x:60,y:0},
+      {x:70,y:0},
+    ]
+      docList(classid).then(list =>{
+        //list並べる順番にsortする処理
+        //いまは一番はやく消えるもの
+        console.log(list)
+        var sortedList = list
+        console.log(sortedList)
+        for (let i=0; i<sortedList.length; i++) {
+          console.log(cleanXYS[i].x)
+          sortedList[i].x = cleanXYS[i].x
+          sortedList[i].y = cleanXYS[i].y
+        }
+        return classes.update(
+          {documents: sortedList},
+          {where: {classid: classid}}
+        )
+      }).then(result =>{
+          res.sendStatus(200)
+      }).catch(err =>{
+          console.log(err.message)
+          res.sendStatus(400)
+      })
 })
 
 export default router
