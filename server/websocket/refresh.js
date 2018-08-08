@@ -5,12 +5,12 @@ const router = Router()
 expressWs(router)
 
 var receivers = []
-router.ws('/move',function(ws, req){
+router.ws('/refresh',function(ws, req){
   const idx = receivers.push(ws)-1
   ws.on('message', msg => {
     receivers.forEach((receiver,receiverId)=>{
       try{
-        receiver.send(msg)
+        receiver.send()
       }catch(e){
         console.log(e)
         receivers.splice(receiverId,1)
