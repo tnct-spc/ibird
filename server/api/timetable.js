@@ -3,7 +3,6 @@ import { readdirSync, readFileSync, writeJson } from 'fs-extra'
 import { resolve } from 'path'
 import { fetch } from 'cheerio-httpcli'
 import { parse, format } from 'url'
-const request = require('request-promise-native')
 
 const router = Router()
 const dirPath = resolve('.timetable', '../.timetable') // jsonのパスを設定
@@ -12,10 +11,9 @@ let list = []
 
 // 送られた文字列で検索して行き先の一覧を表示するURLを取得するAPI
 router.get('/searchstation', (req, res) => {
+  var stationList = JSON.parse('{}')
   if (req.query.station) {
-    var stationList = JSON.parse('{}')
     var baseURL = parse(searchBaseURL, true)
-    var confirm = ''
     fetch(updateQuery(baseURL, {q: req.query.station}))
       .then(function (result) {
         var $ = result.$
@@ -25,34 +23,15 @@ router.get('/searchstation', (req, res) => {
             $('.elmSearchItem li').each(function () {
               stationList[$(this).text()] = $(this).find('a').attr('href')
             })
-          } else {
-            console.log('該当する駅が存在しません')
-            res.sendStatus(400)
           }
         } else {
-          // Requestから駅を特定できたならリストの状態で返す
-          confirm = $('#cat-pass strong').text()
-          request({
-            url: 'http://localhost:3000/api/geturllist',
-            method: 'GET',
-            qs: {'url': updateQuery(baseURL, {q: req.query.station})}
-          })
-            .then(function (response) {
-              res.send(response)
-            })
-            .catch(function (error) {
-              console.log(error)
-              res.sendStatus(500)
-            })
+          // Requestから駅を特定できたなら一つだけ返す
+          stationList[req.query.station] = result.response.request.uri.href
         }
       })
       // 成功
       .then(function () {
-        if (Object.keys(stationList).length) {
-          res.json(stationList)
-        } else if (confirm === undefined) {
-          res.sendStatus(200)
-        }
+        res.json(stationList)
       })
       // エラー処理
       .catch(function (error) {
@@ -61,7 +40,7 @@ router.get('/searchstation', (req, res) => {
       })
   } else {
     console.log('駅名が入力されていません')
-    res.sendStatus(400)
+    res.json(stationList)
   }
 })
 
