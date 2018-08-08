@@ -62,6 +62,7 @@ module.exports = {
         documents:'[{"docid": "20180402","x": 100,"y": 200},{"docid": "20180403","x": 100,"y": 200},{"docid": "20180404","x": 100,"y": 200}]',
         year: 2,
         course: 'C'
+      },
        {
         classid: 11,
         documents:'[{"docid": "20180401","x": 100,"y": 200},{"docid": "20180402","x": 100,"y": 200},{"docid": "20180403","x": 100,"y": 200}]',
@@ -154,8 +155,7 @@ module.exports = {
       }
     ], {});
   },
-
   down: (queryInterface, Sequelize) => {
     return queryInterface.bulkDelete('classes', null, {})
   }
-};
+ };
