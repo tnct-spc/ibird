@@ -38,7 +38,10 @@ export default{
     }
     const formData = new FormData()
     formData.append( 'file', files)
-    formData.append('classids',"[20180401,20170401,20160401]")
+    const path = location.pathname
+    const pathinfo = path.split('/')
+    const classes = pathinfo.pop()
+    formData.append('classids',"["+classes+"]")
     axios.post('../api/upload-file',formData)
     .then((response)=>{
       overlay.innerHTML="success"
