@@ -2,7 +2,7 @@
   <div @mousedown="mousedown">
     <p>{{ this.paper }}</p>
     <img class="paper" :src="paper.imgUrl" id="drag"
-      alt="" :style="{left: this.paper.x+'px', top: this.paper.y+'px'}" ondragstart="return false;">>
+      alt="" width="15%">>
   </div>
 </template>
 <script>
@@ -86,8 +86,6 @@ export default {
 </script>
 <style scoped>
 img.paper {
-  width: 15%;
-  height: 37%;
   margin: 1rem;
   box-shadow: 0.5rem 0.5rem 0.5rem 0.01rem;
   border:solid 0.1rem black;
