@@ -27,18 +27,18 @@ export default{
     ],
     classes:{
     list0:[
-      {classid:"404",cource:"学年を選択してください"},
-      {classid:"",cource:""},
-      {classid:"",cource:""},
-      {classid:"",cource:""},
-      {classid:"",cource:""}
-    ],
-    list1:[
       {classid:"",cource:"1-1"},
       {classid:"",cource:"1-2"},
       {classid:"",cource:"1-3"},
       {classid:"20180402",cource:"1-4"},
       {classid:"20180401",cource:"1-5"}
+    ],
+    list1:[
+      {classid:"20180402",cource:"1-J"},
+      {classid:"",cource:"1-D"},
+      {classid:"",cource:"1-E"},
+      {classid:"20180401",cource:"1-M"},
+      {classid:"20180401",cource:"1-C"}
     ],
     list2:[
       {classid:"20170401",cource:"2-J"},
