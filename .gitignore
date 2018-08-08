@@ -1,5 +1,6 @@
 # dependencies
 node_modules
+.docker_node_modules
 
 #pdf
 *.pdf
@@ -33,3 +34,6 @@ build
 .timetable/
 db/data
 yarn-error.log
+
+# yarn
+yarn.lock
