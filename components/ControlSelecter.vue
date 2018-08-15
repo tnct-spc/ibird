@@ -1,4 +1,5 @@
 <template>
+  <section>
   <div id="grid" style="margin-left:5px;margin-right:5px">
     <!-- 学年を表示する -->
     <button v-for="(item, index) in obj" :key="index" @click="switchingClassTable(Object.keys(obj)[index-1])" class="sitayose p">
@@ -9,6 +10,7 @@
       {{ item.course }}
     </a>
   </div>
+ </section>
 </template>
 <script>
 import axios from 'axios'

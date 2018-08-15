@@ -1,12 +1,14 @@
 <template>
   <section>
-　<div id="overlay" @dragleave.prevent="onDragLeave($event)" @dragover.prevent="onDragOver($event)" @drop.prevent="onDrop($event)">
+  <div id="overlay" @dragleave.prevent="onDragLeave($event)" @dragover.prevent="onDragOver($event)" @drop.prevent="onDrop($event)">
   {{text}}
-</div>
+  <BulletinBoard :classid="classid"/>
+  </div>
   </section>
 </template>
 <script>
 import axios from 'axios'
+import BulletinBoard from '~/components/BulletinBoard.vue'
 
 export default{
   props:{
@@ -14,11 +16,8 @@ export default{
   },
   data:()=>{
     return{
-      text:""
+      text:"管理者ページ"
     }
-  },
-  mounted(){
-    this.text="管理者ページ"
   },
   methods: {
   onDragOver(event){
@@ -49,8 +48,11 @@ export default{
     .catch((error) => {
       this.text=error
     })
-  },
- }
+  }
+ },
+ components:{
+   BulletinBoard
+ },
 }
 </script>
 <style scoped>

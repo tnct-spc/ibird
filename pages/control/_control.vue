@@ -1,14 +1,12 @@
 <template>
     <section>
-      <Control :classid="classid"/>
       <ControlSelecter :classes="classes"/>
-      <Homeroom :classid="classid"/>
+      <Control :classid="classid"/>
     </section>
 </template>
 <script>
 import Control from '~/components/Control.vue'
 import ControlSelecter from '~/components/ControlSelecter.vue'
-import Homeroom from '~/components/Homeroom.vue'
 import axios from 'axios'
 
 export default {
@@ -38,8 +36,7 @@ export default {
   },
   components:{
     Control,
-    ControlSelecter,
-    Homeroom
+    ControlSelecter
   },
 }
 </script>
