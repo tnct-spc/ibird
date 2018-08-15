@@ -1,7 +1,7 @@
 <template>
   <div id="grid" style="margin-left:5px;margin-right:5px">
-    <button v-for="(item, index) in grade" @click="switchingClassTable(index)" class="sitayose p">
-      {{item.classes}}
+    <button v-for="(item, index) in obj" :key="index" @click="switchingClassTable(index)" class="sitayose p">
+      {{ Object.keys(obj)[index-1] }}　<!--indexが1始まりだったので-1している。要検討 -->
     </button>
     <a :href=item.classid v-for="(item, index) in classes.list0" @click="switchingClass(index)" class="p">
       {{item.cource}}
@@ -13,10 +13,13 @@
 </template>
 <script>
 import axios from 'axios'
-export default{
+import Vue from 'vue';
+export default {
   data:()=>{
     return{
     url:"",
+    year: "",
+    obj: {},
     //dbからのclassidでやるべきだけどとりあえずの実装
     grade:[
       {id:1,classes:"1年"},
@@ -70,6 +73,14 @@ export default{
     ]
     }
     }
+  },
+  created() {
+    axios.get('http://' +process.env.mainUrl + '/api/classes-list').then(res =>{
+      res.data.forEach(c => {
+        if(!this.obj[c.year]) Vue.set(this.obj, c.year, []) //最初の型を決める
+        this.obj[c.year].push({classid: c.classid, course: c.course})
+      })
+    });
   },
   methods:{
     switchingClassTable(element){
