@@ -1,7 +1,7 @@
 <template>
-    <section>
+    <section id="wrapper">
       <ControlSelecter :classes="classes"/>
-      <Control :classid="classid"/>
+      <Control id="upload" :classid="classid"/>
     </section>
 </template>
 <script>
@@ -40,5 +40,13 @@ export default {
   },
 }
 </script>
-<style scoped>
+<style>
+ #upload{
+   height: 100%;
+ }
+ #wrapper {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
 </style>
