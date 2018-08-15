@@ -14,19 +14,20 @@
 import axios from 'axios'
 import Vue from 'vue';
 export default {
+  props:{
+    "classes":Array
+  },
   data:()=>{
     return{
       year: "", //現在選択中の学年
       obj: {},  //学年をKEYにclassidとcourseのオブジェクトの配列を持つ
     }
   },
-  created() {
-    axios.get('http://' +process.env.mainUrl + '/api/classes-list').then(res =>{
-      res.data.forEach(c => {
+  created(){
+      this.classes.forEach(c => {
         if(!this.obj[c.year]) Vue.set(this.obj, c.year, []) //最初の型を決める
         this.obj[c.year].push({classid: c.classid, course: c.course})
-      })
-    });
+    })
   },
   methods:{
     switchingClassTable: function(newYear) { //新年じゃないよ

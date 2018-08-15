@@ -1,7 +1,7 @@
 <template>
     <section>
-      <Control/>
-      <ControlSelecter/>
+      <Control :classid="classid"/>
+      <ControlSelecter :classes="classes"/>
       <Homeroom :classid="classid"/>
     </section>
 </template>
