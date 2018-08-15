@@ -1,14 +1,13 @@
 <template>
   <div id="grid" style="margin-left:5px;margin-right:5px">
+    <!-- 学年を表示する -->
     <button v-for="(item, index) in obj" :key="index" @click="switchingClassTable(Object.keys(obj)[index-1])" class="sitayose p">
       {{ Object.keys(obj)[index-1] }}　<!--indexが1始まりだったので-1している。要検討 -->
     </button>
-    <a :href=item.classid v-for="(item, index) in obj[year]" :key="index" @click="switchingClass(index)" class="p">
+    <!-- 学年で選択されたクラスを表示する -->
+    <a :href=item.classid v-for="(item, index) in obj[year]" @click="switchingClass()" class="p">
       {{ item.course }}
     </a>
-    <div>
-      {{url}}
-    </div>
   </div>
 </template>
 <script>
@@ -17,61 +16,8 @@ import Vue from 'vue';
 export default {
   data:()=>{
     return{
-    url:"",
-    year: "",
-    obj: {},
-    //dbからのclassidでやるべきだけどとりあえずの実装
-    grade:[
-      {id:1,classes:"1年"},
-      {id:2,classes:"2年"},
-      {id:3,classes:"3年"},
-      {id:4,classes:"4年"},
-      {id:5,classes:"5年"}
-    ],
-    classes:{
-    list0:[
-      {classid:"",cource:"1-1"},
-      {classid:"",cource:"1-2"},
-      {classid:"",cource:"1-3"},
-      {classid:"20180402",cource:"1-4"},
-      {classid:"20180401",cource:"1-5"}
-    ],
-    list1:[
-      {classid:"20180402",cource:"1-J"},
-      {classid:"",cource:"1-D"},
-      {classid:"",cource:"1-E"},
-      {classid:"20180401",cource:"1-M"},
-      {classid:"20180401",cource:"1-C"}
-    ],
-    list2:[
-      {classid:"20170401",cource:"2-J"},
-      {classid:"",cource:"2-D"},
-      {classid:"",cource:"2-E"},
-      {classid:"",cource:"2-M"},
-      {classid:"",cource:"2-C"}
-    ],
-    list3:[
-      {classid:"20160401",cource:"3-J"},
-      {classid:"",cource:"3-D"},
-      {classid:"",cource:"3-E"},
-      {classid:"",cource:"3-M"},
-      {classid:"",cource:"3-C"}
-    ],
-    list4:[
-      {classid:"",cource:"4-J"},
-      {classid:"",cource:"4-D"},
-      {classid:"",cource:"4-E"},
-      {classid:"",cource:"4-M"},
-      {classid:"",cource:"4-C"}
-    ],
-    list5:[
-      {classid:"",cource:"5-J"},
-      {classid:"",cource:"5-D"},
-      {classid:"",cource:"5-E"},
-      {classid:"",cource:"5-M"},
-      {classid:"",cource:"5-C"}
-    ]
-    }
+      year: "", //現在選択中の学年
+      obj: {},  //学年をKEYにclassidとcourseのオブジェクトの配列を持つ
     }
   },
   created() {
@@ -84,13 +30,9 @@ export default {
   },
   methods:{
     switchingClassTable: function(newYear) { //新年じゃないよ
-      console.log(this.year)
       this.year = newYear
-      console.log(this.year)
     },
-    switchingClass(index){
-      this.url = this.classes.list0[index].classid
-    }
+    switchingClass: function(index) {}
   },
 }
 </script>
