@@ -1,10 +1,10 @@
 <template>
   <div id="grid" style="margin-left:5px;margin-right:5px">
-    <button v-for="(item, index) in obj" :key="index" @click="switchingClassTable(index)" class="sitayose p">
+    <button v-for="(item, index) in obj" :key="index" @click="switchingClassTable(Object.keys(obj)[index-1])" class="sitayose p">
       {{ Object.keys(obj)[index-1] }}　<!--indexが1始まりだったので-1している。要検討 -->
     </button>
-    <a :href=item.classid v-for="(item, index) in classes.list0" @click="switchingClass(index)" class="p">
-      {{item.cource}}
+    <a :href=item.classid v-for="(item, index) in obj[year]" :key="index" @click="switchingClass(index)" class="p">
+      {{ item.course }}
     </a>
     <div>
       {{url}}
@@ -83,26 +83,10 @@ export default {
     });
   },
   methods:{
-    switchingClassTable(element){
-      this.classes.list0.forEach((e,i)=>{
-        switch (element) {
-          case 0:this.classes.list0[i].classid=this.classes.list1[i].classid
-                       this.classes.list0[i].cource=this.classes.list1[i].cource
-                       break
-          case 1:this.classes.list0[i].classid=this.classes.list2[i].classid
-                       this.classes.list0[i].cource=this.classes.list2[i].cource
-                       break
-          case 2:this.classes.list0[i].classid=this.classes.list3[i].classid
-                       this.classes.list0[i].cource=this.classes.list3[i].cource
-                       break
-          case 3:this.classes.list0[i].classid=this.classes.list4[i].classid
-                       this.classes.list0[i].cource=this.classes.list4[i].cource
-                       break
-          case 4:this.classes.list0[i].classid=this.classes.list5[i].classid
-                       this.classes.list0[i].cource=this.classes.list5[i].cource
-                       break
-        }
-      })
+    switchingClassTable: function(newYear) { //新年じゃないよ
+      console.log(this.year)
+      this.year = newYear
+      console.log(this.year)
     },
     switchingClass(index){
       this.url = this.classes.list0[index].classid
