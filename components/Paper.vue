@@ -46,6 +46,7 @@ export default {
         document.removeEventListener('mousemove',this.mousemove)
         this.selectedcard({classid: this.classid, paperId: null})
       } else {
+        this.upPaper()
         document.addEventListener('mousemove',this.mousemove)
         this.selectedcard({classid: this.classid, paperId: this.paperId})
       }
@@ -81,6 +82,19 @@ export default {
         }).catch(e =>{
           console.log(e)
         })
+    },
+    upPaper: function(){
+      axios.put('http://' +process.env.mainUrl + '/api/order-doc', {
+        params: {
+          classid: this.classid,
+          docid: this.paper.docid
+        }
+      }).then( () => {
+        const c = new W3cwebsocket('ws://' +process.env.mainUrl + '/ws/refresh')
+        c.onopen = () => c.send('{}')
+      }).catch(e =>{
+        console.log(e)
+      })
     }
   }
 }
