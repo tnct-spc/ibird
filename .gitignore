@@ -1,5 +1,6 @@
 # dependencies
 node_modules
+.docker_node_modules
 
 #pdf
 *.pdf
@@ -30,8 +31,12 @@ build
 
 .idea/
 
+.timetable/
 db/data
 yarn-error.log
 
 #sslkey
 docker/nginx/sslkey/*
+
+# yarn
+yarn.lock

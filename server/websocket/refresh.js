@@ -4,7 +4,7 @@ import expressWs from 'express-ws'
 const router = Router()
 expressWs(router)
 
-const receivers = []
+var receivers = []
 router.ws('/refresh',function(ws, req){
   const idx = receivers.push(ws)-1
   ws.on('message', msg => {
@@ -18,7 +18,7 @@ router.ws('/refresh',function(ws, req){
     })
   })
   ws.on('close', ()=>{
-    receivers.splice(idx,1)
+    receivers = receivers.filter( v => v!==ws )
   })
 })
 
