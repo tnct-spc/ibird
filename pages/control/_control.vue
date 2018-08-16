@@ -1,14 +1,12 @@
 <template>
-    <section>
-      <Control/>
-      <ControlSelecter/>
-      <Homeroom :classid="classid"/>
+    <section id="wrapper">
+      <ControlSelecter :classes="classes"/>
+      <Control id="upload" :classid="classid"/>
     </section>
 </template>
 <script>
 import Control from '~/components/Control.vue'
 import ControlSelecter from '~/components/ControlSelecter.vue'
-import Homeroom from '~/components/Homeroom.vue'
 import axios from 'axios'
 
 export default {
@@ -38,10 +36,17 @@ export default {
   },
   components:{
     Control,
-    ControlSelecter,
-    Homeroom
+    ControlSelecter
   },
 }
 </script>
 <style scoped>
+ #upload{
+   height: 100%;
+ }
+ #wrapper {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
 </style>
