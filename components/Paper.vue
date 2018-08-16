@@ -85,10 +85,8 @@ export default {
     },
     upPaper: function(){
       axios.put('http://' +process.env.mainUrl + '/api/order-doc', {
-        params: {
-          classid: this.classid,
-          docid: this.paper.docid
-        }
+        classid: this.classid,
+        docid: this.paper.docid
       }).then( () => {
         const c = new W3cwebsocket('ws://' +process.env.mainUrl + '/ws/refresh')
         c.onopen = () => c.send('{}')
