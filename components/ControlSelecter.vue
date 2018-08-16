@@ -31,6 +31,11 @@ export default {
     }
   },
   mounted(){
+      this.classes.sort((a,b)=>{
+      if(a.classid < b.classid) return -1;
+      if(a.classid > b.classid) return 1;
+      return 0;
+      })
       const grid = document.getElementById("grid")
       let grids = 0
       this.classes.forEach((c)=> {
