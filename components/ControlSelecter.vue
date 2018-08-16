@@ -18,7 +18,7 @@
 </template>
 <script>
 import axios from 'axios'
-import Vue from 'vue';
+import Vue from 'vue'
 export default {
   props:{
     "classes":Array
@@ -32,9 +32,7 @@ export default {
   },
   mounted(){
       this.classes.sort((a,b)=>{
-      if(a.classid < b.classid) return -1;
-      if(a.classid > b.classid) return 1;
-      return 0;
+      return a.classid - b.classid
       })
       const grid = document.getElementById("grid")
       let grids = 0
