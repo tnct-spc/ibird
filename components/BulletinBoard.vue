@@ -50,6 +50,7 @@ export default {
           document['isSelected'] = false
           document['imgUrl'] = '/jpg/' + document.docid + '.jpg'
           documents.push(document)
+          console.log(document.docid)
         });
         this.fixPapers({classid: this.classid, documents: documents})
       }).catch(e =>{
