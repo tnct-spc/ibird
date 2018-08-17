@@ -41,7 +41,7 @@ router.put('/add-doc', (req, res, next) => {
         //listにいい感じに追加してデータベース更新
         list.push(doc)
         return classes.update(
-            {documents: list}, 
+            {documents: list},
             {where: {classid: classid}}
         )
     }).then(result =>{
@@ -56,7 +56,7 @@ router.put('/fix-position', (req, res, next) => {
     const docid = req.body.docid
     const x = req.body.x
     const y = req.body.y
-    
+
     docList(classid).then(list =>{
         //listをいい感じに変更してデータベース更新
         list.forEach(v => {
@@ -66,7 +66,7 @@ router.put('/fix-position', (req, res, next) => {
             }
         })
         return classes.update(
-            {documents: list}, 
+            {documents: list},
             {where: {classid: classid}}
         )
     }).then(result =>{
@@ -85,7 +85,7 @@ router.delete('/rm-doc', (req, res, next) => {
         return list.filter(value => value.docid !== docid)
     }).then(newList =>{
         return classes.update(
-            {documents: newList}, 
+            {documents: newList},
             {where: {classid: classid}}
         )
     }).then(result =>{
@@ -111,6 +111,43 @@ router.get('/class-docs', (req, res, next) => {
     docList(classid).then(list =>{
         res.json(list)
     })
+})
+
+router.put('/sort-docs', (req, res, next) => {
+    const classid = req.body.classid
+    console.log(classid)
+    //並べる場所,今はてきとう
+    const cleanXYS = [
+      {x:0,y:0},
+      {x:10,y:0},
+      {x:20,y:0},
+      {x:30,y:0},
+      {x:40,y:0},
+      {x:50,y:0},
+      {x:60,y:0},
+      {x:70,y:0},
+    ]
+      docList(classid).then(list =>{
+        //list並べる順番にsortする処理
+        //いまは一番はやく消えるもの
+        console.log(list)
+        var sortedList = list
+        console.log(sortedList)
+        for (let i=0; i<sortedList.length; i++) {
+          console.log(cleanXYS[i].x)
+          sortedList[i].x = cleanXYS[i].x
+          sortedList[i].y = cleanXYS[i].y
+        }
+        return classes.update(
+          {documents: sortedList},
+          {where: {classid: classid}}
+        )
+      }).then(result =>{
+          res.sendStatus(200)
+      }).catch(err =>{
+          console.log(err.message)
+          res.sendStatus(400)
+      })
 })
 
 export default router
