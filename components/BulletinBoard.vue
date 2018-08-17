@@ -1,6 +1,6 @@
 <template>
   <section>
-    <Paper v-for="(paper, paperId) in this.sortedPapers" :key="paperId" :classid=classid :paper-id="paperId+''" :ws-client="client" />
+    <Paper v-for="paper in sortedPapers" :key="paper.index" :classid=classid :paper-id="paper.index+''" :ws-client="client" />
   </section>
 </template>
 
@@ -36,14 +36,15 @@ export default {
       papers: 'papers'
     }),
     sortedPapers: function(){
-      if(this.papers(this.classid)) {
-        const papers = this.papers(this.classid).filter(v => true) //配列のコピー 直接ソートすると怒られる
+      // const paper = papers.filter(v => true) //配列のコピー 直接ソートすると怒られる
+      var papers = this.papers(this.classid)
+      if(papers) {
+        papers = this.papers(this.classid).filter(v => true)
         papers.sort((a,b) => {
-          return 1
+          return 0
         })
-        return papers
       }
-      return this.papers(this.classid)
+      return papers
     }
   },
   methods:{
@@ -56,7 +57,8 @@ export default {
         params: { classid: this.classid }
       }).then(res =>{
         var documents = []
-        res.data.forEach(document => {
+        res.data.forEach((document , index)=> {
+          document['index'] = index
           document['isSelected'] = false
           document['imgUrl'] = '/jpg/' + document.docid + '.jpg'
           documents.push(document)
