@@ -41,7 +41,7 @@ router.put('/add-doc', (req, res, next) => {
         //listにいい感じに追加してデータベース更新
         list.push(doc)
         return classes.update(
-            {documents: list}, 
+            {documents: list},
             {where: {classid: classid}}
         )
     }).then(result =>{
@@ -56,7 +56,7 @@ router.put('/fix-position', (req, res, next) => {
     const docid = req.body.docid
     const x = req.body.x
     const y = req.body.y
-    
+
     docList(classid).then(list =>{
         //listをいい感じに変更してデータベース更新
         list.forEach(v => {
@@ -66,7 +66,7 @@ router.put('/fix-position', (req, res, next) => {
             }
         })
         return classes.update(
-            {documents: list}, 
+            {documents: list},
             {where: {classid: classid}}
         )
     }).then(result =>{
@@ -85,7 +85,7 @@ router.delete('/rm-doc', (req, res, next) => {
         return list.filter(value => value.docid !== docid)
     }).then(newList =>{
         return classes.update(
-            {documents: newList}, 
+            {documents: newList},
             {where: {classid: classid}}
         )
     }).then(result =>{
@@ -104,6 +104,12 @@ router.get('/classes-list', (req, res, next) => {
         })
         res.json(list)
     })
+})
+
+router.get('/class-docs', (req, res, next) => {
+    const classid = req.query.classid
+    docList(classid).then(list =>{
+        res.json(list)
 })
 
 router.put('/sort-docs', (req, res, next) => {
