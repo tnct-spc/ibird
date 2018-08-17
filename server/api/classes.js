@@ -110,6 +110,7 @@ router.get('/class-docs', (req, res, next) => {
     const classid = req.query.classid
     docList(classid).then(list =>{
         res.json(list)
+    })
 })
 
 router.put('/sort-docs', (req, res, next) => {
