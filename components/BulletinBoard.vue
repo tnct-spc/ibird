@@ -1,6 +1,6 @@
 <template>
   <section>
-    <Paper v-for="(paper, paperId) in this.papers(classid)" :key="paperId" :classid=classid :paper-id="paperId+''" :ws-client="client" />
+    <Paper v-for="(paper, paperId) in this.sortedPapers" :key="paperId" :classid=classid :paper-id="paperId+''" :ws-client="client" />
   </section>
 </template>
 
@@ -35,6 +35,16 @@ export default {
     ...mapGetters({
       papers: 'papers'
     }),
+    sortedPapers: function(){
+      if(this.papers(this.classid)) {
+        const papers = this.papers(this.classid).filter(v => true) //配列のコピー 直接ソートすると怒られる
+        papers.sort((a,b) => {
+          return 1
+        })
+        return papers
+      }
+      return this.papers(this.classid)
+    }
   },
   methods:{
     ...mapMutations({
@@ -50,7 +60,6 @@ export default {
           document['isSelected'] = false
           document['imgUrl'] = '/jpg/' + document.docid + '.jpg'
           documents.push(document)
-          console.log(document.docid)
         });
         this.fixPapers({classid: this.classid, documents: documents})
       }).catch(e =>{

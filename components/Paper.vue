@@ -46,7 +46,6 @@ export default {
         document.removeEventListener('mousemove',this.mousemove)
         this.selectedcard({classid: this.classid, paperId: null})
       } else {
-        this.upPaper()
         document.addEventListener('mousemove',this.mousemove)
         this.selectedcard({classid: this.classid, paperId: this.paperId})
       }
