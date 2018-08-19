@@ -219,12 +219,16 @@ router.get('/createtable', (req, res) => {
             $('#hh_' + ariveHour[j] + ' .timeNumb').each(function () {
               var trainData = JSON.parse('{}')
               trainData['min'] = $(this).find('dt').text().replace(/[^0-9]+/g, '')
-              if ($(this).find('.trainType').length) {
-                var trainType = $(this).find('.trainType').text().replace('[', '')
-                  .replace(']', '')
-                trainData['kind'] = kindList[trainType]
+              if (kindList.length) {
+                if ($(this).find('.trainType').length) {
+                  var trainType = $(this).find('.trainType').text().replace('[', '')
+                    .replace(']', '')
+                  trainData['kind'] = kindList[trainType]
+                } else {
+                  trainData['kind'] = kindList.無印
+                }
               } else {
-                trainData['kind'] = kindList.無印
+                trainData['kind'] = '各駅停車'
               }
               if ($(this).find('.trainFor').length) {
                 var trainFor = $(this).find('.trainFor').text()
