@@ -38,7 +38,16 @@ router.get('/searchstation', (req, res) => {
           }
         } else {
           // Requestから駅を特定できたなら一つだけ返す
-          stationList[req.query.station] = {q: result.response.request.uri.href}
+          var stationParam = JSON.parse(jsonbase)
+          stationParam.station = req.query.station
+          stationParam.apiurl = format({
+            protocol: 'http',
+            port: '3000',
+            hostname: address(),
+            query: {'url': result.response.request.uri.href},
+            pathname: '/api/geturllist'
+          })
+          stationList.push(stationParam)
         }
       })
       // 成功
