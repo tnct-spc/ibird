@@ -3,6 +3,7 @@ import { readdirSync, readFileSync, writeJson } from 'fs-extra'
 import { resolve } from 'path'
 import { fetch } from 'cheerio-httpcli'
 import { parse, format } from 'url'
+import { address } from 'ip'
 const axios = require('axios')
 
 const router = Router()
@@ -12,17 +13,27 @@ let list = []
 
 // 送られた文字列で検索して行き先の一覧を表示するURLを取得するAPI
 router.get('/searchstation', (req, res) => {
-  var stationList = JSON.parse('{}')
+  var stationList = []
   if (req.query.station) {
     var baseURL = parse(searchBaseURL, true)
     fetch(updateQuery(baseURL, {q: req.query.station}))
       .then(function (result) {
         var $ = result.$
+        var jsonbase = '{"station": "", "apiurl": ""}'
         // Requestから駅を特定できないなら候補の一覧を返す
         if ($('#cat-pass strong').text() === '駅の検索結果') {
           if ($('.labelSmall .title').text() === '駅') {
             $('.elmSearchItem li').each(function () {
-              stationList[$(this).text()] = $(this).find('a').attr('href')
+              var stationParam = JSON.parse(jsonbase)
+              stationParam.station = $(this).text()
+              stationParam.apiurl = format({
+                protocol: 'http',
+                port: '3000',
+                hostname: address(),
+                query: {'url': 'https://transit.yahoo.co.jp/' + $(this).find('a').attr('href')},
+                pathname: '/api/geturllist'
+              })
+              stationList.push(stationParam)
             })
           }
         } else {
