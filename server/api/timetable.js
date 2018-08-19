@@ -3,6 +3,7 @@ import { readdirSync, readFileSync, writeJson } from 'fs-extra'
 import { resolve } from 'path'
 import { fetch } from 'cheerio-httpcli'
 import { parse, format } from 'url'
+const axios = require('axios')
 
 const router = Router()
 const dirPath = resolve('.timetable', '../.timetable') // jsonのパスを設定
@@ -26,7 +27,7 @@ router.get('/searchstation', (req, res) => {
           }
         } else {
           // Requestから駅を特定できたなら一つだけ返す
-          stationList[req.query.station] = result.response.request.uri.href
+          stationList[req.query.station] = {q: result.response.request.uri.href}
         }
       })
       // 成功
@@ -44,28 +45,104 @@ router.get('/searchstation', (req, res) => {
   }
 })
 
+router.get('/test', (req, res) => {
+  var shinjukulist = [
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=1051&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=1050&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=1061&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=1060&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=1091&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=1090&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=1101&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=1100&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=7171&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=7170&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=3021&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=3031&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=3091&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=3401&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=7211&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=7210&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=1051&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=1051&q=%E6%96%B0%E5%AE%BF&kind=4&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=1050&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=1050&q=%E6%96%B0%E5%AE%BF&kind=4&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=1061&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=1061&q=%E6%96%B0%E5%AE%BF&kind=4&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=1060&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=1060&q=%E6%96%B0%E5%AE%BF&kind=4&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=1091&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=1091&q=%E6%96%B0%E5%AE%BF&kind=4&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=1090&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=1090&q=%E6%96%B0%E5%AE%BF&kind=4&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=1101&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=1101&q=%E6%96%B0%E5%AE%BF&kind=4&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=1100&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=1100&q=%E6%96%B0%E5%AE%BF&kind=4&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=7171&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=7171&q=%E6%96%B0%E5%AE%BF&kind=4&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=7170&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=7170&q=%E6%96%B0%E5%AE%BF&kind=4&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=3021&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=3021&q=%E6%96%B0%E5%AE%BF&kind=4&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=3031&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=3031&q=%E6%96%B0%E5%AE%BF&kind=4&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=3091&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=3091&q=%E6%96%B0%E5%AE%BF&kind=4&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=3401&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=3401&q=%E6%96%B0%E5%AE%BF&kind=4&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=7211&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=7211&q=%E6%96%B0%E5%AE%BF&kind=4&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=7210&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
+    'https://transit.yahoo.co.jp/station/time/22741/?gid=7210&q=%E6%96%B0%E5%AE%BF&kind=4&done=time'
+  ]
+  test(shinjukulist)
+  res.send('ok')
+})
+async function test (testlist) {
+  for (var i = 0; i < testlist.length; i++) {
+    console.log(testlist[i])
+    await axios.get('http://localhost:3000/api/createtable', {
+      params: {'url': testlist[i]}
+    })
+  }
+}
 // 確定済みの駅のURLから行き先のリストを返すAPI
 router.get('/geturllist', (req, res) => {
-  var executeList = []
+  var urlList = []
   fetch(req.query.url)
     .then(function (result) {
       var $ = result.$
+      var jsonbase = '{"direction":"", "day": "", "url":""}'
+      // [{going: '行き先', url:~~},...]のようなリストにする
       $('.elmSearchItem.direction li').each(function () {
         $(this).find('li').each(function () {
-          executeList.push($(this).find('a').attr('href'))
+          var weekdaysJson = JSON.parse(jsonbase)
+          weekdaysJson.direction = $(this).find('a').text()
+          weekdaysJson.day = 'weekdays'
+          weekdaysJson.url = $(this).find('a').attr('href')
+          urlList.push(weekdaysJson)
         })
       })
-      for (var i = 0; i < executeList.length; i++) {
-        var url = parse(executeList[i], true)
-        if (url.query.kind === '1') {
-          executeList.push(updateQuery(url, {kind: 2}))
-          executeList.push(updateQuery(url, {kind: 4}))
+      for (var i = 0; i < urlList.length; i++) {
+        var URL = parse(urlList[i].url, true)
+        if (URL.query.kind === '1') {
+          var weekenddaysJson = JSON.parse(jsonbase)
+          weekenddaysJson.direction = urlList[i].direction
+          weekenddaysJson.day = 'weekenddays'
+          weekenddaysJson.url = updateQuery(URL, {kind: 2})
+          var holidaysJson = JSON.parse(jsonbase)
+          holidaysJson.direction = urlList[i].direction
+          holidaysJson.day = 'holidays'
+          holidaysJson.url = updateQuery(URL, {kind: 4})
+          urlList.push(weekenddaysJson)
+          urlList.push(holidaysJson)
         }
       }
     })
     // 成功
     .then(function () {
-      res.json(executeList)
+      res.json(urlList)
     })
     // エラー処理
     .catch(function (error) {
@@ -238,8 +315,8 @@ function createJsonFile (jsonData, URL) {
 
   // ファイル名を作成
   var q = parse(URL, true).query
-  if (q.kind === 4) filename = 'holidays_'
-  else if (q.kind === 2) filename = 'weekenddays_'
+  if (q.kind === '4') filename = 'holidays_'
+  else if (q.kind === '2') filename = 'weekenddays_'
   else filename = 'weekdays_'
   var stationID = parse(URL).pathname.split('/')
   filename += stationID[3] + '_'
