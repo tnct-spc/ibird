@@ -4,229 +4,229 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert('documents', [
       {
-        id: 1,
+        classid: 1,
         docid: '20180401',
         x: 0,
         y: 0,
         priority: 1,
-        timeLimit: new Date(2020,1,1),
-        scheduledDate: new Date(2001,1,1)
+        endTime: new Date(2020,1,1),
+        startTime: new Date(2001,1,1)
       },
       {
-        id: 2,
+        classid: 2,
         docid: '20180402',
         x: 0,
         y: 0,
         priority: 1,
-        timeLimit: new Date(2020,1,1),
-        scheduledDate: new Date(2001,1,1)
+        endTime: new Date(2020,1,1),
+        startTime: new Date(2001,1,1)
       },
       {
-        id: 3,
+        classid: 3,
         docid: '20180403',
         x: 0,
         y: 0,
         priority: 1,
-        timeLimit: new Date(2020,1,1),
-        scheduledDate: new Date(2001,1,1)
+        endTime: new Date(2020,1,1),
+        startTime: new Date(2001,1,1)
       },
       {
-        id: 4,
+        classid: 4,
         docid: '20180401',
         x: 0,
         y: 0,
         priority: 1,
-        timeLimit: new Date(2020,1,1),
-        scheduledDate: new Date(2001,1,1)
+        endTime: new Date(2020,1,1),
+        startTime: new Date(2001,1,1)
       },
       {
-        id: 5,
+        classid: 5,
         docid: '20180401',
         x: 0,
         y: 0,
         priority: 1,
-        timeLimit: new Date(2020,1,1),
-        scheduledDate: new Date(2001,1,1)
+        endTime: new Date(2020,1,1),
+        startTime: new Date(2001,1,1)
       },
       {
-        id: 6,
+        classid: 6,
         docid: '20180401',
         x: 0,
         y: 0,
         priority: 1,
-        timeLimit: new Date(2020,1,1),
-        scheduledDate: new Date(2001,1,1)
+        endTime: new Date(2020,1,1),
+        startTime: new Date(2001,1,1)
       },
       {
-        id: 7,
+        classid: 7,
         docid: '20180401',
         x: 0,
         y: 0,
         priority: 1,
-        timeLimit: new Date(2020,1,1),
-        scheduledDate: new Date(2001,1,1)
+        endTime: new Date(2020,1,1),
+        startTime: new Date(2001,1,1)
       },
       {
-        id: 8,
+        classid: 8,
         docid: '20180401',
         x: 0,
         y: 0,
         priority: 1,
-        timeLimit: new Date(2020,1,1),
-        scheduledDate: new Date(2001,1,1)
+        endTime: new Date(2020,1,1),
+        startTime: new Date(2001,1,1)
       },
       {
-        id: 9,
+        classid: 9,
         docid: '20180401',
         x: 0,
         y: 0,
         priority: 1,
-        timeLimit: new Date(2020,1,1),
-        scheduledDate: new Date(2001,1,1)
+        endTime: new Date(2020,1,1),
+        startTime: new Date(2001,1,1)
       },
       {
-        id: 10,
+        classid: 10,
         docid: '20180401',
         x: 0,
         y: 0,
         priority: 1,
-        timeLimit: new Date(2020,1,1),
-        scheduledDate: new Date(2001,1,1)
+        endTime: new Date(2020,1,1),
+        startTime: new Date(2001,1,1)
       },
       {
-        id: 11,
+        classid: 11,
         docid: '20180401',
         x: 0,
         y: 0,
         priority: 1,
-        timeLimit: new Date(2020,1,1),
-        scheduledDate: new Date(2001,1,1)
+        endTime: new Date(2020,1,1),
+        startTime: new Date(2001,1,1)
       },
       {
-        id: 12,
+        classid: 12,
         docid: '20180401',
         x: 0,
         y: 0,
         priority: 1,
-        timeLimit: new Date(2020,1,1),
-        scheduledDate: new Date(2001,1,1)
+        endTime: new Date(2020,1,1),
+        startTime: new Date(2001,1,1)
       },
       {
-        id: 13,
+        classid: 13,
         docid: '20180401',
         x: 0,
         y: 0,
         priority: 1,
-        timeLimit: new Date(2020,1,1),
-        scheduledDate: new Date(2001,1,1)
+        endTime: new Date(2020,1,1),
+        startTime: new Date(2001,1,1)
       },
       {
-        id: 14,
+        classid: 14,
         docid: '20180401',
         x: 0,
         y: 0,
         priority: 1,
-        timeLimit: new Date(2020,1,1),
-        scheduledDate: new Date(2001,1,1)
+        endTime: new Date(2020,1,1),
+        startTime: new Date(2001,1,1)
       },
       {
-        id: 15,
+        classid: 15,
         docid: '20180401',
         x: 0,
         y: 0,
         priority: 1,
-        timeLimit: new Date(2020,1,1),
-        scheduledDate: new Date(2001,1,1)
+        endTime: new Date(2020,1,1),
+        startTime: new Date(2001,1,1)
       },
       {
-        id: 16,
+        classid: 16,
         docid: '20180401',
         x: 0,
         y: 0,
         priority: 1,
-        timeLimit: new Date(2020,1,1),
-        scheduledDate: new Date(2001,1,1)
+        endTime: new Date(2020,1,1),
+        startTime: new Date(2001,1,1)
       },
       {
-        id: 17,
+        classid: 17,
         docid: '20180401',
         x: 0,
         y: 0,
         priority: 1,
-        timeLimit: new Date(2020,1,1),
-        scheduledDate: new Date(2001,1,1)
+        endTime: new Date(2020,1,1),
+        startTime: new Date(2001,1,1)
       },
       {
-        id: 18,
+        classid: 18,
         docid: '20180401',
         x: 0,
         y: 0,
         priority: 1,
-        timeLimit: new Date(2020,1,1),
-        scheduledDate: new Date(2001,1,1)
+        endTime: new Date(2020,1,1),
+        startTime: new Date(2001,1,1)
       },
       {
-        id: 19,
+        classid: 19,
         docid: '20180401',
         x: 0,
         y: 0,
         priority: 1,
-        timeLimit: new Date(2020,1,1),
-        scheduledDate: new Date(2001,1,1)
+        endTime: new Date(2020,1,1),
+        startTime: new Date(2001,1,1)
       },
       {
-        id: 20,
+        classid: 20,
         docid: '20180401',
         x: 0,
         y: 0,
         priority: 1,
-        timeLimit: new Date(2020,1,1),
-        scheduledDate: new Date(2001,1,1)
+        endTime: new Date(2020,1,1),
+        startTime: new Date(2001,1,1)
       },
       {
-        id: 21,
+        classid: 21,
         docid: '20180401',
         x: 0,
         y: 0,
         priority: 1,
-        timeLimit: new Date(2020,1,1),
-        scheduledDate: new Date(2001,1,1)
+        endTime: new Date(2020,1,1),
+        startTime: new Date(2001,1,1)
       },
       {
-        id: 22,
+        classid: 22,
         docid: '20180401',
         x: 0,
         y: 0,
         priority: 1,
-        timeLimit: new Date(2020,1,1),
-        scheduledDate: new Date(2001,1,1)
+        endTime: new Date(2020,1,1),
+        startTime: new Date(2001,1,1)
       },
       {
-        id: 23,
+        classid: 23,
         docid: '20180401',
         x: 0,
         y: 0,
         priority: 1,
-        timeLimit: new Date(2020,1,1),
-        scheduledDate: new Date(2001,1,1)
+        endTime: new Date(2020,1,1),
+        startTime: new Date(2001,1,1)
       },
       {
-        id: 24,
+        classid: 24,
         docid: '20180401',
         x: 0,
         y: 0,
         priority: 1,
-        timeLimit: new Date(2020,1,1),
-        scheduledDate: new Date(2001,1,1)
+        endTime: new Date(2020,1,1),
+        startTime: new Date(2001,1,1)
       },
       {
-        id: 25,
+        classid: 25,
         docid: '20180401',
         x: 0,
         y: 0,
         priority: 1,
-        timeLimit: new Date(2020,1,1),
-        scheduledDate: new Date(2001,1,1)
+        endTime: new Date(2020,1,1),
+        startTime: new Date(2001,1,1)
       },
     ], {})
   },
