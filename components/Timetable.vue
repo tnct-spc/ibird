@@ -12,7 +12,7 @@ import axios from 'axios'
 
 export default {
     name : 'Timetable',
-    data () {
+    data :function() {
         return {
             year : new Date().getFullYear(),
             month : new Date().getMonth() + 1,
@@ -24,45 +24,8 @@ export default {
     },
     computed : {
         object : function() {
-            function VernalEquinox(year){
-                switch(year % 4){
-                    case 0 : return year <= 2088 ? 20 : 19;
-                    break;
-                    case 1 : return 20;
-                    break;
-                    case 2 : return year <= 2022 ? 21 : 20;
-                    break;
-                    default : return year <= 2055 ? 21 : 20;
-                }
-            }
-
-            function AutumnalEquinox(year){
-                switch(year % 4){
-                    case 0 : return 22;
-                    break;
-                case 1 : return year <= 2041 ? 23 : 22
-                    break;
-                    case 2 : return year <= 2074 ? 23 : 22
-                    break;
-                    default : return 23;
-                }
-            }
-
-            var holidays = [[1,1],[2,11],[4,29],[5,3],[5,4],[5,5],[8,11],[11,3],[11,23],[12,23],[3,VernalEquinox(year)],[9,AutumnalEquinox(year)]];
+            var holidays = [[1,1],[2,11],[4,29],[5,3],[5,4],[5,5],[8,11],[11,3],[11,23],[12,23],[3,VernalEquinox(this.year)],[9,AutumnalEquinox(this.year)]];
             var holidaysresult = holidays.indexOf([month,day]);
-
-            function SubstituteHoliday(){
-                while(1){
-                    if(holidays.indexOf([month,day - i]) == -1){
-                        break;
-                    }else if(dayOfWeek - i != 0){
-                        return true;
-                        break;
-                    }else{
-                        i++;
-                    }
-                }
-            }
 
             if(hour < 5 && hour > 0){
                 return null;
@@ -98,22 +61,57 @@ export default {
                     return o;
             }
         },
-
         set : function(){
             var i = 0;
             var make = object.timetable[hour];
                 while(1){
                     if (make[i].min >= minute){
-                       break;
+                        break;
                     }else if(make.length >= i){
                         make = object.timetable[hour + 1];
                     }else{
                         i++;
                     }
                 }
-            return make[i];
+                return make[i];
+            },
+    },
+    methods : {
+        verinalEquinox : function(year){
+            switch(year % 4){
+                case 0 : return year <= 2088 ? 20 : 19;
+                break;
+                case 1 : return 20;
+                break;
+                case 2 : return year <= 2022 ? 21 : 20;
+                break;
+                default : return year <= 2055 ? 21 : 20;
+            }
         },
-    }
+        AutumnalEquinox : function(year){
+            switch(year % 4){
+                case 0 : return 22;
+                break;
+            case 1 : return year <= 2041 ? 23 : 22
+                break;
+                case 2 : return year <= 2074 ? 23 : 22
+                break;
+                default : return 23;
+            }
+        },
+        SubstituteHoliday: function(){
+            while(1){
+                if(holidays.indexOf([month,day - i]) == -1){
+                    break;
+                }else if(dayOfWeek - i != 0){
+                    return true;
+                    break;
+                }else{
+                    i++;
+                }
+            }
+        }
+    },
 }
 </script>
 
