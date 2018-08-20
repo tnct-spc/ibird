@@ -1,20 +1,2 @@
 [
-  {
-    "name": "weekdays_22900_3071.json",
-    "station": "狭間駅",
-    "direction": "高尾山口・高尾方面",
-    "line": "京王高尾線"
-  },
-  {
-    "name": "weekenddays_22900_3071.json",
-    "station": "狭間駅",
-    "direction": "高尾山口・高尾方面",
-    "line": "京王高尾線"
-  },
-  {
-    "name": "holidays_22900_3071.json",
-    "station": "狭間駅",
-    "direction": "高尾山口・高尾方面",
-    "line": "京王高尾線"
-  }
 ]

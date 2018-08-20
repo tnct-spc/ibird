@@ -4,7 +4,6 @@ import { resolve } from 'path'
 import { fetch } from 'cheerio-httpcli'
 import { parse, format } from 'url'
 import { address } from 'ip'
-const axios = require('axios')
 
 const router = Router()
 const dirPath = resolve('.timetable', '../.timetable') // jsonのパスを設定
@@ -65,25 +64,6 @@ router.get('/searchstation', (req, res) => {
   }
 })
 
-router.get('/test', (req, res) => {
-  var shinjukulist = [
-    'https://transit.yahoo.co.jp/station/time/22900/?gid=3071&kind=1&done=time',
-    'https://transit.yahoo.co.jp/station/time/22900/?gid=3071&kind=2&done=time',
-    'https://transit.yahoo.co.jp/station/time/22900/?gid=3071&kind=4&done=time'
-  ]
-  test(shinjukulist)
-  res.send('ok')
-})
-async function test (testlist) {
-  for (var i = 0; i < testlist.length; i++) {
-    console.log(testlist[i])
-    await axios.get('http://localhost:3000/api/createtable', {
-      params: {'url': testlist[i]}
-    }).then(responce => {
-      console.log(responce.data)
-    })
-  }
-}
 // 確定済みの駅のURLから行き先のリストを返すAPI
 router.get('/geturllist', (req, res) => {
   var urlList = []
@@ -91,7 +71,7 @@ router.get('/geturllist', (req, res) => {
     .then(function (result) {
       var $ = result.$
       var jsonbase = '{"direction":"", "day": "", "url":""}'
-      // [{going: '行き先', url:~~},...]のようなリストにする
+      // 平日のurlを作成
       $('.elmSearchItem.direction li').each(function () {
         $(this).find('li').each(function () {
           var weekdaysJson = JSON.parse(jsonbase)
@@ -101,6 +81,7 @@ router.get('/geturllist', (req, res) => {
           urlList.push(weekdaysJson)
         })
       })
+      // 平日のurlをいじって他のurlを作成
       for (var i = 0; i < urlList.length; i++) {
         var URL = parse(urlList[i].url, true)
         if (URL.query.kind === '1') {
@@ -299,7 +280,7 @@ var getTodayList = () => {
 }
 
 // fetchのプロミスで呼び出すファイルを作成する関数
-function createJsonFile (jsonData, URL) {
+var createJsonFile = (jsonData, URL) => {
   var filename = ''
 
   // ファイル名を作成
