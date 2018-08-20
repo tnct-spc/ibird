@@ -1,56 +1,62 @@
 <template>
   <section>
-　<div id="overlay" @dragleave.prevent="onDragLeave" @dragover.prevent="onDragOver" @drop.prevent="onDrop">
-  管理者ページ
-</div>
+  <div id="overlay" @dragleave.prevent="onDragLeave($event)" @dragover.prevent="onDragOver($event)" @drop.prevent="onDrop($event)">
+  {{text}}
+  <BulletinBoard :classid="classid"/>
+  </div>
   </section>
 </template>
 <script>
 import axios from 'axios'
-let files
-let formData
-let overlay
+import BulletinBoard from '~/components/BulletinBoard.vue'
 
 export default{
-  name: 'login-form',
+  props:{
+     "classid":String
+  },
+  data:()=>{
+    return{
+      text:"管理者ページ"
+    }
+  },
   methods: {
-  onDragOver:(event) => {
+  onDragOver(event){
     event.preventDefault()
     event.dataTransfer.dropEffect = "copy"
-    overlay = document.getElementById("overlay")
+    const overlay = document.getElementById("overlay")
     overlay.classList.add("dropover")
   },
-  onDragLeave:(event) => {
+  onDragLeave(event){
   },
-  onDrop:(event) => {
+  onDrop(event){
     event.preventDefault()
-    event.dataTransfer.dropEffect="copy"
+    event.dataTransfer.dropEffect = "copy"
     overlay.classList.remove("dropover")
-    files = event.dataTransfer.files[0]
+    const files = event.dataTransfer.files[0]
     if(!files.type.match('application/pdf')&&!files.type.match('application/vnd.*'))
     {
-      overlay.innerHTML="ファイル形式に対応してません"
+      this.text="ファイル形式に対応してません"
       return
     }
-    formData = new FormData()
-    formData.append( 'file', files )
-    axios.post('api/upload-file',formData)
-    .then((response) => {
-        overlay.innerHTML="success"
+    const formData = new FormData()
+    formData.append( 'file', files)
+    formData.append('classids',"["+this.classid+"]")
+    axios.post('../api/upload-file',formData)
+    .then((response)=>{
+      this.text="success"
     })
     .catch((error) => {
-        overlay.innerHTML="error"
-        console.log(error)
+      this.text=error
     })
-  },
- }
+  }
+ },
+ components:{
+   BulletinBoard
+ },
 }
 </script>
 <style scoped>
 #overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
   text-align: center;
