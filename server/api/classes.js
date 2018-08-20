@@ -24,6 +24,11 @@ const classes = sequelize.define('classes', {
       timestamps: false
   });
   const documents = sequelize.define('documents', {
+      id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+      },
       docid: Sequelize.STRING,
       classid: Sequelize.INTEGER,
       x: Sequelize.INTEGER,
@@ -47,7 +52,7 @@ const docList = (classid)=>{
 router.put('/add-doc', (req, res, next) => {
     const classid = req.body.classid
     const doc = req.body.doc
-    return classes.create(
+    return documents.create(
           {
             classid: classid,
             docid: doc.docid,
