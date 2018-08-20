@@ -14,39 +14,53 @@ const sequelize = new Sequelize('ibird', 'postgres', 'password',{
 })
 const classes = sequelize.define('classes', {
     classid: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         primaryKey: true,
     },
-    documents: Sequelize.JSON,
+//    documents: Sequelize.JSON,
     year: Sequelize.TEXT,
     course: Sequelize.TEXT
   },{
       timestamps: false
   });
+  const documents = sequelize.define('documents', {
+      docid: Sequelize.STRING,
+      classid: Sequelize.INTEGER,
+      x: Sequelize.INTEGER,
+      y: Sequelize.INTEGER,
+      priority: Sequelize.INTEGER,
+      endTime: Sequelize.DATE,
+      startTime: Sequelize.DATE,
+    },{
+        timestamps: false
+    });
 
 //classidを渡したらドキュメントのリストを返してくれます
 const docList = (classid)=>{
-    return classes.findById(classid).then( c =>{
-        var list = []
-        for(var i of Object.values(c.documents)) list.push(i)
-        return list
+    return documents.findAll({
+      where: {classid: classid}
+    }).then( c =>{
+        return c
     })
 }
 
 router.put('/add-doc', (req, res, next) => {
     const classid = req.body.classid
     const doc = req.body.doc
-
-    docList(classid).then(list =>{
-        //listにいい感じに追加してデータベース更新
-        list.push(doc)
-        return classes.update(
-            {documents: list},
-            {where: {classid: classid}}
-        )
-    }).then(result =>{
+    return classes.create(
+          {
+            classid: classid,
+            docid: doc.docid,
+            x: doc.x,
+            y: doc.y,
+            priority: 1,//以下未実装
+            startTime: Date.now(),
+            endTime: Date.now(),//ここまで未実装
+          }
+    ).then(result =>{
         res.sendStatus(200)
     }).catch(err =>{
+      console.log(err)
         res.sendStatus(400)
     })
 })
@@ -57,19 +71,17 @@ router.put('/fix-position', (req, res, next) => {
     const x = req.body.x
     const y = req.body.y
 
-    docList(classid).then(list =>{
-        //listをいい感じに変更してデータベース更新
-        list.forEach(v => {
-            if(v.docid == docid){
-                v.x = x
-                v.y = y
-            }
-        })
-        return classes.update(
-            {documents: list},
-            {where: {classid: classid}}
-        )
-    }).then(result =>{
+    documents.update(
+      {
+        x: x,
+        y: y,
+      },
+      {where: {
+        classid: classid,
+        docid: docid,
+      }
+      }
+    ).then(result =>{
         res.sendStatus(200)
     }).catch(err =>{
         res.sendStatus(400)
@@ -80,14 +92,11 @@ router.delete('/rm-doc', (req, res, next) => {
     const classid = req.query.classid
     const docid = req.query.docid
 
-    docList(classid).then(list =>{
-        //docidが同じdocumentを省く
-        return list.filter(value => value.docid !== docid)
-    }).then(newList =>{
-        return classes.update(
-            {documents: newList},
-            {where: {classid: classid}}
-        )
+    classes.destroy({
+      where: {
+        classid: classid,
+        docid: docid,
+      }
     }).then(result =>{
         res.sendStatus(200)
     }).catch(err =>{
