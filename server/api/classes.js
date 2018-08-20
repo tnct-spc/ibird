@@ -93,6 +93,26 @@ router.put('/fix-position', (req, res, next) => {
     })
 })
 
+router.put('/order-doc', (req, res, next) => {
+    const classid = req.body.classid
+    const docid = req.body.docid
+    docList(classid).then(list =>{
+        //listをいい感じに変更してデータベース更新
+        const buff = list.filter(value => value.docid === docid)
+        const newlist = list.filter(value => value.docid !== docid)
+        buff.forEach(v =>  newlist.push(v))
+        
+        return classes.update(
+            {documents: newlist}, 
+            {where: {classid: classid}}
+        )
+    }).then(result =>{
+        res.sendStatus(200)
+    }).catch(err =>{
+        res.sendStatus(400)
+    })
+})
+
 router.delete('/rm-doc', (req, res, next) => {
     const classid = req.query.classid
     const docid = req.query.docid

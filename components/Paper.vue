@@ -81,6 +81,17 @@ export default {
         }).catch(e =>{
           console.log(e)
         })
+    },
+    upPaper: function(){
+      axios.put('http://' +process.env.mainUrl + '/api/order-doc', {
+        classid: this.classid,
+        docid: this.paper.docid
+      }).then( () => {
+        const c = new W3cwebsocket('ws://' +process.env.mainUrl + '/ws/refresh')
+        c.onopen = () => c.send('{}')
+      }).catch(e =>{
+        console.log(e)
+      })
     }
   }
 }
