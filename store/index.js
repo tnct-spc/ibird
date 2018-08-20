@@ -18,7 +18,7 @@ export const mutations = {
       try {
         state.papers[classid][paperId].x = x
         state.papers[classid][paperId].y = y
-        state.papers[classid][paperId].date = new Date()
+        state.papers[classid][paperId].updatedAt = new Date()
       } catch (e) {
         console.log(e)
       }

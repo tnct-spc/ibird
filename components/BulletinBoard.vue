@@ -39,7 +39,7 @@ export default {
       var papers = this.papers(this.classid)
       if(papers) {
         papers = this.papers(this.classid).filter(v => true) //配列のコピー 直接ソートすると怒られる
-        papers.sort((a,b) => a.date - b.date)
+        papers.sort((a,b) => a.updatedAt - b.updatedAt)
       }
       return papers
     }
@@ -58,7 +58,7 @@ export default {
           document['index'] = index
           document['isSelected'] = false
           document['imgUrl'] = '/jpg/' + document.docid + '.jpg'
-          document['date'] = Date()
+          document['updatedAt'] = Date()
           documents.push(document)
         });
         this.fixPapers({classid: this.classid, documents: documents})
