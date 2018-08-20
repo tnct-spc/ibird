@@ -43,6 +43,7 @@ export default {
       this.cursorOffset.y = e.offsetY
       if (this.paper.isSelected) {
         this.savePosition()
+        this.saveOrder()
         document.removeEventListener('mousemove',this.mousemove)
         this.selectedcard({classid: this.classid, paperId: null})
       } else {
@@ -78,6 +79,14 @@ export default {
           docid: this.paper.docid,
           x: this.paper.x,
           y: this.paper.y
+        }).catch(e =>{
+          console.log(e)
+        })
+    },
+    saveOrder: function(){
+        axios.put('http://' +process.env.mainUrl + '/api/order-doc', {
+          classid: this.classid,
+          docid: this.paper.docid,
         }).catch(e =>{
           console.log(e)
         })

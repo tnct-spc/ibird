@@ -58,7 +58,7 @@ export default {
           document['index'] = index
           document['isSelected'] = false
           document['imgUrl'] = '/jpg/' + document.docid + '.jpg'
-          document['updatedAt'] = Date()
+          document['updatedAt'] = document.updatedAt
           documents.push(document)
         });
         this.fixPapers({classid: this.classid, documents: documents})
