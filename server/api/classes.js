@@ -52,6 +52,9 @@ const docList = (classid)=>{
 router.put('/add-doc', (req, res, next) => {
     const classid = req.body.classid
     const doc = req.body.doc
+    const now = new Date()
+    var endTime = new Date()
+    endTime.setDate(now.getDate()+7)
     return documents.create(
           {
             classid: classid,
@@ -59,8 +62,8 @@ router.put('/add-doc', (req, res, next) => {
             x: doc.x,
             y: doc.y,
             priority: 1,//以下未実装
-            startTime: Date.now(),
-            endTime: Date.now(),//ここまで未実装
+            startTime: now,
+            endTime: endTime,//ここまで未実装
           }
     ).then(result =>{
         res.sendStatus(200)
@@ -101,9 +104,9 @@ router.put('/fix-position', (req, res, next) => {
 //         const buff = list.filter(value => value.docid === docid)
 //         const newlist = list.filter(value => value.docid !== docid)
 //         buff.forEach(v =>  newlist.push(v))
-        
+
 //         return classes.update(
-//             {documents: newlist}, 
+//             {documents: newlist},
 //             {where: {classid: classid}}
 //         )
 //     }).then(result =>{
@@ -153,17 +156,18 @@ router.put('/sort-docs', (req, res, next) => {
     //並べる場所,今はてきとう
     const cleanXYS = [
       {x:0,y:0},
-      {x:10,y:0},
-      {x:20,y:0},
-      {x:30,y:0},
-      {x:40,y:0},
-      {x:50,y:0},
-      {x:60,y:0},
-      {x:70,y:0},
+      {x:200,y:0},
+      {x:400,y:0},
+      {x:600,y:0},
+      {x:800,y:0},
+      {x:1000,y:0},
+      {x:1200,y:0},
+      {x:1400,y:0},
     ]
       docList(classid).then(list =>{
         //list並べる順番にsortする処理
-        //いまは一番はやく消えるもの
+
+
         console.log(list)
         var sortedList = list
         console.log(sortedList)
@@ -171,11 +175,8 @@ router.put('/sort-docs', (req, res, next) => {
           console.log(cleanXYS[i].x)
           sortedList[i].x = cleanXYS[i].x
           sortedList[i].y = cleanXYS[i].y
+          sortedList[i].save()
         }
-        return classes.update(
-          {documents: sortedList},
-          {where: {classid: classid}}
-        )
       }).then(result =>{
           res.sendStatus(200)
       }).catch(err =>{
