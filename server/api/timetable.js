@@ -67,54 +67,9 @@ router.get('/searchstation', (req, res) => {
 
 router.get('/test', (req, res) => {
   var shinjukulist = [
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=1051&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=1050&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=1061&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=1060&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=1091&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=1090&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=1101&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=1100&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=7171&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=7170&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=3021&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=3031&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=3091&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=3401&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=7211&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=7210&q=%E6%96%B0%E5%AE%BF&kind=1&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=1051&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=1051&q=%E6%96%B0%E5%AE%BF&kind=4&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=1050&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=1050&q=%E6%96%B0%E5%AE%BF&kind=4&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=1061&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=1061&q=%E6%96%B0%E5%AE%BF&kind=4&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=1060&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=1060&q=%E6%96%B0%E5%AE%BF&kind=4&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=1091&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=1091&q=%E6%96%B0%E5%AE%BF&kind=4&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=1090&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=1090&q=%E6%96%B0%E5%AE%BF&kind=4&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=1101&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=1101&q=%E6%96%B0%E5%AE%BF&kind=4&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=1100&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=1100&q=%E6%96%B0%E5%AE%BF&kind=4&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=7171&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=7171&q=%E6%96%B0%E5%AE%BF&kind=4&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=7170&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=7170&q=%E6%96%B0%E5%AE%BF&kind=4&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=3021&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=3021&q=%E6%96%B0%E5%AE%BF&kind=4&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=3031&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=3031&q=%E6%96%B0%E5%AE%BF&kind=4&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=3091&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=3091&q=%E6%96%B0%E5%AE%BF&kind=4&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=3401&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=3401&q=%E6%96%B0%E5%AE%BF&kind=4&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=7211&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=7211&q=%E6%96%B0%E5%AE%BF&kind=4&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=7210&q=%E6%96%B0%E5%AE%BF&kind=2&done=time',
-    'https://transit.yahoo.co.jp/station/time/22741/?gid=7210&q=%E6%96%B0%E5%AE%BF&kind=4&done=time'
+    'https://transit.yahoo.co.jp/station/time/22900/?gid=3071&kind=1&done=time',
+    'https://transit.yahoo.co.jp/station/time/22900/?gid=3071&kind=2&done=time',
+    'https://transit.yahoo.co.jp/station/time/22900/?gid=3071&kind=4&done=time'
   ]
   test(shinjukulist)
   res.send('ok')
@@ -124,6 +79,8 @@ async function test (testlist) {
     console.log(testlist[i])
     await axios.get('http://localhost:3000/api/createtable', {
       params: {'url': testlist[i]}
+    }).then(responce => {
+      console.log(responce.data)
     })
   }
 }
@@ -174,6 +131,8 @@ router.get('/geturllist', (req, res) => {
 // 駅のタイムテーブルを取得してJSONを生成するAPI
 router.get('/createtable', (req, res) => {
   var fullTimetableData = JSON.parse('{}')
+  var fileInfo = JSON.parse('{}')
+  var name = ''
   fetch(req.query.url)
     .then(function (result) {
       var $ = result.$
@@ -246,11 +205,17 @@ router.get('/createtable', (req, res) => {
       fullTimetableData['timetable'] = timetable
     })
     .then(function () {
-      createJsonFile(fullTimetableData, req.query.url)
+      name = createJsonFile(fullTimetableData, req.query.url)
+    })
+    .then(function () {
+      fileInfo['name'] = name
+      fileInfo['station'] = fullTimetableData.station
+      fileInfo['direction'] = fullTimetableData.direction
+      fileInfo['line'] = fullTimetableData.line
     })
     // 成功
     .then(function () {
-      res.sendStatus(200)
+      res.json(fileInfo)
     })
     // エラー処理
     .catch(function (error) {
@@ -335,7 +300,7 @@ var getTodayList = () => {
 
 // fetchのプロミスで呼び出すファイルを作成する関数
 function createJsonFile (jsonData, URL) {
-  var filename
+  var filename = ''
 
   // ファイル名を作成
   var q = parse(URL, true).query
@@ -373,6 +338,7 @@ function createJsonFile (jsonData, URL) {
       if (error) console.log('Failed writeFilename : ' + error)
     }
   )
+  return filename
 }
 
 export default router
