@@ -1,7 +1,7 @@
 <template>
     <section id="wrapper">
       <ControlSelecter :classes="classes"/>
-      <Control id="upload" :classid="classid"/>
+      <Control id="upload" :classid="classid" :classes="classes"/>
     </section>
 </template>
 <script>
@@ -23,7 +23,7 @@ export default {
       var eflag = true
       classlist.forEach(c => {
         if(String(c.classid) === params.control) eflag = false
-      });
+      })
       if(eflag) throw new URIError("URIちがうよ");
 
       return {
