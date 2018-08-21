@@ -1,6 +1,11 @@
 <template>
   <section>
-    <Paper v-for="(paper, i) in sortedPapers" :key="i" :classid="classid" :ws-client="client" :paper="paper" />
+    <Paper v-for="(paper, i) in sortedPapers"
+      :key="i"
+      :classid="classid"
+      :ws-client="client"
+      :paper="paper"
+      />
   </section>
 </template>
 
@@ -37,11 +42,8 @@ export default {
       papers: 'papers'
     }),
     sortedPapers: function(){
-      var papers = Object.values(this.papers)
-      // if(papers) {
-      //   papers = this.papers.filter(v => true) //配列のコピー 直接ソートすると怒られる
-      //   papers.sort((a,b) => a.updatedAt - b.updatedAt)
-      // }
+      var papers = Object.values(this.papers).filter(() => true)
+      papers.sort((a,b) => a.updatedAt - b.updatedAt)
       return papers
     }
   },

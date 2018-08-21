@@ -36,21 +36,22 @@ export default {
       if (this.paper.isSelected) {
         this.savePosition()
         this.saveOrder()
-        document.removeEventListener('mousemove',this.mousemove)
         this.selectedcard({docid: null})
+        document.removeEventListener('mousemove',this.mousemove)
       } else {
-        document.addEventListener('mousemove',this.mousemove)
         this.selectedcard({docid: this.paper.docid})
+        document.addEventListener('mousemove',this.mousemove)
       }
     },
     mousemove: function(e){
-      this.wsClient.send(JSON.stringify({
-        classid: this.classid,
-        docid: this.paper.docid,
-        x: e.x-this.cursorOffset.x,
-        y: e.y-this.cursorOffset.y,
-      }))
-      document.addEventListener('mouseup',this.mouseup)
+      if(this.paper.isSelected){
+        this.wsClient.send(JSON.stringify({
+          classid: this.classid,
+          docid: this.paper.docid,
+          x: e.x-this.cursorOffset.x,
+          y: e.y-this.cursorOffset.y,
+        }))
+      }
     },
     remove: function(){
       axios.delete('http://' +process.env.mainUrl + '/api/rm-doc', {
