@@ -29,7 +29,11 @@ export const mutations = {
     state.papers[docid].isSelected = true
   },
   fixPapers (state, {documents}) {
-    Object.keys(state.papers).forEach(key => Vue.delete(state.papers, key))
-    Object.keys(documents.key).forEach(key => Vue.set(state.papers, key, documents.key))
+    Object.keys(state.papers).forEach(key => {
+      Vue.delete(state.papers, key)
+    })
+    Object.keys(documents).forEach(key => {
+      Vue.set(state.papers, key, documents[key])
+    })
   }
 }
