@@ -37,11 +37,11 @@ export default {
       papers: 'papers'
     }),
     sortedPapers: function(){
-      var papers = this.papers
-      if(papers) {
-        papers = this.papers.filter(v => true) //配列のコピー 直接ソートすると怒られる
-        papers.sort((a,b) => a.updatedAt - b.updatedAt)
-      }
+      var papers = Object.values(this.papers)
+      // if(papers) {
+      //   papers = this.papers.filter(v => true) //配列のコピー 直接ソートすると怒られる
+      //   papers.sort((a,b) => a.updatedAt - b.updatedAt)
+      // }
       return papers
     }
   },
@@ -54,16 +54,17 @@ export default {
       axios.get('http://' +process.env.mainUrl + '/api/class-docs',{
         params: { classid: this.classid }
       }).then(res =>{
-        var documents = []
+    console.log('aaa')
+        var documents = {}
         res.data.forEach((document , index)=> {
-          document['index'] = index
-          document['isSelected'] = false
-          document['imgUrl'] = '/jpg/' + document.docid + '.jpg'
-          document['updatedAt'] = document.updatedAt
-          documents.push(document)
+          documents[document.docid].index = index
+          documents[document.docid].isSelected = false
+          documents[document.docid].imgUrl =  '/jpg/' + document.docid + '.jpg'
+          documents[document.docid].updatedAt = document.updatedAt
         });
         this.fixPapers({documents: documents})
       }).catch(e =>{
+    console.log('vbb')
         console.log(e)
       })
     }

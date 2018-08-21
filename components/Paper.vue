@@ -19,7 +19,7 @@ export default {
   },
   props: {
     "classid": String,
-    "paperId": String,
+    "docid": String,
     "wsClient": {}
   },
   computed: {
@@ -27,7 +27,7 @@ export default {
       papers: 'papers'
     }),
     paper () {
-      return this.papers[this.paperId]
+      return this.papers[this.docid]
     },
   },
   methods: {
@@ -45,16 +45,16 @@ export default {
         this.savePosition()
         this.saveOrder()
         document.removeEventListener('mousemove',this.mousemove)
-        this.selectedcard({paperId: null})
+        this.selectedcard({docid: null})
       } else {
         document.addEventListener('mousemove',this.mousemove)
-        this.selectedcard({paperId: this.paperId})
+        this.selectedcard({docid: this.docid})
       }
     },
     mousemove: function(e){
       this.wsClient.send(JSON.stringify({
         classid: this.classid,
-        paperId: this.paperId,
+        docid: this.docid,
         x: e.x-this.cursorOffset.x,
         y: e.y-this.cursorOffset.y,
       }))

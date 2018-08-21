@@ -1,5 +1,7 @@
+import Vue from 'vue'
+
 export const state = () => ({
-  papers: []
+  papers: {}
 })
 
 export const getters = {
@@ -9,27 +11,25 @@ export const getters = {
 }
 
 export const mutations = {
-  move (state, { paperId, x, y }) {
+  move (state, { docid, x, y }) {
     if (state.papers) {
       try {
-        state.papers[paperId].x = x
-        state.papers[paperId].y = y
-        state.papers[paperId].updatedAt = new Date()
+        state.papers[docid].x = x
+        state.papers[docid].y = y
+        state.papers[docid].updatedAt = new Date()
       } catch (e) {
         console.log(e)
       }
     }
   },
-  selectCard (state, {paperId}) {
+  selectCard (state, {docid}) {
     for (var i = 0; i < state.papers.length; i++) {
       state.papers[i].isSelected = false
     }
-    state.papers[paperId].isSelected = true
+    state.papers[docid].isSelected = true
   },
   fixPapers (state, {documents}) {
-    state.papers.splice(0, state.papers.length)
-    documents.forEach(d => {
-      state.papers.push(d)
-    })
+    Object.keys(state.papers).forEach(key => Vue.delete(state.papers, key))
+    Object.keys(documents.key).forEach(key => Vue.set(state.papers, key, documents.key))
   }
 }
