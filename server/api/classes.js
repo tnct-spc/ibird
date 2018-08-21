@@ -1,7 +1,9 @@
 import { Router } from 'express'
 import Sequelize from 'sequelize'
 import parser from 'body-parser'
+import { w3cwebsocket } from 'websocket'
 
+const W3cwebsocket = w3cwebsocket
 const router = Router()
 router.use(parser.urlencoded({ extended: false }));
 router.use(parser.json());
@@ -166,17 +168,31 @@ router.put('/sort-docs', (req, res, next) => {
     ]
       docList(classid).then(list =>{
         //list並べる順番にsortする処理
+        var temp = []
+        const now = new Date()
+        for(let i=0;i<list.length;i++){
+          var label = Math.ceil((list[i].endTime - now)/(1000 * 60 * 60 *24))
+          label -= list[i].priority
+          temp.push({
+            data: list[i],
+            label: label
+          })
+        }
+        temp.sort((a,b) => {
+            if (a.label < b.label) return -1;
+            if (a.label > b.label) return 1;
+            return 0;
+        });
 
-
-        console.log(list)
-        var sortedList = list
-        console.log(sortedList)
+        var sortedList =[]
+        temp.forEach(v => { sortedList.push(v.data)})
         for (let i=0; i<sortedList.length; i++) {
-          console.log(cleanXYS[i].x)
           sortedList[i].x = cleanXYS[i].x
           sortedList[i].y = cleanXYS[i].y
           sortedList[i].save()
         }
+        const c = new W3cwebsocket('ws://localhost:3000/ws/refresh')
+        c.onopen = () => c.send('{}')
       }).then(result =>{
           res.sendStatus(200)
       }).catch(err =>{
