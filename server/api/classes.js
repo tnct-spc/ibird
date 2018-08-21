@@ -154,17 +154,18 @@ router.get('/class-docs', (req, res, next) => {
 
 router.put('/sort-docs', (req, res, next) => {
     const classid = req.body.classid
-    console.log(classid)
     //並べる場所,今はてきとう
     const cleanXYS = [
-      {x:0,y:0},
-      {x:200,y:0},
-      {x:400,y:0},
-      {x:600,y:0},
-      {x:800,y:0},
-      {x:1000,y:0},
-      {x:1200,y:0},
-      {x:1400,y:0},
+      {x:30,y:20},
+      {x:260,y:20},
+      {x:490,y:20},
+      {x:720,y:20},
+      {x:950,y:20},
+      {x:30,y:380},
+      {x:260,y:380},
+      {x:490,y:380},
+      {x:720,y:380},
+      {x:950,y:380},
     ]
       docList(classid).then(list =>{
         //list並べる順番にsortする処理
