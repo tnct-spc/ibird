@@ -19,16 +19,8 @@ export default {
   },
   props: {
     "classid": String,
-    "docid": String,
-    "wsClient": {}
-  },
-  computed: {
-    ...mapGetters({
-      papers: 'papers'
-    }),
-    paper () {
-      return this.papers[this.docid]
-    },
+    "wsClient": {},
+    "paper": {}
   },
   methods: {
     ...mapMutations({
@@ -48,13 +40,13 @@ export default {
         this.selectedcard({docid: null})
       } else {
         document.addEventListener('mousemove',this.mousemove)
-        this.selectedcard({docid: this.docid})
+        this.selectedcard({docid: this.paper.docid})
       }
     },
     mousemove: function(e){
       this.wsClient.send(JSON.stringify({
         classid: this.classid,
-        docid: this.docid,
+        docid: this.paper.docid,
         x: e.x-this.cursorOffset.x,
         y: e.y-this.cursorOffset.y,
       }))

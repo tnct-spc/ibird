@@ -1,6 +1,6 @@
 <template>
   <section>
-    <Paper v-for="(paper, i) in sortedPapers" :key="i" :classid=classid :paper-id="i+''" :ws-client="client" />
+    <Paper v-for="(paper, i) in sortedPapers" :key="i" :classid="classid" :ws-client="client" :paper="paper" />
   </section>
 </template>
 
@@ -62,7 +62,6 @@ export default {
           document['updatedAt'] = document.updatedAt
           documents[document.docid] = document
         });
-        console.log(documents)
         this.fixPapers({documents: documents})
       }).catch(e =>{
         console.log(e)

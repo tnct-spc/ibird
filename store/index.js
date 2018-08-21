@@ -12,7 +12,7 @@ export const getters = {
 
 export const mutations = {
   move (state, { docid, x, y }) {
-    if (state.papers) {
+    if (state.papers[docid]) {
       try {
         state.papers[docid].x = x
         state.papers[docid].y = y
@@ -23,9 +23,9 @@ export const mutations = {
     }
   },
   selectCard (state, {docid}) {
-    for (var i = 0; i < state.papers.length; i++) {
-      state.papers[i].isSelected = false
-    }
+    Object.keys(state.papers).forEach(key => {
+      state.papers[key].isSelected = false
+    })
     state.papers[docid].isSelected = true
   },
   fixPapers (state, {documents}) {
