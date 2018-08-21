@@ -1,6 +1,6 @@
 <template>
   <section>
-    <Paper v-for="paper in sortedPapers" :key="paper.index" :classid=classid :paper-id="paper.index+''" :ws-client="client" />
+    <Paper v-for="(paper, i) in sortedPapers" :key="i" :classid=classid :paper-id="i+''" :ws-client="client" />
   </section>
 </template>
 
@@ -54,17 +54,17 @@ export default {
       axios.get('http://' +process.env.mainUrl + '/api/class-docs',{
         params: { classid: this.classid }
       }).then(res =>{
-    console.log('aaa')
         var documents = {}
         res.data.forEach((document , index)=> {
-          documents[document.docid].index = index
-          documents[document.docid].isSelected = false
-          documents[document.docid].imgUrl =  '/jpg/' + document.docid + '.jpg'
-          documents[document.docid].updatedAt = document.updatedAt
+          document['index'] = index
+          document['isSelected'] = false
+          document['imgUrl'] = '/jpg/' + document.docid + '.jpg'
+          document['updatedAt'] = document.updatedAt
+          documents[document.docid] = document
         });
+        console.log(documents)
         this.fixPapers({documents: documents})
       }).catch(e =>{
-    console.log('vbb')
         console.log(e)
       })
     }
