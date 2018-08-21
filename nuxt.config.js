@@ -43,6 +43,6 @@ module.exports = {
     }
   },
   env: {
-    mainUrl: process.env.MAIN_URL || 'localhost:3000'
+    mainUrl: process.env.MAIN_URL || '192.168.1.86:3000'
   }
 }
