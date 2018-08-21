@@ -205,7 +205,7 @@ router.put('/sort-docs', (req, res, next) => {
 router.put('/class', (req, res, next) => {
   const year = req.body.year
   const course = req.body.course
-  classes.create({
+  return classes.create({
     year: year,
     course: course
   }).then(result => {
@@ -216,7 +216,16 @@ router.put('/class', (req, res, next) => {
   })
 })
 router.delete('/class', (req, res, next) => {
-
+  const classid = req.query.classid
+  console.log(classid)
+  return classes.destroy({
+    where: {classid: classid}
+  }).then(result => {
+    res.sendStatus(200)
+  }).catch(err => {
+    console.log(err)
+    res.sendStatus(400)
+  })
 })
 
 export default router
