@@ -26,7 +26,8 @@ export default {
     this.refresh()
     this.client = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/move')
     this.client.onmessage=({data})=>{
-      this.move(JSON.parse(data))
+      data = JSON.parse(data)
+      if(data.classid === this.classid) this.move(data)
     }
     this.refreshClient = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/refresh')
     this.refreshClient.onmessage = d => this.refresh()
@@ -36,9 +37,9 @@ export default {
       papers: 'papers'
     }),
     sortedPapers: function(){
-      var papers = this.papers(this.classid)
+      var papers = this.papers
       if(papers) {
-        papers = this.papers(this.classid).filter(v => true) //配列のコピー 直接ソートすると怒られる
+        papers = this.papers.filter(v => true) //配列のコピー 直接ソートすると怒られる
         papers.sort((a,b) => a.updatedAt - b.updatedAt)
       }
       return papers
@@ -61,7 +62,7 @@ export default {
           document['updatedAt'] = document.updatedAt
           documents.push(document)
         });
-        this.fixPapers({classid: this.classid, documents: documents})
+        this.fixPapers({documents: documents})
       }).catch(e =>{
         console.log(e)
       })

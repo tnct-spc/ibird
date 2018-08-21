@@ -27,7 +27,7 @@ export default {
       papers: 'papers'
     }),
     paper () {
-      return this.papers(this.classid)[this.paperId]
+      return this.papers[this.paperId]
     },
   },
   methods: {
@@ -45,10 +45,10 @@ export default {
         this.savePosition()
         this.saveOrder()
         document.removeEventListener('mousemove',this.mousemove)
-        this.selectedcard({classid: this.classid, paperId: null})
+        this.selectedcard({paperId: null})
       } else {
         document.addEventListener('mousemove',this.mousemove)
-        this.selectedcard({classid: this.classid, paperId: this.paperId})
+        this.selectedcard({paperId: this.paperId})
       }
     },
     mousemove: function(e){

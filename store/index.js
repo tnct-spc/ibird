@@ -1,36 +1,35 @@
-import Vue from 'vue'
-
 export const state = () => ({
-  papers: { }
+  papers: []
 })
 
 export const getters = {
   papers (state) {
-    return classid => {
-      return state.papers[classid]
-    }
+    return state.papers
   }
 }
 
 export const mutations = {
-  move (state, { classid, paperId, x, y }) {
-    if (state.papers[classid]) {
+  move (state, { paperId, x, y }) {
+    if (state.papers) {
       try {
-        state.papers[classid][paperId].x = x
-        state.papers[classid][paperId].y = y
-        state.papers[classid][paperId].updatedAt = new Date()
+        state.papers[paperId].x = x
+        state.papers[paperId].y = y
+        state.papers[paperId].updatedAt = new Date()
       } catch (e) {
         console.log(e)
       }
     }
   },
-  selectCard (state, {classid, paperId}) {
-    for (var i = 0; i < state.papers[classid].length; i++) {
-      state.papers[classid][i].isSelected = false
+  selectCard (state, {paperId}) {
+    for (var i = 0; i < state.papers.length; i++) {
+      state.papers[i].isSelected = false
     }
-    state.papers[classid][paperId].isSelected = true
+    state.papers[paperId].isSelected = true
   },
-  fixPapers (state, {classid, documents}) {
-    Vue.set(state.papers, classid, documents)
+  fixPapers (state, {documents}) {
+    state.papers.splice(0, state.papers.length)
+    documents.forEach(d => {
+      state.papers.push(d)
+    })
   }
 }
