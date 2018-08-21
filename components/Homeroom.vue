@@ -20,4 +20,9 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style>
+body{
+  background-color: #d0ae88ff;
+}
+</style>
+
