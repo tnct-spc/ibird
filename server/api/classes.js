@@ -1,7 +1,9 @@
 import { Router } from 'express'
 import Sequelize from 'sequelize'
 import parser from 'body-parser'
+import { w3cwebsocket } from 'websocket'
 
+const W3cwebsocket = w3cwebsocket
 const router = Router()
 router.use(parser.urlencoded({ extended: false }));
 router.use(parser.json());
@@ -53,6 +55,9 @@ const docList = (classid)=>{
 router.put('/add-doc', (req, res, next) => {
     const classid = req.body.classid
     const doc = req.body.doc
+    const now = new Date()
+    var endTime = new Date()
+    endTime.setDate(now.getDate()+7)
     return documents.create(
           {
             classid: classid,
@@ -60,8 +65,8 @@ router.put('/add-doc', (req, res, next) => {
             x: doc.x,
             y: doc.y,
             priority: 1,//以下未実装
-            startTime: Date.now(),
-            endTime: Date.now(),//ここまで未実装
+            startTime: now,
+            endTime: endTime,//ここまで未実装
           }
     ).then(result =>{
         res.sendStatus(200)
@@ -148,33 +153,46 @@ router.get('/class-docs', (req, res, next) => {
 
 router.put('/sort-docs', (req, res, next) => {
     const classid = req.body.classid
-    console.log(classid)
     //並べる場所,今はてきとう
     const cleanXYS = [
-      {x:0,y:0},
-      {x:10,y:0},
-      {x:20,y:0},
-      {x:30,y:0},
-      {x:40,y:0},
-      {x:50,y:0},
-      {x:60,y:0},
-      {x:70,y:0},
+      {x:30,y:20},
+      {x:260,y:20},
+      {x:490,y:20},
+      {x:720,y:20},
+      {x:950,y:20},
+      {x:30,y:380},
+      {x:260,y:380},
+      {x:490,y:380},
+      {x:720,y:380},
+      {x:950,y:380},
     ]
       docList(classid).then(list =>{
         //list並べる順番にsortする処理
-        //いまは一番はやく消えるもの
-        console.log(list)
-        var sortedList = list
-        console.log(sortedList)
+        var temp = []
+        const now = new Date()
+        for(let i=0;i<list.length;i++){
+          var label = Math.ceil((list[i].endTime - now)/(1000 * 60 * 60 *24))
+          label -= list[i].priority
+          temp.push({
+            data: list[i],
+            label: label
+          })
+        }
+        temp.sort((a,b) => {
+            if (a.label < b.label) return -1;
+            if (a.label > b.label) return 1;
+            return 0;
+        });
+
+        var sortedList =[]
+        temp.forEach(v => { sortedList.push(v.data)})
         for (let i=0; i<sortedList.length; i++) {
-          console.log(cleanXYS[i].x)
           sortedList[i].x = cleanXYS[i].x
           sortedList[i].y = cleanXYS[i].y
+          sortedList[i].save()
         }
-        return classes.update(
-          {documents: sortedList},
-          {where: {classid: classid}}
-        )
+        const c = new W3cwebsocket('ws://localhost:3000/ws/refresh')
+        c.onopen = () => c.send('{}')
       }).then(result =>{
           res.sendStatus(200)
       }).catch(err =>{
