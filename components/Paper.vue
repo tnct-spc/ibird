@@ -2,11 +2,11 @@
   <div @mousedown="mousedown">
     <p>{{ this.paper }}</p>
     <img class="paper" :src="paper.imgUrl" id="drag"
-      alt="" :style="{left: this.paper.x+'px', top: this.paper.y+'px'}" ondragstart="return false;" width="15%">>
+      alt="" :style="{left: this.paper.x+'px', top: this.paper.y+'px'}" ondragstart="return false;" >
   </div>
 </template>
 <script>
-import { mapMutations, mapGetters } from 'vuex'
+import { mapMutations } from 'vuex'
 import axios from 'axios'
 import { w3cwebsocket } from 'websocket'
 const W3cwebsocket = w3cwebsocket
@@ -14,13 +14,16 @@ const W3cwebsocket = w3cwebsocket
 export default {
   data:function(){
     return{
+      wsClient: {},
       cursorOffset: {x:0,y:0},
     }
   },
   props: {
     "classid": String,
-    "wsClient": {},
     "paper": {}
+  },
+  created (){
+    this.wsClient = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/move')
   },
   methods: {
     ...mapMutations({

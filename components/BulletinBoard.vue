@@ -11,7 +11,7 @@
 
 <script>
 import Paper from '~/components/Paper.vue'
-import { mapMutations, mapGetters } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import { w3cwebsocket } from 'websocket'
 import axios from 'axios'
 
@@ -38,7 +38,7 @@ export default {
     this.refreshClient.onmessage = d => this.refresh()
   },
   computed: {
-    ...mapGetters({
+    ...mapState({
       papers: 'papers'
     }),
     sortedPapers: function(){
@@ -50,7 +50,7 @@ export default {
   methods:{
     ...mapMutations({
       move: 'move',
-      fixPapers: 'fixPapers'
+      refreshPapers: 'refreshPapers'
     }),
     refresh: function(){
       axios.get('http://' +process.env.mainUrl + '/api/class-docs',{
@@ -58,13 +58,11 @@ export default {
       }).then(res =>{
         var documents = {}
         res.data.forEach((document , index)=> {
-          document['index'] = index
           document['isSelected'] = false
           document['imgUrl'] = '/jpg/' + document.docid + '.jpg'
-          document['updatedAt'] = document.updatedAt
           documents[document.docid] = document
         });
-        this.fixPapers({documents: documents})
+        this.refreshPapers({documents: documents})
       }).catch(e =>{
         console.log(e)
       })

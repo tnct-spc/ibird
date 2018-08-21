@@ -4,12 +4,6 @@ export const state = () => ({
   papers: {}
 })
 
-export const getters = {
-  papers (state) {
-    return state.papers
-  }
-}
-
 export const mutations = {
   move (state, { docid, x, y }) {
     if (state.papers[docid]) {
@@ -28,7 +22,7 @@ export const mutations = {
     })
     state.papers[docid].isSelected = true
   },
-  fixPapers (state, {documents}) {
+  refreshPapers (state, {documents}) {
     Object.keys(state.papers).forEach(key => {
       Vue.delete(state.papers, key)
     })
