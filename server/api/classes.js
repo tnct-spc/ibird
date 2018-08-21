@@ -18,6 +18,7 @@ const classes = sequelize.define('classes', {
     classid: {
         type: Sequelize.INTEGER,
         primaryKey: true,
+        autoIncrement: true
     },
 //    documents: Sequelize.JSON,
     year: Sequelize.TEXT,
@@ -199,6 +200,32 @@ router.put('/sort-docs', (req, res, next) => {
           console.log(err.message)
           res.sendStatus(400)
       })
+})
+
+router.put('/class', (req, res, next) => {
+  const year = req.body.year
+  const course = req.body.course
+  return classes.create({
+    year: year,
+    course: course
+  }).then(result => {
+    res.sendStatus(200)
+  }).catch(err => {
+    console.log(err)
+    res.sendStatus(400)
+  })
+})
+router.delete('/class', (req, res, next) => {
+  const classid = req.query.classid
+  console.log(classid)
+  return classes.destroy({
+    where: {classid: classid}
+  }).then(result => {
+    res.sendStatus(200)
+  }).catch(err => {
+    console.log(err)
+    res.sendStatus(400)
+  })
 })
 
 export default router
