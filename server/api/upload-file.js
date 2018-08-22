@@ -35,20 +35,6 @@ const pdfToJpg = (pdfPath) => {
   return filename(jpgPath)
 }
 
-//特定のクラスにdocumentを追加する関数
-async function runAddAPI(classids, docid) {
-  for(var classid of classids) {
-    await axios.put('http://localhost:3000/api/add-doc', {
-      classid: classid,
-      doc: {
-        docid: docid,
-        x: 100,
-        y: 100
-      }
-    })
-  }
-}
-
 const upload = multer({ storage: multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, '.document/')
@@ -58,7 +44,7 @@ const upload = multer({ storage: multer.diskStorage({
   }
 })})
 
-async function run(path, classids){
+async function run(path){
   //拡張子がofficeだったらconvertしてpathにpdfのpathを入れる
   if(office_extensions.indexOf(extension(path)) >= 0){
     const result = await officeToPDF(path)
@@ -67,14 +53,13 @@ async function run(path, classids){
   var docid = pdfToJpg(path)
   docid = docid.slice(0, -4)
 
-  if(classids) await runAddAPI(JSON.parse(classids), docid)
   const c = new W3cwebsocket('ws://localhost:3000/ws/refresh')
   c.onopen = () => c.send('{}')
   return docid
 }
 
 router.post('/upload-file', upload.single('file'), (req, res, next) => {
-  run(req.file.path, req.body.classids).then((docid) =>{
+  run(req.file.path).then((docid) =>{
     console.log(docid)
     res.status(200).json({docid: docid})
   }).catch(e =>{
