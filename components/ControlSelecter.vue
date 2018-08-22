@@ -3,15 +3,15 @@
   <div style="margin-left:5px;margin-right:5px">
     <!-- 学年を表示する -->
     <div id="grid">
-    <button v-for="(item, index) in obj" @click="switchingClassTable(Object.keys(obj)[index-1])" class="sitayose p">
-      {{Object.keys(obj)[index-1]}}　<!--indexが1始まりだったので-1している。要検討 -->
-    </button>
+     <button v-for="(item, index) in obj" @click="switchingClassTable(Object.keys(obj)[index-1])" class="sitayose p">
+       {{Object.keys(obj)[index-1]}}　<!--indexが1始まりだったので-1している。要検討 -->
+     </button>
     </div>
     <!-- 学年で選択されたクラスを表示する -->
     <div id="grid2">
-    <a :href=item.classid v-for="(item, index) in obj[year]" @click="switchingClass()" class="p">
-      {{ item.course }}
-    </a>
+     <a :href=item.classid v-for="(item, index) in obj[year]" @click="switchingClass()" class="p">
+       {{ item.course }}
+     </a>
     </div>
   </div>
  </section>
