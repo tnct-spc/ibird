@@ -26,6 +26,27 @@
           </b-form-checkbox>
          </div>
          </div>
+         <div>
+         <div id="style2">
+         <label>掲載開始日</label>
+         <input type="date"/>
+         </div>
+         <div id="style2">
+         <label>掲載終了日</label>
+         <input type="date"/>
+         </div>
+         <div id="style2">
+         <span>優先度</span>
+         <select v-model="selected">
+          <option disabled value="">優先度を選択してください</option>
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+         </select>
+         </div>
+         </div>
          </div>
           <div class="modal-footer">
             <button class="btn btn-secondar mr-auto btn-primary" @click="$emit('close')">
@@ -49,6 +70,7 @@ export default{
   },
   data:()=>{
    return{
+    selected: '',
     obj:{},
     obj2:{},
     submitId:[]

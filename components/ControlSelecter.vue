@@ -1,6 +1,9 @@
 <template>
   <section>
-  <div style="margin-left:5px;margin-right:5px">
+  <div style="margin-left:10%;margin-right:5%">
+    <button type="button" class="btn btn-info" @click="sortDocs()">
+       sort-docs
+    </button>
     <!-- 学年を表示する -->
     <div id="grid1">
     <button v-for="(item, index) in obj" @click="switchingClassTable(Object.keys(obj)[index-1])" class="sitayose p">
@@ -61,8 +64,10 @@ export default {
     switchingClass(classid){
       console.log(classid)
       this.$parent.classid = classid
+    },
+    sortDocs(){
     }
-  },
+  }
 }
 </script>
 
