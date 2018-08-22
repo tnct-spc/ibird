@@ -20,7 +20,6 @@
   </div>
   <div v-else>
     <h1>seeDocument</h1>
-    <p>{{classid}}</p>
     <img width="100%"v-bind:src="'/jpg/'+img+'.jpg'"></img>
     <div align="right" >
       <button class="btn btn-primary text-right" v-on:click="display=true">back</button>
@@ -34,7 +33,6 @@ export default{
   data(){
     return{
       display:true,
-      // img:null,
       img:'20180403',
       classid:null
     }
@@ -52,7 +50,6 @@ export default{
   methods:{
     //ドキュメント閲覧
     seeDocument:function(document_docid){
-      this.classid=document.docid
       this.display=false
     },
   },
