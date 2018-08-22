@@ -8,7 +8,7 @@
       </thead>
       <tbody>
         <tr v-for="(document) in documents">
-          <td>{{document.docid}}{{ext}}</td>
+          <td>{{document.docid}}.{{ext}}</td>
           <td>
             <button class="btn btn-primary" v-on:click="seeDocument(document)">See</button>
           </td>
