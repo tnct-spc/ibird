@@ -52,9 +52,6 @@ async function run(path){
   }
   var docid = pdfToJpg(path)
   docid = docid.slice(0, -4)
-
-  const c = new W3cwebsocket('ws://localhost:3000/ws/refresh')
-  c.onopen = () => c.send('{}')
   return docid
 }
 
