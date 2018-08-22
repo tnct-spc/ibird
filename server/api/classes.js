@@ -122,7 +122,7 @@ router.delete('/rm-doc', (req, res, next) => {
     const classid = req.query.classid
     const docid = req.query.docid
 
-    classes.destroy({
+    documents.destroy({
       where: {
         classid: classid,
         docid: docid,
