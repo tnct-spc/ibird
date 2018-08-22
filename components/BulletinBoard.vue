@@ -27,6 +27,18 @@ export default {
       refreshClient: {}
     }
   },
+  watch:{
+    classid(){
+      this.refresh()
+      this.client = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/move')
+      this.client.onmessage=({data})=>{
+        data = JSON.parse(data)
+        if(data.classid === this.classid) this.move(data)
+      }
+      this.refreshClient = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/refresh')
+      this.refreshClient.onmessage = d => this.refresh()
+    }
+  },
   created () {
     this.refresh()
     this.client = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/move')

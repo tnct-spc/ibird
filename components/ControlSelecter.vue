@@ -9,9 +9,9 @@
     </div>
     <!-- 学年で選択されたクラスを表示する -->
     <div id="grid2">
-    <a :href=item.classid v-for="(item, index) in obj[year]" class="p">
-      {{ item.course }}
-    </a>
+     <button v-for="(item, index) in obj[year]" @click="switchingClass(item.classid)" class="p">
+        {{ item.course }}
+     </button>
     </div>
   </div>
  </section>
@@ -57,6 +57,10 @@ export default {
       this.year = newYear
       const grid2 = document.getElementById("grid2")
       grid2.style.gridTemplateColumns="repeat("+String(this.grid[this.year])+", 1fr)"
+    },
+    switchingClass(classid){
+      console.log(classid)
+      this.$parent.classid = classid
     }
   },
 }
