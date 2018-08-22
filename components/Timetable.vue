@@ -1,8 +1,8 @@
 <template>
    <div class = "timetable">
       <h1>次の電車</h1>
-      <p class = "lineinfo">{{object.station,object.line,object.going}}</p>
-      <p class = "traininfo">{{set.min,set.kind,set.going}}</p>
+      <p v-if = "object !== undefined && holidays !== undefined" class = "lineinfo">{{object.station,object.line,object.going}}</p>
+       <p v-if = "object !== undefined && holidays !== undefined" class = "traininfo">{{set.min,set.kind,set.going}}</p>
       <p class = "nowtime">現在時刻 {{ hour }}：{{ minute }}</p>
   </div>
 </template>
@@ -20,55 +20,54 @@ export default {
             hour : new Date().getHours(),
             minute : new Date().getMinutes(),
             dayOfWeek : new Date().getDay(),
+            holidays : [[1,1],[2,11],[4,29],[5,3],[5,4],[5,5],[8,11],[11,3],[11,23],[12,23],[3,this.VerinalEquinox(this.year)],[9,this.AutumnalEquinox(this.year)]],
         }
     },
     computed : {
         object : function() {
-            var holidays = [[1,1],[2,11],[4,29],[5,3],[5,4],[5,5],[8,11],[11,3],[11,23],[12,23],[3,VernalEquinox(this.year)],[9,AutumnalEquinox(this.year)]];
-            var holidaysresult = holidays.indexOf([month,day]);
+            // var holidays = [[1,1],[2,11],[4,29],[5,3],[5,4],[5,5],[8,11],[11,3],[11,23],[12,23],[3,this.VerinalEquinox(this.year)],[9,this.AutumnalEquinox(this.year)]];
+            // var holidaysresult = holidays.indexOf([this.month,this.day]);
 
-            if(hour < 5 && hour > 0){
-                return null;
-            }
+            // if(this.hour < 5 && this.hour > 0){
+            //     return null;
+            // }
 
-            if(dayOfWeek == 6){
+            if(this.dayOfWeek == 6){
                 const params = {file : 'weekenddays_22900_1532076061582.json'};
                 axios.get('/timetable',{ params })
                     .then((res) =>{
-                    var o = new Object();
-                        o = JSON.parse(res);
+                        var o = JSON.parse(res);
+                        return o;
                     });
-                    return o;
-            }else if(dayOfWeek == 0 || holidaysresult != -1 || (month == 1 && dayOfWeek == 1 && 7 < day && day < 15)
-            || (month == 7 && dayOfWeek == 1 && 14 < day && day < 22)
-            || (month == 9 && dayOfWeek == 1 && 14 < day && day < 22)
-            || (month == 10 && dayOfWeek == 1 && 7 < day && day < 15)
-            || (SubstituteHoliday() == true)){
+            }else if(this.dayOfWeek == 0 ||this.holidays.indexOf([this.month,this.day]) != -1 || (this.month == 1 && this.dayOfWeek == 1 && 7 < this.day && this.day < 15)
+            || (this.month == 7 && this.dayOfWeek == 1 && 14 < this.day && this.day < 22)
+            || (this.month == 9 && this.dayOfWeek == 1 && 14 < this.day && this.day < 22)
+            || (this.month == 10 && this.dayOfWeek == 1 && 7 < this.day && this.day < 15)
+            || (this.SubstituteHoliday() == true)){
                 const params = {file : 'holidays_22900_1532075748963.json'};
                 axios.get('/timetable',{ params })
                     .then((res) =>{
-                        var o = new Object();
-                        o = JSON.parse(res);
+                        var o = JSON.parse(res);
+                        return o;
                     });
-                    return o;
             } else {
                 const params = {file : 'weekdays_22900_1532076326046.json'};
                 axios.get('/timetable',{ params })
                     .then((res) =>{
-                    var o = new Object();
-                    o = JSON.parse(res);
+                        var o = JSON.parse(res);
+                        return o;
                     });
-                    return o;
             }
+
         },
         set : function(){
             var i = 0;
-            var make = object.timetable[hour];
+            var make = object.timetable[this.hour];
                 while(1){
-                    if (make[i].min >= minute){
+                    if (make[i].min >= this.minute){
                         break;
                     }else if(make.length >= i){
-                        make = object.timetable[hour + 1];
+                        make = object.timetable[this.hour + 1];
                     }else{
                         i++;
                     }
@@ -77,7 +76,7 @@ export default {
             },
     },
     methods : {
-        verinalEquinox : function(year){
+        VerinalEquinox : function(year){
             switch(year % 4){
                 case 0 : return year <= 2088 ? 20 : 19;
                 break;
@@ -100,8 +99,9 @@ export default {
             }
         },
         SubstituteHoliday: function(){
+            var i = 0;
             while(1){
-                if(holidays.indexOf([month,day - i]) == -1){
+                if(this.holidays.indexOf([this.month,this.day - i]) == -1){
                     break;
                 }else if(dayOfWeek - i != 0){
                     return true;
@@ -119,8 +119,8 @@ export default {
 .timetable{
     left : 0;
     bottom : 0; 
-    height : 20%;
-    width : 30%;
+    height : 40%;
+    width : 40%;
     background-color : olivedrab;
     border : outset 1em forestgreen;
 }
