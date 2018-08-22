@@ -12,7 +12,7 @@
           <td>{{documents.indexOf(document)}}</td>
           <td>{{document.docid}}</td>
           <td>
-            <button class="btn btn-primary" v-on:click="seeDocument(document.docid)">See</button>
+            <button class="btn btn-primary" v-on:click="seeDocument(document)">See</button>
           </td>
         </tr>
       </tbody>
@@ -20,6 +20,8 @@
   </div>
   <div v-else>
     <h1>seeDocument</h1>
+    <p>{{hoge}}</p>
+    </p>
     <img width="100%"v-bind:src="'/jpg/'+img+'.jpg'"></img>
     <div align="right" >
       <button class="btn btn-primary text-right" v-on:click="display=true">back</button>
@@ -33,8 +35,8 @@ export default{
   data(){
     return{
       display:true,
-      img:'20180403',
-      classid:null
+      classid:null,
+      hoge:'bbbbbbb'
     }
   },
   //リスト更新
@@ -49,8 +51,10 @@ export default{
   },
   methods:{
     //ドキュメント閲覧
-    seeDocument:function(document_docid){
+    seeDocument(document){
       this.display=false
+      this.hoge=document
+      this.img=document.docid
     },
   },
 }
