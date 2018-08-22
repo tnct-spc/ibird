@@ -2,14 +2,14 @@
   <section>
   <div style="margin-left:5px;margin-right:5px">
     <!-- 学年を表示する -->
-    <div id="grid">
+    <div id="grid1">
     <button v-for="(item, index) in obj" @click="switchingClassTable(Object.keys(obj)[index-1])" class="sitayose p">
       {{Object.keys(obj)[index-1]}}　<!--indexが1始まりだったので-1している。要検討 -->
     </button>
     </div>
     <!-- 学年で選択されたクラスを表示する -->
     <div id="grid2">
-    <a :href=item.classid v-for="(item, index) in obj[year]" @click="switchingClass()" class="p">
+    <a :href=item.classid v-for="(item, index) in obj[year]" class="p">
       {{ item.course }}
     </a>
     </div>
@@ -21,29 +21,29 @@ import axios from 'axios'
 import Vue from 'vue'
 export default {
   props:{
-    "classes":Array
+    "classes":Array,
   },
   data:()=>{
     return{
       year: "", //現在選択中の学年
-      obj: {},  //学年をKEYにclassidとcourseのオブジェクトの配列を持つ
-      grid:{}
+      obj:{},//学年をKEYにclassidとcourseのオブジェクトの配列を持つ
+      grid:{},
+      grids:0
     }
   },
   mounted(){
       this.classes.sort((a,b)=>{
       return a.classid - b.classid
       })
-      const grid = document.getElementById("grid")
-      let grids = 0
       this.classes.forEach((c)=> {
         if(!this.obj[c.year]){
           Vue.set(this.obj, c.year, [])
-          grids++
+          this.grids++
         } //最初の型を決める
         this.obj[c.year].push({classid: c.classid, course: c.course})
       })
-      grid.style.gridTemplateColumns="repeat("+String(grids)+", 1fr)"
+      const grid1 = document.getElementById("grid1")
+      grid1.style.gridTemplateColumns="repeat("+String(this.grids)+", 1fr)"
       for(let courseGrid in this.obj){
         let grids2 = 0
         this.obj[courseGrid].forEach((c)=> {
@@ -57,8 +57,7 @@ export default {
       this.year = newYear
       const grid2 = document.getElementById("grid2")
       grid2.style.gridTemplateColumns="repeat("+String(this.grid[this.year])+", 1fr)"
-    },
-    switchingClass: function(index) {}
+    }
   },
 }
 </script>
@@ -77,7 +76,7 @@ body{
 .sitayose{
   margin-top: 5px;
 }
-#grid{
+#grid1{
   display: grid;
   grid-template-rows:5%;
   text-align: center;
