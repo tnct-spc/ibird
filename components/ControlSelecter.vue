@@ -24,7 +24,8 @@ import axios from 'axios'
 import Vue from 'vue'
 export default {
   props:{
-    "classes":Array,
+    "classid":String,
+    "classes":Array
   },
   data:()=>{
     return{
@@ -66,6 +67,9 @@ export default {
       this.$parent.classid = classid
     },
     sortDocs(){
+      axios.put('../api/sort-docs',{
+        classid:this.classid
+      })
     }
   }
 }

@@ -110,11 +110,23 @@ export default{
       }
       const formData = new FormData()
       formData.append( 'file', this.files.files)
-      const str = this.submitId.join(',');
-      formData.append('classids',"["+str+"]")
+      let formData2 = { 'x': 0,
+                        'y': 0,
+                        'startTime':this.startDate,
+                        'endTime':this.endDate,
+                        'priority':this.selected,
+                        'classids':this.submitId }
       axios.post('../api/upload-file',formData)
       .then((response)=>{
-        this.$parent.text="classid:"+str
+        formData2.docid = response.data.docid
+        axios.post('../api/add-doc',formData2)
+        .then((response)=>{
+          this.$parent.text=this.submitId
+          console.log(response)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
       })
       .catch((error) => {
         this.$parent.text=error

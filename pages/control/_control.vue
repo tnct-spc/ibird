@@ -1,6 +1,6 @@
 <template>
     <section id="wrapper">
-      <ControlSelecter :classes="classes"/>
+      <ControlSelecter :classes="classes" :classid="classid"/>
       <Control id="upload" :classid="classid" :classes="classes"/>
     </section>
 </template>
