@@ -56,18 +56,17 @@ const docList = (classid)=>{
 router.put('/add-doc', (req, res, next) => {
     const classid = req.body.classid
     const doc = req.body.doc
-    const now = new Date()
-    var endTime = new Date()
-    endTime.setDate(now.getDate()+7)
+    const startTime = new Date(doc.startTime)
+    const endTime = new Date(doc.endTime)
     return documents.create(
           {
             classid: classid,
             docid: doc.docid,
             x: doc.x,
             y: doc.y,
-            priority: 1,//以下未実装
-            startTime: now,
-            endTime: endTime,//ここまで未実装
+            priority: doc.priority,
+            startTime: startTime,
+            endTime: endTime,
           }
     ).then(result =>{
         res.sendStatus(200)
