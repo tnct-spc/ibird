@@ -29,16 +29,17 @@
          <div>
          <div id="style2">
          <label>掲載開始日</label>
-         <input type="date"/>
+         <input type="date" v-model="startDate"/>
          </div>
          <div id="style2">
          <label>掲載終了日</label>
-         <input type="date"/>
+         <input type="date" v-model="endDate"/>
          </div>
          <div id="style2">
          <span>優先度</span>
          <select v-model="selected">
           <option disabled value="">優先度を選択してください</option>
+          <option>0</option>
           <option>1</option>
           <option>2</option>
           <option>3</option>
@@ -70,13 +71,21 @@ export default{
   },
   data:()=>{
    return{
-    selected: '',
+    selected:"",
+    startDate:"",
+    endDate:"",
     obj:{},
     obj2:{},
     submitId:[]
    }
   },
   mounted(){
+    const date = new Date();
+    let month = date.getMonth()+1
+    if(month<10) month = "0" + month
+    const today = [date.getFullYear(),month,date.getDate()]
+    this.startDate = today.join('-')
+    this.endDate = this.startDate
     this.classes.sort((a,b)=>{
     return a.classid - b.classid
     })
@@ -99,18 +108,16 @@ export default{
             if(e.submit === true) this.submitId.push(e.classid)
         })
       }
-      console.log(this.submitId)
       const formData = new FormData()
       formData.append( 'file', this.files.files)
       const str = this.submitId.join(',');
-      console.log(this.submitId)
       formData.append('classids',"["+str+"]")
       axios.post('../api/upload-file',formData)
       .then((response)=>{
         this.$parent.text="classid:"+str
       })
       .catch((error) => {
-        this.$parent.text=str
+        this.$parent.text=error
       })
       this.$emit('close')
     },
@@ -175,5 +182,6 @@ export default{
 
 #style2{
   text-align: center;
+  margin-top: 5%;
 }
 </style>
