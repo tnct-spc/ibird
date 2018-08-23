@@ -70,33 +70,19 @@ router.get('/geturllist', (req, res) => {
   fetch(req.query.url)
     .then(function (result) {
       var $ = result.$
-      var jsonbase = '{"direction":"", "day": "", "url":""}'
+      var jsonbase = '{"line":"", direction":"", "weekdaysURL":"", "weekenddaysURL":"", "holidaysURL":""}'
       // 平日のurlを作成
       $('.elmSearchItem.direction li').each(function () {
         $(this).find('li').each(function () {
-          var weekdaysJson = JSON.parse(jsonbase)
-          weekdaysJson.direction = $(this).find('a').text()
-          weekdaysJson.day = 'weekdays'
-          weekdaysJson.url = $(this).find('a').attr('href')
-          urlList.push(weekdaysJson)
+          var urlObject = parse($(this).find('a').attr('href'), true)
+          var singleJson = JSON.parse(jsonbase)
+          singleJson.direction = $(this).find('a').text()
+          singleJson.weekdaysURL = urlObject.href
+          singleJson.weekenddaysURL = updateQuery(urlObject, {kind: 2})
+          singleJson.holidaysURL = updateQuery(urlObject, {kind: 4})
+          urlList.push(singleJson)
         })
       })
-      // 平日のurlをいじって他のurlを作成
-      for (var i = 0; i < urlList.length; i++) {
-        var URL = parse(urlList[i].url, true)
-        if (URL.query.kind === '1') {
-          var weekenddaysJson = JSON.parse(jsonbase)
-          weekenddaysJson.direction = urlList[i].direction
-          weekenddaysJson.day = 'weekenddays'
-          weekenddaysJson.url = updateQuery(URL, {kind: 2})
-          var holidaysJson = JSON.parse(jsonbase)
-          holidaysJson.direction = urlList[i].direction
-          holidaysJson.day = 'holidays'
-          holidaysJson.url = updateQuery(URL, {kind: 4})
-          urlList.push(weekenddaysJson)
-          urlList.push(holidaysJson)
-        }
-      }
     })
     // 成功
     .then(function () {
