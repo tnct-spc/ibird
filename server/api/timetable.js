@@ -70,12 +70,14 @@ router.get('/geturllist', (req, res) => {
   fetch(req.query.url)
     .then(function (result) {
       var $ = result.$
-      var jsonbase = '{"line":"", direction":"", "weekdaysURL":"", "weekenddaysURL":"", "holidaysURL":""}'
+      var jsonbase = '{"line":"", "direction":"", "weekdaysURL":"", "weekenddaysURL":"", "holidaysURL":""}'
       // 平日のurlを作成
       $('.elmSearchItem.direction li').each(function () {
+        var line = $(this).find('dl dt').text()
         $(this).find('li').each(function () {
           var urlObject = parse($(this).find('a').attr('href'), true)
           var singleJson = JSON.parse(jsonbase)
+          singleJson.line = line
           singleJson.direction = $(this).find('a').text()
           singleJson.weekdaysURL = urlObject.href
           singleJson.weekenddaysURL = updateQuery(urlObject, {kind: 2})
