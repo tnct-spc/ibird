@@ -64,6 +64,8 @@
 <script>
 import Vue from 'vue'
 import axios from 'axios'
+import { w3cwebsocket } from 'websocket'
+
 export default{
   props:{
    "classes":Array,
@@ -71,7 +73,7 @@ export default{
   },
   data:()=>{
    return{
-    selected:"",
+    selected:"0",
     startDate:"",
     endDate:"",
     obj:{},
@@ -108,6 +110,7 @@ export default{
             if(e.submit === true) this.submitId.push(e.classid)
         })
       }
+      if(this.submitId.length === 0)return
       const formData = new FormData()
       formData.append( 'file', this.files.files)
       let formData2 = { 'x': 0,
@@ -125,7 +128,10 @@ export default{
           console.log(response)
         })
         .catch((error) => {
+          this.$parent.text=this.submitId
           console.log(error)
+          const refresh = new w3cwebsocket('ws://' +process.env.mainUrl + '/ws/refresh')
+          refresh.onopen = () => refresh.send('')
         })
       })
       .catch((error) => {

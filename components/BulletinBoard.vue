@@ -29,14 +29,8 @@ export default {
   },
   watch:{
     classid(){
-      this.refresh()
-      this.client = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/move')
-      this.client.onmessage=({data})=>{
-        data = JSON.parse(data)
-        if(data.classid === this.classid) this.move(data)
-      }
-      this.refreshClient = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/refresh')
-      this.refreshClient.onmessage = d => this.refresh()
+      this.refreshClient = new w3cwebsocket('ws://' +process.env.mainUrl + '/ws/refresh')
+      this.refreshClient.onopen = () => this.refreshClient.send('')
     }
   },
   created () {
@@ -47,7 +41,7 @@ export default {
       if(data.classid === this.classid) this.move(data)
     }
     this.refreshClient = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/refresh')
-    this.refreshClient.onmessage = d => this.refresh()
+    this.refreshClient.onmessage = () => this.refresh()
   },
   computed: {
     ...mapState({
