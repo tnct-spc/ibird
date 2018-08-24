@@ -5,16 +5,14 @@
        <div class="modal-header"/>
         <div class="modal-body">
           <div id="style">
-          <div v-for="(item1,key,index) in obj2" style="margin-left:5%;display:inline">
            <b-form-checkbox
            　　　　　　　class="checkbox-inline"
-                       v-for="(item) in obj2[index+1]"
-                       v-model="item.check"
-                       :key = "item.id"
-                       @input="accept(index+1)">
-                       {{item.id}}年
+                       v-for="(item ,key ,index) in obj2"
+                       v-model="obj2[index+1]"
+                       :key = "key"
+                       @input="bulkSelection(index+1)">
+                       {{key}}年
            </b-form-checkbox>
-         </div>
          </div>
          <div id="style2">
          <div v-for="(item1 ,key ,index) in obj">
@@ -95,12 +93,11 @@ export default{
       if(!this.obj[c.year]){
         Vue.set(this.obj, c.year, [])
         this.grids++
-      } //最初の型を決める
+      }
       this.obj[c.year].push({classid: c.classid, course: c.course, submit:false})
     })
     Object.keys(this.obj).forEach((e)=>{
-      Vue.set(this.obj2,e,[])
-      this.obj2[e].push({id:e,check:false})
+      Vue.set(this.obj2,e,false)
     })
   },
   methods:{
@@ -110,7 +107,10 @@ export default{
             if(e.submit === true) this.submitId.push(e.classid)
         })
       }
-      if(this.submitId.length === 0)return
+      if(this.submitId.length === 0){
+        alert("クラスを選択してください")
+        return
+      }
       const formData = new FormData()
       formData.append( 'file', this.files.files)
       let formData2 = { 'x': 0,
@@ -126,6 +126,8 @@ export default{
         .then((response)=>{
           this.$parent.text=this.submitId
           console.log(response)
+          const refresh = new w3cwebsocket('ws://' +process.env.mainUrl + '/ws/refresh')
+          refresh.onopen = () => refresh.send('')
         })
         .catch((error) => {
           this.$parent.text=this.submitId
@@ -139,19 +141,13 @@ export default{
       })
       this.$emit('close')
     },
-    accept(index){
-      let checked = 0
-      let count = 0
-      this.obj[index].forEach((e)=>{
-        count++
-        if (e.submit == true) checked++
-      })
-      if(count === checked){
+    bulkSelection(index){
+      if(this.obj2[index] === false){
         this.obj[index].forEach((e)=>{
           e.submit = false
         })
       }
-      else{
+      else if(this.obj2[index] === true){
         this.obj[index].forEach((e)=>{
           e.submit = true
         })
