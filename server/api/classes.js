@@ -56,11 +56,11 @@ const docList = (classid)=>{
 router.post('/add-doc', (req, res, next) => {
     const classids = req.body.classids
     const doc = req.body
-    console.log(req.body)
     const startTime = new Date(doc.startTime)
     const endTime = new Date(doc.endTime)
+    let insertData = []
     classids.forEach((e)=>{
-      documents.create(
+        insertData.push(
             {
               classid: e,
               docid: doc.docid,
@@ -69,15 +69,16 @@ router.post('/add-doc', (req, res, next) => {
               priority: doc.priority,
               startTime: startTime,
               endTime: endTime,
-            }
-      )
-    }).then(result =>{
-        res.sendStatus(200)
-    }).catch(err =>{
-      console.log(err)
-        res.sendStatus(400)
+            })
     })
-})
+    documents.bulkCreate(insertData)
+      .then(result =>{
+        res.sendStatus(200)
+      }).catch(err =>{
+        console.log(err)
+        res.sendStatus(400)
+      })
+ })
 
 router.put('/fix-position', (req, res, next) => {
     const classid = req.body.classid
