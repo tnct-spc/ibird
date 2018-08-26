@@ -99,12 +99,21 @@ router.get('/geturllist', (req, res) => {
 
 // 駅のタイムテーブルを取得してJSONを生成するAPI
 router.get('/createtable', async (req, res) => {
-  var test = await fetchAnother(req.query.url)
-  res.json(test)
-  /* var fullTimetableData = JSON.parse('{}')
-  var fileInfo = JSON.parse('{}')
-  var name = ''
-  fetch(req.query.url)
+  var another = await fetchAnother(req.query.weekdaysURL)
+  var weekdays = await fetchTimetable(req.query.weekdaysURL)
+  var weekenddays = await fetchTimetable(req.query.weekenddaysURL)
+  var holidays = await fetchTimetable(req.query.holidaysURL)
+  var fullTimetableData = await Object.assign(another, weekdays, weekenddays, holidays)
+  res.json(createJsonFile(fullTimetableData, req.query.weekdaysURL))
+})
+
+var fetchTimetable = async (url) => {
+  var timeTableData = JSON.parse('{}')
+  var urlKind = await parse(url, true).query.kind
+  if (urlKind === '1') urlKind = 'weekdays'
+  else if (urlKind === '2') urlKind = 'weekenddays'
+  else urlKind = 'holidays'
+  await fetch(url)
     .then(function (result) {
       var $ = result.$
       // 電車の車種と行き先のリストを作成
@@ -118,7 +127,6 @@ router.get('/createtable', async (req, res) => {
         var going = $(this).text().split('：')
         goingList[going[0]] = going[1]
       })
-
       // 電車が止まる時間帯だけのリストを作成
       var ariveHour = []
       $('.tblDiaDetail tr').each(function () {
@@ -128,7 +136,6 @@ router.get('/createtable', async (req, res) => {
           ariveHour.push(idToNum)
         }
       })
-
       // 時刻表とその電車の車種、行き先を取得
       var timetable = JSON.parse('{}')
       for (var i = 1; i <= 24; i++) {
@@ -166,28 +173,13 @@ router.get('/createtable', async (req, res) => {
           }
         }
       }
-      fullTimetableData['timetable'] = timetable
+      timeTableData[urlKind] = timetable
     })
-    .then(function () {
-      name = createJsonFile(fullTimetableData, req.query.url)
-    })
-    .then(function () {
-      fileInfo['name'] = name
-      fileInfo['station'] = fullTimetableData.station
-      fileInfo['direction'] = fullTimetableData.direction
-      fileInfo['line'] = fullTimetableData.line
-    })
-    // 成功
-    .then(function () {
-      res.json(fileInfo)
-    })
-    // エラー処理
     .catch(function (error) {
-      console.log('Failed loadHTML: ' + error)
-      res.sendStatus(400)
+      console.log('fetchTimetable ' + error)
     })
-    */
-})
+  return timeTableData
+}
 
 var fetchAnother = async (url) => {
   var scrapeAnotherData = JSON.parse('{}')
@@ -199,6 +191,9 @@ var fetchAnother = async (url) => {
       scrapeAnotherData['station'] = anotherData[0]
       scrapeAnotherData['direction'] = anotherData[2]
       scrapeAnotherData['line'] = anotherData[1]
+    })
+    .catch(function (error) {
+      console.log('fetchAnother' + error)
     })
   return scrapeAnotherData
 }
@@ -218,18 +213,6 @@ router.get('/getfilelist', (req, res) => {
 })
 
 // 最終的に表示するJSONのタイムテーブルを返すAPI
-/*
-  このAPIのRequestで受け取るパラメータは、
-  {
-    "file":"ファイル名"
-  }
-  のような形式のJSONをQueryで送ります。また、1回のRequestで送るファイル名は1つだけです。
-  狭間駅のサンプルで平日に新宿方面を表示したい場合は、
-  {
-    "file":"weekdays_22900_1532075866616.json"
-  }
-  のようになります。
-*/
 router.get('/sendtable', (req, res) => {
   if (req.query.file) {
     var timeTableData = JSON.parse(readFileSync(dirPath + '/' + req.query.file, 'utf8'))
@@ -279,22 +262,11 @@ var getTodayList = () => {
 
 // fetchのプロミスで呼び出すファイルを作成する関数
 var createJsonFile = (jsonData, URL) => {
-  var filename = ''
-
+  console.log(jsonData)
   // ファイル名を作成
-  var q = parse(URL, true).query
-  if (q.kind === '4') filename = 'holidays_'
-  else if (q.kind === '2') filename = 'weekenddays_'
-  else filename = 'weekdays_'
-  var stationID = parse(URL).pathname.split('/')
-  filename += stationID[3] + '_'
-  filename += q.gid + '.json'
-  // 最終的なファイルを作成
-  writeJson(dirPath + '/' + filename, jsonData, {spaces: 2},
-    function (error) {
-      if (error) console.log('Failed writeJson : ' + error)
-    }
-  )
+  var urlObject = parse(URL, true)
+  var stationID = urlObject.pathname.split('/')
+  var filename = stationID[3] + '_' + urlObject.query.gid + '.json'
 
   // 上で作ったファイルのデータをまとめる
   var jsonInfo = JSON.parse('{}')
@@ -312,12 +284,18 @@ var createJsonFile = (jsonData, URL) => {
   } else {
     nowData.push(jsonInfo)
   }
+  // 最終的なファイルを作成
+  writeJson(dirPath + '/' + filename, jsonData, {spaces: 2},
+    function (error) {
+      if (error) console.log('Failed writeJson : ' + error)
+    }
+  )
   writeJson(dirPath + '/filename.json', nowData, {spaces: 2},
     function (error) {
       if (error) console.log('Failed writeFilename : ' + error)
     }
   )
-  return filename
+  return jsonInfo
 }
 
 export default router
