@@ -72,6 +72,10 @@ export default {
     Paper
   }
 }
+ var targetElement = document.getElementById( "overlay" ) ;
+ targetElement.show() ;
+ targetElement.showModal() ;
+ targetElement.close() ;
 </script>
 <style>
   body{
