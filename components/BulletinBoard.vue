@@ -1,12 +1,17 @@
 <template>
   <section>
-    <Paper v-for="(paper, paperId) in this.papers(classid)" :key="paperId" :classid=classid :paper-id="paperId+''" :ws-client="client" />
+    <Paper v-for="(paper, i) in sortedPapers"
+      :key="i"
+      :classid="classid"
+      :ws-client="client"
+      :paper="paper"
+      />
   </section>
 </template>
 
 <script>
 import Paper from '~/components/Paper.vue'
-import { mapMutations, mapGetters } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import { w3cwebsocket } from 'websocket'
 import axios from 'axios'
 
@@ -18,37 +23,46 @@ export default {
   },
   data () {
     return {
-      client: {}
+      client: {},
+      refreshClient: {}
     }
   },
   created () {
     this.refresh()
     this.client = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/move')
     this.client.onmessage=({data})=>{
-      this.move(JSON.parse(data))
+      data = JSON.parse(data)
+      if(data.classid === this.classid) this.move(data)
     }
+    this.refreshClient = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/refresh')
+    this.refreshClient.onmessage = d => this.refresh()
   },
   computed: {
-    ...mapGetters({
+    ...mapState({
       papers: 'papers'
     }),
+    sortedPapers: function(){
+      var papers = Object.values(this.papers).filter(() => true)
+      papers.sort((a,b) => a.updatedAt - b.updatedAt)
+      return papers
+    }
   },
   methods:{
     ...mapMutations({
       move: 'move',
-      fixPapers: 'fixPapers'
+      refreshPapers: 'refreshPapers'
     }),
     refresh: function(){
       axios.get('http://' +process.env.mainUrl + '/api/class-docs',{
         params: { classid: this.classid }
       }).then(res =>{
-        var documents = []
-        res.data.forEach(document => {
+        var documents = {}
+        res.data.forEach((document , index)=> {
           document['isSelected'] = false
           document['imgUrl'] = '/jpg/' + document.docid + '.jpg'
-          documents.push(document)
+          documents[document.docid] = document
         });
-        this.fixPapers({classid: this.classid, documents: documents})
+        this.refreshPapers({documents: documents})
       }).catch(e =>{
         console.log(e)
       })
@@ -62,7 +76,7 @@ export default {
 <style>
   body{
     background-color: #d0ae88ff
-  }  
+  }
 </style>
 <style scoped>
 

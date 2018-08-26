@@ -1,56 +1,61 @@
 <template>
-  <section>
-　<div id="overlay" @dragleave.prevent="onDragLeave" @dragover.prevent="onDragOver" @drop.prevent="onDrop">
-  管理者ページ
-</div>
-  </section>
+ <section>
+  <div id="overlay" @dragleave.prevent="onDragLeave($event)" @dragover.prevent="onDragOver($event)" @drop.prevent="onDrop($event)">
+   {{text}}
+   <BulletinBoard :classid="classid"/>
+  </div>
+  <ModalUploader v-if="showModal" @close="showModal=false" :classes="classes" :files="files"/>
+ </section>
 </template>
 <script>
 import axios from 'axios'
-let files
-let formData
-let overlay
+import Vue from 'vue'
+import BulletinBoard from '~/components/BulletinBoard.vue'
+import ModalUploader from '~/components/ModalUploader.vue'
 
 export default{
-  name: 'login-form',
+  props:{
+     "classes":Array,
+     "classid":String
+  },
+  data:function(){
+    return{
+      text:"管理者ページ",
+      showModal: false,
+      files:{}
+    }
+  },
   methods: {
-  onDragOver:(event) => {
+  onDragOver(event){
     event.preventDefault()
     event.dataTransfer.dropEffect = "copy"
-    overlay = document.getElementById("overlay")
+    const overlay = document.getElementById("overlay")
     overlay.classList.add("dropover")
   },
-  onDragLeave:(event) => {
+  onDragLeave(event){
   },
-  onDrop:(event) => {
+  onDrop(event){
     event.preventDefault()
-    event.dataTransfer.dropEffect="copy"
+    event.dataTransfer.dropEffect = "copy"
     overlay.classList.remove("dropover")
-    files = event.dataTransfer.files[0]
+    const files = event.dataTransfer.files[0]
+    Vue.set(this.files,"files",files)
     if(!files.type.match('application/pdf')&&!files.type.match('application/vnd.*'))
     {
-      overlay.innerHTML="ファイル形式に対応してません"
+      this.text="ファイル形式に対応してません"
       return
     }
-    formData = new FormData()
-    formData.append( 'file', files )
-    axios.post('api/upload-file',formData)
-    .then((response) => {
-        overlay.innerHTML="success"
-    })
-    .catch((error) => {
-        overlay.innerHTML="error"
-        console.log(error)
-    })
-  },
- }
+    this.showModal = true
+  }
+ },
+ components:{
+   BulletinBoard,
+   ModalUploader
+ },
 }
 </script>
 <style scoped>
 #overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
   text-align: center;

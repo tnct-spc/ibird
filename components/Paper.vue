@@ -2,56 +2,72 @@
   <div @mousedown="mousedown">
     <p>{{ this.paper }}</p>
     <img class="paper" :src="paper.imgUrl" id="drag"
-      alt="" :style="{left: this.paper.x+'px', top: this.paper.y+'px'}" ondragstart="return false;">
+      alt="" :style="{left: this.paper.x+'px', top: this.paper.y+'px'}" ondragstart="return false;" >
   </div>
 </template>
 <script>
-import { mapMutations, mapGetters } from 'vuex'
+import { mapMutations } from 'vuex'
 import axios from 'axios'
+import { w3cwebsocket } from 'websocket'
+const W3cwebsocket = w3cwebsocket
 
 export default {
   data:function(){
     return{
+      wsClient: {},
       cursorOffset: {x:0,y:0},
     }
   },
   props: {
     "classid": String,
-    "paperId": String,
-    "wsClient": {}
+    "paper": {}
   },
-  computed: {
-    ...mapGetters({
-      papers: 'papers'
-    }),
-    paper () {
-      return this.papers(this.classid)[this.paperId]
-    },
+  created (){
+    this.wsClient = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/move')
   },
   methods: {
     ...mapMutations({
       selectedcard: 'selectCard'
     }),
     mousedown: function(e){
+      if (e.button == 1) {
+        this.remove()
+        return
+      }
       this.cursorOffset.x = e.offsetX
       this.cursorOffset.y = e.offsetY
       if (this.paper.isSelected) {
         this.savePosition()
+        this.saveOrder()
+        this.selectedcard({docid: null})
         document.removeEventListener('mousemove',this.mousemove)
-        this.selectedcard({classid: this.classid, paperId: null})
       } else {
+        this.selectedcard({docid: this.paper.docid})
         document.addEventListener('mousemove',this.mousemove)
-        this.selectedcard({classid: this.classid, paperId: this.paperId})
       }
     },
     mousemove: function(e){
-      this.wsClient.send(JSON.stringify({
-        classid: this.classid,
-        paperId: this.paperId,
-        x: e.x-this.cursorOffset.x,
-        y: e.y-this.cursorOffset.y,
-      }))
-      document.addEventListener('mouseup',this.mouseup)
+      if(this.paper.isSelected){
+        this.wsClient.send(JSON.stringify({
+          classid: this.classid,
+          docid: this.paper.docid,
+          x: e.x-this.cursorOffset.x,
+          y: e.y-this.cursorOffset.y,
+        }))
+      }
+    },
+    remove: function(){
+      axios.delete('http://' +process.env.mainUrl + '/api/rm-doc', {
+        params: {
+          classid: this.classid,
+          docid: this.paper.docid
+        }
+      }).then( () => {
+        const c = new W3cwebsocket('ws://' +process.env.mainUrl + '/ws/refresh')
+        c.onopen = () => c.send('{}')
+      }).catch(e =>{
+        console.log(e)
+      })
     },
     savePosition: function(){
         axios.put('http://' +process.env.mainUrl + '/api/fix-position', {
@@ -62,6 +78,25 @@ export default {
         }).catch(e =>{
           console.log(e)
         })
+    },
+    saveOrder: function(){
+        axios.put('http://' +process.env.mainUrl + '/api/order-doc', {
+          classid: this.classid,
+          docid: this.paper.docid,
+        }).catch(e =>{
+          console.log(e)
+        })
+    },
+    upPaper: function(){
+      axios.put('http://' +process.env.mainUrl + '/api/order-doc', {
+        classid: this.classid,
+        docid: this.paper.docid
+      }).then( () => {
+        const c = new W3cwebsocket('ws://' +process.env.mainUrl + '/ws/refresh')
+        c.onopen = () => c.send('{}')
+      }).catch(e =>{
+        console.log(e)
+      })
     }
   }
 }
