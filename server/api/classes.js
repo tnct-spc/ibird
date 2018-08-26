@@ -53,28 +53,32 @@ const docList = (classid)=>{
     })
 }
 
-router.put('/add-doc', (req, res, next) => {
-    const classid = req.body.classid
-    const doc = req.body.doc
+router.post('/add-doc', (req, res, next) => {
+    const classids = req.body.classids
+    const doc = req.body
     const startTime = new Date(doc.startTime)
     const endTime = new Date(doc.endTime)
-    return documents.create(
-          {
-            classid: classid,
-            docid: doc.docid,
-            x: doc.x,
-            y: doc.y,
-            priority: doc.priority,
-            startTime: startTime,
-            endTime: endTime,
-          }
-    ).then(result =>{
-        res.sendStatus(200)
-    }).catch(err =>{
-      console.log(err)
-        res.sendStatus(400)
+    let insertData = []
+    classids.forEach((e)=>{
+        insertData.push(
+            {
+              classid: e,
+              docid: doc.docid,
+              x: doc.x,
+              y: doc.y,
+              priority: doc.priority,
+              startTime: startTime,
+              endTime: endTime,
+            })
     })
-})
+    documents.bulkCreate(insertData)
+      .then(result =>{
+        res.sendStatus(200)
+      }).catch(err =>{
+        console.log(err)
+        res.sendStatus(400)
+      })
+ })
 
 router.put('/fix-position', (req, res, next) => {
     const classid = req.body.classid

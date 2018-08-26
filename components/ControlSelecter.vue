@@ -1,6 +1,9 @@
 <template>
   <section>
-  <div style="margin-left:5px;margin-right:5px">
+  <div style="margin-left:10%;margin-right:5%">
+    <button type="button" class="btn btn-info" @click="sortDocs()">
+       sort-docs
+    </button>
     <!-- 学年を表示する -->
     <div id="grid1">
     <button v-for="(item, index) in obj" @click="switchingClassTable(Object.keys(obj)[index-1])" class="sitayose p">
@@ -9,9 +12,9 @@
     </div>
     <!-- 学年で選択されたクラスを表示する -->
     <div id="grid2">
-    <a :href=item.classid v-for="(item, index) in obj[year]" class="p">
-      {{ item.course }}
-    </a>
+     <button v-for="(item, index) in obj[year]" @click="switchingClass(item.classid)" class="p">
+        {{ item.course }}
+     </button>
     </div>
   </div>
  </section>
@@ -21,7 +24,8 @@ import axios from 'axios'
 import Vue from 'vue'
 export default {
   props:{
-    "classes":Array,
+    "classid":String,
+    "classes":Array
   },
   data:()=>{
     return{
@@ -57,8 +61,17 @@ export default {
       this.year = newYear
       const grid2 = document.getElementById("grid2")
       grid2.style.gridTemplateColumns="repeat("+String(this.grid[this.year])+", 1fr)"
+    },
+    switchingClass(classid){
+      console.log(classid)
+      this.$parent.classid = classid
+    },
+    sortDocs(){
+      axios.put('../api/sort-docs',{
+        classid:this.classid
+      })
     }
-  },
+  }
 }
 </script>
 

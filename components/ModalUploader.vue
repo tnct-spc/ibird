@@ -5,16 +5,14 @@
        <div class="modal-header"/>
         <div class="modal-body">
           <div id="style">
-          <div v-for="(item1,key,index) in obj2" style="margin-left:5%;display:inline">
            <b-form-checkbox
            　　　　　　　class="checkbox-inline"
-                       v-for="(item) in obj2[index+1]"
-                       v-model="item.check"
-                       :key = "item.id"
-                       @input="accept(index+1)">
-                       {{item.id}}年
+                       v-for="(item ,key ,index) in obj2"
+                       v-model="obj2[index+1]"
+                       :key = "key"
+                       @input="bulkSelection(index+1)">
+                       {{key}}年
            </b-form-checkbox>
-         </div>
          </div>
          <div id="style2">
          <div v-for="(item1 ,key ,index) in obj">
@@ -24,6 +22,28 @@
                          :key = "item2.classid">
                          {{key}}-{{item2.course}}
           </b-form-checkbox>
+         </div>
+         </div>
+         <div>
+         <div id="style2">
+         <label>掲載開始日</label>
+         <input type="date" v-model="startDate"/>
+         </div>
+         <div id="style2">
+         <label>掲載終了日</label>
+         <input type="date" v-model="endDate"/>
+         </div>
+         <div id="style2">
+         <span>優先度</span>
+         <select v-model="selected">
+          <option disabled value="">優先度を選択してください</option>
+          <option>0</option>
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+         </select>
          </div>
          </div>
          </div>
@@ -42,6 +62,8 @@
 <script>
 import Vue from 'vue'
 import axios from 'axios'
+import { w3cwebsocket } from 'websocket'
+
 export default{
   props:{
    "classes":Array,
@@ -49,12 +71,21 @@ export default{
   },
   data:()=>{
    return{
+    selected:"0",
+    startDate:"",
+    endDate:"",
     obj:{},
     obj2:{},
     submitId:[]
    }
   },
   mounted(){
+    const date = new Date();
+    let month = date.getMonth()+1
+    if(month<10) month = "0" + month
+    const today = [date.getFullYear(),month,date.getDate()]
+    this.startDate = today.join('-')
+    this.endDate = this.startDate
     this.classes.sort((a,b)=>{
     return a.classid - b.classid
     })
@@ -62,12 +93,11 @@ export default{
       if(!this.obj[c.year]){
         Vue.set(this.obj, c.year, [])
         this.grids++
-      } //最初の型を決める
+      }
       this.obj[c.year].push({classid: c.classid, course: c.course, submit:false})
     })
     Object.keys(this.obj).forEach((e)=>{
-      Vue.set(this.obj2,e,[])
-      this.obj2[e].push({id:e,check:false})
+      Vue.set(this.obj2,e,false)
     })
   },
   methods:{
@@ -77,34 +107,47 @@ export default{
             if(e.submit === true) this.submitId.push(e.classid)
         })
       }
-      console.log(this.submitId)
+      if(this.submitId.length === 0){
+        alert("クラスを選択してください")
+        return
+      }
       const formData = new FormData()
       formData.append( 'file', this.files.files)
-      const str = this.submitId.join(',');
-      console.log(this.submitId)
-      formData.append('classids',"["+str+"]")
+      let formData2 = { 'x': 0,
+                        'y': 0,
+                        'startTime':this.startDate,
+                        'endTime':this.endDate,
+                        'priority':this.selected,
+                        'classids':this.submitId }
       axios.post('../api/upload-file',formData)
       .then((response)=>{
-        this.$parent.text="classid:"+str
+        formData2.docid = response.data.docid
+        axios.post('../api/add-doc',formData2)
+        .then((response)=>{
+          this.$parent.text=this.submitId
+          console.log(response)
+          const refresh = new w3cwebsocket('ws://' +process.env.mainUrl + '/ws/refresh')
+          refresh.onopen = () => refresh.send('')
+        })
+        .catch((error) => {
+          this.$parent.text=this.submitId
+          console.log(error)
+          const refresh = new w3cwebsocket('ws://' +process.env.mainUrl + '/ws/refresh')
+          refresh.onopen = () => refresh.send('')
+        })
       })
       .catch((error) => {
-        this.$parent.text=str
+        this.$parent.text=error
       })
       this.$emit('close')
     },
-    accept(index){
-      let checked = 0
-      let count = 0
-      this.obj[index].forEach((e)=>{
-        count++
-        if (e.submit == true) checked++
-      })
-      if(count === checked){
+    bulkSelection(index){
+      if(this.obj2[index] === false){
         this.obj[index].forEach((e)=>{
           e.submit = false
         })
       }
-      else{
+      else if(this.obj2[index] === true){
         this.obj[index].forEach((e)=>{
           e.submit = true
         })
@@ -153,5 +196,6 @@ export default{
 
 #style2{
   text-align: center;
+  margin-top: 5%;
 }
 </style>
