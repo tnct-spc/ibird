@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { readdirSync, readFileSync, writeJson } from 'fs-extra'
+import { readFileSync, writeJson } from 'fs-extra'
 import { resolve } from 'path'
 import { fetch } from 'cheerio-httpcli'
 import { parse, format } from 'url'
@@ -8,7 +8,6 @@ import { address } from 'ip'
 const router = Router()
 const dirPath = resolve('.timetable', '../.timetable') // jsonのパスを設定
 const searchBaseURL = 'https://transit.yahoo.co.jp/station/time/search?srtbl=on&kind=1&done=time'
-let list = []
 
 // 送られた文字列で検索して行き先の一覧を表示するURLを取得するAPI
 router.get('/searchstation', (req, res) => {
@@ -55,7 +54,7 @@ router.get('/searchstation', (req, res) => {
       })
       // エラー処理
       .catch(function (error) {
-        console.log('Failed searchstation: ' + error)
+        console.log('searchstation ' + error)
         res.sendStatus(400)
       })
   } else {
@@ -92,7 +91,7 @@ router.get('/geturllist', (req, res) => {
     })
     // エラー処理
     .catch(function (error) {
-      console.log('Failed GetURLList: ' + error)
+      console.log('GetURLList ' + error)
       res.sendStatus(400)
     })
 })
@@ -107,6 +106,30 @@ router.get('/createtable', async (req, res) => {
   res.json(createJsonFile(fullTimetableData, req.query.weekdaysURL))
 })
 
+// 表示できるJSONファイルの情報を返すAPI
+router.get('/getfilelist', (req, res) => {
+  var allFilelist = JSON.parse(readFileSync(dirPath + '/filename.json', 'utf8'))
+  res.json(allFilelist)
+})
+
+// 最終的に表示するJSONのタイムテーブルを返すAPI
+router.get('/sendtable', (req, res) => {
+  if (req.query.file) {
+    var timeTableData = JSON.parse(readFileSync(dirPath + '/' + req.query.file, 'utf8'))
+    res.json(timeTableData)
+  } else {
+    res.sendStatus(400)
+  }
+})
+
+// urlのqueryをいじる関数
+var updateQuery = (urlObject, object) => {
+  urlObject.search = undefined
+  Object.assign(urlObject.query, object)
+  return format(urlObject)
+}
+
+// timetableをyahooからスクレイピングする関数
 var fetchTimetable = async (url) => {
   var timeTableData = JSON.parse('{}')
   var urlKind = await parse(url, true).query.kind
@@ -181,6 +204,7 @@ var fetchTimetable = async (url) => {
   return timeTableData
 }
 
+// timetable以外に必要なデータをスクレイピングする関数
 var fetchAnother = async (url) => {
   var scrapeAnotherData = JSON.parse('{}')
   await fetch(url)
@@ -198,36 +222,18 @@ var fetchAnother = async (url) => {
   return scrapeAnotherData
 }
 
-// 表示できるJSONファイルの情報を返すAPI
-router.get('/getfilelist', (req, res) => {
-  var allFilelist = JSON.parse(readFileSync(dirPath + '/filename.json', 'utf8'))
-  res.json(allFilelist)
-})
-
-// 最終的に表示するJSONのタイムテーブルを返すAPI
-router.get('/sendtable', (req, res) => {
-  if (req.query.file) {
-    var timeTableData = JSON.parse(readFileSync(dirPath + '/' + req.query.file, 'utf8'))
-    res.json(timeTableData)
-  } else {
-    res.sendStatus(400)
-  }
-})
-
-// urlのqueryをいじる関数
-var updateQuery = (urlObject, object) => {
-  urlObject.search = undefined
-  Object.assign(urlObject.query, object)
-  return format(urlObject)
-}
-
-// fetchのプロミスで呼び出すファイルを作成する関数
+// ファイルを作成する関数
 var createJsonFile = (jsonData, URL) => {
-  console.log(jsonData)
   // ファイル名を作成
   var urlObject = parse(URL, true)
   var stationID = urlObject.pathname.split('/')
   var filename = stationID[3] + '_' + urlObject.query.gid + '.json'
+  // 最終的なファイルを作成
+  writeJson(dirPath + '/' + filename, jsonData, {spaces: 2},
+    function (error) {
+      if (error) console.log('writeJson ' + error)
+    }
+  )
 
   // 上で作ったファイルのデータをまとめる
   var jsonInfo = JSON.parse('{}')
@@ -245,15 +251,9 @@ var createJsonFile = (jsonData, URL) => {
   } else {
     nowData.push(jsonInfo)
   }
-  // 最終的なファイルを作成
-  writeJson(dirPath + '/' + filename, jsonData, {spaces: 2},
-    function (error) {
-      if (error) console.log('Failed writeJson : ' + error)
-    }
-  )
   writeJson(dirPath + '/filename.json', nowData, {spaces: 2},
     function (error) {
-      if (error) console.log('Failed writeFilename : ' + error)
+      if (error) console.log('writeFilename ' + error)
     }
   )
   return jsonInfo
