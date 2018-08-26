@@ -49,5 +49,15 @@
     "eslint-plugin-vue": "^4.5.0",
     "jest": "^23.0.1",
     "peer": "^0.2.8"
-  }
+  },
+  "main": ".eslintrc.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tnct-spc/ibird.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tnct-spc/ibird/issues"
+  },
+  "homepage": "https://github.com/tnct-spc/ibird#readme"
 }
