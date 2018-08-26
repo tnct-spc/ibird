@@ -200,16 +200,8 @@ var fetchAnother = async (url) => {
 
 // 表示できるJSONファイルの情報を返すAPI
 router.get('/getfilelist', (req, res) => {
-  var fileInfo = JSON.parse(readFileSync(dirPath + '/filename.json', 'utf8'))
-  list.length = 0
-  for (var i = 0; i < getTodayList().length; i++) {
-    for (var j = 0; j < fileInfo.length; j++) {
-      if (getTodayList()[i] === fileInfo[j].name) {
-        list.push(fileInfo[j])
-      }
-    }
-  }
-  res.json(list)
+  var allFilelist = JSON.parse(readFileSync(dirPath + '/filename.json', 'utf8'))
+  res.json(allFilelist)
 })
 
 // 最終的に表示するJSONのタイムテーブルを返すAPI
@@ -227,37 +219,6 @@ var updateQuery = (urlObject, object) => {
   urlObject.search = undefined
   Object.assign(urlObject.query, object)
   return format(urlObject)
-}
-
-// 実行したの日の曜日に合わせてサーバー内にあるファイルのリストを返す関数
-var getTodayList = () => {
-  var todayFileList = []
-  var filelist = readdirSync(dirPath) // 全ファイルのリストを生成
-  filelist.some(function (name, i) {
-    if (name === 'filename.json') filelist.splice(i, 1) // リストからfilename.jsonを削除
-  })
-  var dt = new Date().getDay()
-
-  if (dt === 0) {
-    for (var i = 0; i < filelist.length; i++) {
-      if (filelist[i].match(/holidays/)) {
-        todayFileList.push(filelist[i])
-      }
-    }
-  } else if (dt === 6) {
-    for (var j = 0; j < filelist.length; j++) {
-      if (filelist[j].match(/weekenddays/)) {
-        todayFileList.push(filelist[j])
-      }
-    }
-  } else {
-    for (var k = 0; k < filelist.length; k++) {
-      if (filelist[k].match(/weekdays/)) {
-        todayFileList.push(filelist[k])
-      }
-    }
-  }
-  return todayFileList
 }
 
 // fetchのプロミスで呼び出すファイルを作成する関数
