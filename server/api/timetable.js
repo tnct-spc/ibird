@@ -98,20 +98,15 @@ router.get('/geturllist', (req, res) => {
 })
 
 // 駅のタイムテーブルを取得してJSONを生成するAPI
-router.get('/createtable', (req, res) => {
-  var fullTimetableData = JSON.parse('{}')
+router.get('/createtable', async (req, res) => {
+  var test = await fetchAnother(req.query.url)
+  res.json(test)
+  /* var fullTimetableData = JSON.parse('{}')
   var fileInfo = JSON.parse('{}')
   var name = ''
   fetch(req.query.url)
     .then(function (result) {
       var $ = result.$
-
-      // 駅名、行き先、何線かを取得
-      var anotherData = $('#cat-pass strong').text().split(' ')
-      fullTimetableData['station'] = anotherData[0]
-      fullTimetableData['direction'] = anotherData[2]
-      fullTimetableData['line'] = anotherData[1]
-
       // 電車の車種と行き先のリストを作成
       var kindList = JSON.parse('{}')
       var goingList = JSON.parse('{}')
@@ -191,7 +186,22 @@ router.get('/createtable', (req, res) => {
       console.log('Failed loadHTML: ' + error)
       res.sendStatus(400)
     })
+    */
 })
+
+var fetchAnother = async (url) => {
+  var scrapeAnotherData = JSON.parse('{}')
+  await fetch(url)
+    .then(function (result) {
+      var $ = result.$
+      // 駅名、行き先、何線かを取得
+      var anotherData = $('#cat-pass strong').text().split(' ')
+      scrapeAnotherData['station'] = anotherData[0]
+      scrapeAnotherData['direction'] = anotherData[2]
+      scrapeAnotherData['line'] = anotherData[1]
+    })
+  return scrapeAnotherData
+}
 
 // 表示できるJSONファイルの情報を返すAPI
 router.get('/getfilelist', (req, res) => {
