@@ -35,6 +35,7 @@ const users = sequelize.define('users', {
 router.post('/login', (req, res, next) => {
     const password = req.body.password
     const username = req.body.username
+    //console.log(sechash.strongHashSync(username, hashopt))
     users.findOne({where: {username: username}}).then(user => {
         if (!user){
             res.status(401).json({ message: 'ユーザーネームが間違っています' })
