@@ -48,13 +48,13 @@ export default {
       })
       const grid1 = document.getElementById("grid1")
       grid1.style.gridTemplateColumns="repeat("+String(this.grids)+", 1fr)"
-      for(let courseGrid in this.obj){
+      Object.keys(this.obj).forEach((e)=>{
         let grids2 = 0
-        this.obj[courseGrid].forEach((c)=> {
+        this.obj[e].forEach((c)=> {
           grids2++
         })
-        Vue.set(this.grid, courseGrid, grids2)
-      }
+        Vue.set(this.grid, e, grids2)
+      })
   },
   methods:{
     switchingClassTable: function(newYear) { //新年じゃないよ
