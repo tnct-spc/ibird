@@ -1,16 +1,30 @@
 <template>
   <div class="container">
+    <br/>
+    <b-card>
     <form v-if="!$store.state.authUser" @submit.prevent="login">
-      <p v-if="formError" class="error">{{ formError }}</p>
-      <p>Username: <input v-model="formUsername" type="text" name="username" ></p>
-      <p>Password: <input v-model="formPassword" type="password" name="password" ></p>
-      <button type="submit">Login</button>
+      <b-alert show variant="danger" v-if="formError">{{ formError }}</b-alert>
+      <b-form-input v-model="formUsername"
+                  type="text"
+                  placeholder="username"
+                  name="username"></b-form-input>
+      <b-form-input v-model="formPassword"
+                  type="password"
+                  placeholder="password"
+                  name="password"></b-form-input>
+      <b-btn class="success" type="submit">Login</b-btn>
     </form>
     <div v-else>
-      Hello {{ $store.state.authUser.username }}!
-      <button @click="logout">Logout</button>
+      <b-alert show variant="success">
+        <h4 class="alert-heading">ログインしました</h4>
+        <hr>
+        <b-btn class="warning" @click="logout">Logout</b-btn>
+        <p>
+          <b-link href="/control/1">コントロールページ</b-link>
+        </p>
+      </b-alert>
     </div>
-    <p><nuxt-link to="/control/1">コントロールページ</nuxt-link></p>
+    </b-card>
   </div>
 </template>
 
@@ -49,10 +63,8 @@ export default {
 </script>
 
 <style>
+<style>
 .container {
   padding: 100px;
-}
-.error {
-  color: red;
 }
 </style>
