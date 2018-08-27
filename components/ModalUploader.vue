@@ -71,21 +71,22 @@ export default{
   },
   data:()=>{
    return{
-    selected:"0",
-    startDate:"",
-    endDate:"",
+    selected:0,
+    startDate:null,
+    endDate:null,
     obj:{},
     obj2:{},
-    submitId:[]
+    submitId:[],
+    month:"",
+    date:{},
    }
   },
   mounted(){
-    const date = new Date();
-    let month = date.getMonth()+1
-    if(month<10) month = "0" + month
-    const today = [date.getFullYear(),month,date.getDate()]
+    this.date = new Date()
+    this.month = this.date.getMonth()+1
+    if(this.month<10) this.month = "0" + this.month
+    const today = [this.date.getFullYear(),this.month,this.date.getDate()]
     this.startDate = today.join('-')
-    this.endDate = this.startDate
     this.classes.sort((a,b)=>{
     return a.classid - b.classid
     })
@@ -102,18 +103,36 @@ export default{
   },
   methods:{
     submit(){
+      this.date = new Date()
+      this.month = this.date.getMonth()+1
+      if(this.month<10) this.month = "0" + this.month
+      const today = [this.date.getFullYear(),this.month,this.date.getDate()]
+      const checker = today.join('-')
       for(let obj in this.obj){
         this.obj[obj].forEach((e,i)=>{
             if(e.submit === true) this.submitId.push(e.classid)
         })
       }
-      if(this.submitId.length === 0){
-        alert("クラスを選択してください")
+      if(this.submitId.length === 0||this.endDate === null
+        ||this.startDate >= this.endDate||checker > this.startDate){
+        if(this.submitId.length === 0){
+          alert("クラスを選択してください")
+        }
+        if(this.endDate === null){
+          alert("掲載開始日、終了日を入力してください")
+        }
+        if(this.startDate >= this.endDate){
+          alert("掲載開始日より前に終了日を設定することはできません")
+        }
+        if(checker > this.startDate){
+          alert("掲載開始日を"+this.date.getFullYear()+"年"+this.month+"月"+this.date.getDate()+"日より前には設定できません")
+        }
+        this.submitId.length = 0
         return
       }
       const formData = new FormData()
       formData.append( 'file', this.files.files)
-      let formData2 = { 'x': 0,
+      const formData2 = { 'x': 0,
                         'y': 0,
                         'startTime':this.startDate,
                         'endTime':this.endDate,
@@ -132,8 +151,6 @@ export default{
         .catch((error) => {
           this.$parent.text=this.submitId
           console.log(error)
-          const refresh = new w3cwebsocket('ws://' +process.env.mainUrl + '/ws/refresh')
-          refresh.onopen = () => refresh.send('')
         })
       })
       .catch((error) => {
