@@ -45,6 +45,10 @@
           <option>5</option>
          </select>
          </div>
+         <div id="style2">
+          <span>タイトル</span>
+          <input v-model="title" placeholder="掲示物のタイトルを入力">
+         </div>
          </div>
          </div>
           <div class="modal-footer">
@@ -79,6 +83,7 @@ export default{
     submitId:[],
     month:"",
     date:{},
+    title: ''
    }
   },
   mounted(){
@@ -100,6 +105,7 @@ export default{
     Object.keys(this.obj).forEach((e)=>{
       Vue.set(this.obj2,e,false)
     })
+    this.title = this.files.files.name
   },
   methods:{
     submit(){
@@ -137,7 +143,8 @@ export default{
                         'startTime':this.startDate,
                         'endTime':this.endDate,
                         'priority':this.selected,
-                        'classids':this.submitId }
+                        'classids':this.submitId,
+                        'title': this.title }
       axios.post('../api/upload-file',formData)
       .then((response)=>{
         formData2.docid = response.data.docid
