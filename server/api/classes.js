@@ -40,8 +40,8 @@ const classes = sequelize.define('classes', {
       endTime: Sequelize.DATE,
       startTime: Sequelize.DATE,
       updatedAt: Sequelize.DATE,
-      Title: Sequelize.TEXT,
-      OpenMobile: Sequelize.BOOLEAN,
+      title: Sequelize.TEXT,
+      openMobile: Sequelize.BOOLEAN,
     },{
         timestamps: false
     });
@@ -162,7 +162,7 @@ router.get('/class-docs-mobile', (req, res, next) => {
     documents.findAll({
       where: {
         classid: classid,
-        OpenMobile: true,
+        openMobile: true,
       }
     }).then(list =>{
         res.json(list)
