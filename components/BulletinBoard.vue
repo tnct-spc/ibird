@@ -50,6 +50,13 @@ export default {
     sortedPapers: function(){
       var papers = Object.values(this.papers).filter(() => true)
       papers.sort((a,b) => a.updatedAt - b.updatedAt)
+      papers = papers.filter(p => {
+        const buff = new Date(p.endTime)
+        buff.setDate(buff.getDate() + 1)
+        const a = new Date() - new Date(p.startTime) > 0 //開始日を過ぎているかどうか(当日はtrue)
+        const b = buff - new Date() > 0 //終了日より前(当日はtrue)
+        return a&&b
+      })
       return papers
     }
   },
