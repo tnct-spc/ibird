@@ -10,7 +10,9 @@ module.exports = {
         y: 0,
         priority: 1,
         endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1)
+        startTime: new Date(2001,1,1),
+        Title: 'タイトルテスト',
+        OpenMobile: true
       },
       {
         classid: 2,
@@ -19,7 +21,9 @@ module.exports = {
         y: 0,
         priority: 1,
         endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1)
+        startTime: new Date(2001,1,1),
+        Title: 'タイトルテスト',
+        OpenMobile: true
       },
       {
         classid: 3,
@@ -28,7 +32,9 @@ module.exports = {
         y: 0,
         priority: 1,
         endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1)
+        startTime: new Date(2001,1,1),
+        Title: 'タイトルテスト',
+        OpenMobile: false
       },
       {
         classid: 4,
@@ -37,7 +43,9 @@ module.exports = {
         y: 0,
         priority: 1,
         endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1)
+        startTime: new Date(2001,1,1),
+        Title: 'タイトルテスト',
+        OpenMobile: true
       },
       {
         classid: 5,
@@ -46,7 +54,9 @@ module.exports = {
         y: 0,
         priority: 1,
         endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1)
+        startTime: new Date(2001,1,1),
+        Title: 'タイトルテスト',
+        OpenMobile: true
       },
       {
         classid: 6,
@@ -55,7 +65,9 @@ module.exports = {
         y: 0,
         priority: 1,
         endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1)
+        startTime: new Date(2001,1,1),
+        Title: 'タイトルテスト',
+        OpenMobile: true
       },
       {
         classid: 7,
@@ -64,7 +76,9 @@ module.exports = {
         y: 0,
         priority: 1,
         endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1)
+        startTime: new Date(2001,1,1),
+        Title: 'タイトルテスト',
+        OpenMobile: true
       },
       {
         classid: 8,
@@ -73,7 +87,9 @@ module.exports = {
         y: 0,
         priority: 1,
         endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1)
+        startTime: new Date(2001,1,1),
+        Title: 'タイトルテスト',
+        OpenMobile: true
       },
       {
         classid: 9,
@@ -82,7 +98,9 @@ module.exports = {
         y: 0,
         priority: 1,
         endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1)
+        startTime: new Date(2001,1,1),
+        Title: 'タイトルテスト',
+        OpenMobile: true
       },
       {
         classid: 10,
@@ -91,7 +109,9 @@ module.exports = {
         y: 0,
         priority: 1,
         endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1)
+        startTime: new Date(2001,1,1),
+        Title: 'タイトルテスト',
+        OpenMobile: true
       },
       {
         classid: 11,
@@ -100,7 +120,9 @@ module.exports = {
         y: 0,
         priority: 1,
         endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1)
+        startTime: new Date(2001,1,1),
+        Title: 'タイトルテスト',
+        OpenMobile: true
       },
       {
         classid: 12,
@@ -109,7 +131,9 @@ module.exports = {
         y: 0,
         priority: 1,
         endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1)
+        startTime: new Date(2001,1,1),
+        Title: 'タイトルテスト',
+        OpenMobile: true
       },
       {
         classid: 13,
@@ -118,7 +142,9 @@ module.exports = {
         y: 0,
         priority: 1,
         endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1)
+        startTime: new Date(2001,1,1),
+        Title: 'タイトルテスト',
+        OpenMobile: true
       },
       {
         classid: 14,
@@ -127,7 +153,9 @@ module.exports = {
         y: 0,
         priority: 1,
         endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1)
+        startTime: new Date(2001,1,1),
+        Title: 'タイトルテスト',
+        OpenMobile: true
       },
       {
         classid: 15,
@@ -136,7 +164,9 @@ module.exports = {
         y: 0,
         priority: 1,
         endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1)
+        startTime: new Date(2001,1,1),
+        Title: 'タイトルテスト',
+        OpenMobile: true
       },
       {
         classid: 16,
@@ -145,7 +175,9 @@ module.exports = {
         y: 0,
         priority: 1,
         endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1)
+        startTime: new Date(2001,1,1),
+        Title: 'タイトルテスト',
+        OpenMobile: true
       },
       {
         classid: 17,
@@ -154,7 +186,9 @@ module.exports = {
         y: 0,
         priority: 1,
         endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1)
+        startTime: new Date(2001,1,1),
+        Title: 'タイトルテスト',
+        OpenMobile: true
       },
       {
         classid: 18,
@@ -163,7 +197,9 @@ module.exports = {
         y: 0,
         priority: 1,
         endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1)
+        startTime: new Date(2001,1,1),
+        Title: 'タイトルテスト',
+        OpenMobile: true
       },
       {
         classid: 19,
@@ -172,7 +208,9 @@ module.exports = {
         y: 0,
         priority: 1,
         endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1)
+        startTime: new Date(2001,1,1),
+        Title: 'タイトルテスト',
+        OpenMobile: true
       },
       {
         classid: 20,
@@ -181,7 +219,9 @@ module.exports = {
         y: 0,
         priority: 1,
         endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1)
+        startTime: new Date(2001,1,1),
+        Title: 'タイトルテスト',
+        OpenMobile: true
       },
       {
         classid: 21,
@@ -190,7 +230,9 @@ module.exports = {
         y: 0,
         priority: 1,
         endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1)
+        startTime: new Date(2001,1,1),
+        Title: 'タイトルテスト',
+        OpenMobile: true
       },
       {
         classid: 22,
@@ -199,7 +241,9 @@ module.exports = {
         y: 0,
         priority: 1,
         endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1)
+        startTime: new Date(2001,1,1),
+        Title: 'タイトルテスト',
+        OpenMobile: true
       },
       {
         classid: 23,
@@ -208,7 +252,9 @@ module.exports = {
         y: 0,
         priority: 1,
         endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1)
+        startTime: new Date(2001,1,1),
+        Title: 'タイトルテスト',
+        OpenMobile: true
       },
       {
         classid: 24,
@@ -217,7 +263,9 @@ module.exports = {
         y: 0,
         priority: 1,
         endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1)
+        startTime: new Date(2001,1,1),
+        Title: 'タイトルテスト',
+        OpenMobile: true
       },
       {
         classid: 25,
@@ -226,7 +274,9 @@ module.exports = {
         y: 0,
         priority: 1,
         endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1)
+        startTime: new Date(2001,1,1),
+        Title: 'タイトルテスト',
+        OpenMobile: true
       },
     ], {})
   },
