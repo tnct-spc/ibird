@@ -49,6 +49,7 @@
           <span>タイトル</span>
           <input v-model="title" placeholder="掲示物のタイトルを入力">
          </div>
+         <b-form-checkbox v-model="openMobile">モバイル向けサイトでも公開</b-form-checkbox>
          </div>
          </div>
           <div class="modal-footer">
@@ -83,7 +84,8 @@ export default{
     submitId:[],
     month:"",
     date:{},
-    title: ''
+    title: '',
+    openMobile: true
    }
   },
   mounted(){
@@ -144,7 +146,8 @@ export default{
                         'endTime':this.endDate,
                         'priority':this.selected,
                         'classids':this.submitId,
-                        'title': this.title }
+                        'title': this.title,
+                        'openMobile': this.openMobile }
       axios.post('../api/upload-file',formData)
       .then((response)=>{
         formData2.docid = response.data.docid
