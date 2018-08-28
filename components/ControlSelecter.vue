@@ -81,8 +81,13 @@ export default {
       })
     },
     showAlert(){
-      const refresh = new w3cwebsocket(process.env.wsUrl + '/ws/alert')
-      refresh.onopen = () => refresh.send(this.alertMessage)
+      const wsClient = new w3cwebsocket(process.env.wsUrl + '/ws/alert')
+      wsClient.onopen = () => {
+        if(this.alertMessage !== ""){
+          // console.log({message: this.alertMessage})
+          wsClient.send(JSON.stringify({message: this.alertMessage}))
+        }
+      }
     }
   }
 }
