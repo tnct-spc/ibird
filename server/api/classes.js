@@ -40,6 +40,8 @@ const classes = sequelize.define('classes', {
       endTime: Sequelize.DATE,
       startTime: Sequelize.DATE,
       updatedAt: Sequelize.DATE,
+      Title: Sequelize.TEXT,
+      OpenMobile: Sequelize.BOOLEAN,
     },{
         timestamps: false
     });
@@ -155,6 +157,19 @@ router.get('/class-docs', (req, res, next) => {
     })
 })
 
+router.get('/class-docs-mobile', (req, res, next) => {
+    const classid = req.query.classid
+    documents.findAll({
+      where: {
+        classid: classid,
+        OpenMobile: true,
+      }
+    }).then(list =>{
+        res.json(list)
+    }).catch(err =>{
+        res.statu(404)
+    })
+})
 router.put('/sort-docs', (req, res, next) => {
     const classid = req.body.classid
     //並べる場所,今はてきとう
