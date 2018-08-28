@@ -3,6 +3,7 @@ import axios from 'axios'
 
 export const state = () => ({
   papers: {},
+  cursorOffset: {x: 0, y: 0},
   authUser: null
 })
 
@@ -31,6 +32,10 @@ export const mutations = {
     Object.keys(documents).forEach(key => {
       Vue.set(state.papers, key, documents[key])
     })
+  },
+  setCursorOffset (state, {x, y}){
+    state.cursorOffset.x = x
+    state.cursorOffset.y = y
   },
   setUser (state, user) {
     state.authUser = user

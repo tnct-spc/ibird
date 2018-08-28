@@ -6,7 +6,7 @@
   </div>
 </template>
 <script>
-import { mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import axios from 'axios'
 import { w3cwebsocket } from 'websocket'
 const W3cwebsocket = w3cwebsocket
@@ -32,17 +32,22 @@ export default {
     }
     startWebsocket()
   },
+  computed: {
+    ...mapState({
+      cursorOffset: 'cursorOffset'
+    })
+  },
   methods: {
     ...mapMutations({
-      selectedcard: 'selectCard'
+      selectedcard: 'selectCard',
+      setCursorOffset: 'setCursorOffset'
     }),
     mousedown: function(e){
       if (e.button == 1) {
         this.remove()
         return
       }
-      this.cursorOffset.x = e.offsetX
-      this.cursorOffset.y = e.offsetY
+      this.setCursorOffset({x: e.offsetX, y: e.offsetY})
       if (this.paper.isSelected) {
         this.savePosition()
         this.saveOrder()
