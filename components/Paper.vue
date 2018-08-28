@@ -1,8 +1,11 @@
 <template>
-  <div @mousedown="mousedown">
+  <div @mousedown="mousedown" ref="fieldElm">
     <p>{{ this.paper }}</p>
     <img class="paper" :src="paper.imgUrl" id="drag"
-      alt="" :style="{left: this.paper.x+'px', top: this.paper.y+'px'}" ondragstart="return false;" >
+      alt="" :style="{
+        left: (this.paper.x*this.fieldSize.x/10000)+'px',
+        top: (this.paper.y*this.fieldSize.y/10000)+'px',
+        }" ondragstart="return false;" >
   </div>
 </template>
 <script>
@@ -16,6 +19,7 @@ export default {
     return{
       wsClient: null,
       cursorOffset: {x:0,y:0},
+      fieldSize: {x:0,y:0},
     }
   },
   props: {
@@ -31,6 +35,13 @@ export default {
       }
     }
     startWebsocket()
+  },
+  mounted(){
+    console.log("mounted")
+    console.log(this.$refs.fieldElm.clientWidth);
+    console.log(this.$refs.fieldElm.clientHeight);
+    this.fieldSize.x = this.$refs.fieldElm.clientWidth
+    this.fieldSize.y = this.$refs.fieldElm.clientHeight
   },
   computed: {
     ...mapState({
@@ -63,8 +74,8 @@ export default {
         this.wsClient.send(JSON.stringify({
           classid: this.classid,
           docid: this.paper.docid,
-          x: e.x-this.cursorOffset.x,
-          y: e.y-this.cursorOffset.y,
+          x: (e.x-this.cursorOffset.x)*10000/this.fieldSize.x,
+          y: (e.y-this.cursorOffset.y)*10000/this.fieldSize.y,
         }))
       }
     },
