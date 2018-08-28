@@ -2,11 +2,13 @@
   <section>
     <BulletinBoard :classid=classid />
     <Alert />
+    <QR :url="url" />
   </section>
 </template>
 <script>
 import BulletinBoard from '~/components/BulletinBoard.vue'
 import Alert from '~/components/Alert.vue'
+import QR from '~/components/QR.vue'
 
 export default {
   props: {
@@ -14,8 +16,14 @@ export default {
   },
   components: {
     BulletinBoard,
-    Alert
+    Alert,
+    QR
   },
+  computed: {
+    url: function(){
+      return process.env.httpUrl + '/mobilepage/' + this.classid
+    }
+  }
 }
 </script>
 
