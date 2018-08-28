@@ -20,7 +20,7 @@ export default {
   },
   created () {
     const startWebsocket = () => {
-      this.client = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/alert')
+      this.client = new W3cwebsocket(process.env.wsUrl+'/ws/alert')
       this.client.onmessage=({data})=>{
         this.message = JSON.parse(data).message;
         var delete_alert = function () {

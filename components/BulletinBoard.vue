@@ -33,14 +33,14 @@ export default {
   },
   watch:{
     classid(){
-      this.refreshClient = new w3cwebsocket('ws://' +process.env.mainUrl + '/ws/refresh')
+      this.refreshClient = new w3cwebsocket(process.env.wsUrl + '/ws/refresh')
       this.refreshClient.onopen = () => this.refreshClient.send('')
     }
   },
   created () {
     this.refresh()
     const startWebsocket = () =>{
-      this.client = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/move')
+      this.client = new W3cwebsocket(process.env.wsUrl+'/ws/move')
       this.client.onmessage=({data})=>{
         data = JSON.parse(data)
         if(data.classid === this.classid) this.move(data)
@@ -49,7 +49,7 @@ export default {
         console.log('websocket disconnect ws/move')
         setTimeout(() =>{startWebsocket()},1000)
       }
-      this.refreshClient = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/refresh')
+      this.refreshClient = new W3cwebsocket(process.env.wsUrl+'/ws/refresh')
       this.refreshClient.onmessage = () => this.refresh()
       this.refreshClient.onclose=()=>{
         console.log('websocket disconnect ws/refresh')
@@ -81,7 +81,7 @@ export default {
       refreshPapers: 'refreshPapers'
     }),
     refresh: function(){
-      axios.get('http://' +process.env.mainUrl + '/api/class-docs',{
+      axios.get(process.env.httpUrl + '/api/class-docs',{
         params: { classid: this.classid }
       }).then(res =>{
         var documents = {}

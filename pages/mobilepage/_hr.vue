@@ -40,7 +40,7 @@ export default{
   },
   //リスト更新
   asyncData ({ params, error }) {
-    return axios.get('http://'+ process.env.mainUrl + '/api/class-docs?classid='+params.hr).then(res =>{
+    return axios.get('https://localhost:3000/api/class-docs?classid='+params.hr).then(res =>{
       return {
         documents:res.data
       }
