@@ -14,7 +14,7 @@ const W3cwebsocket = w3cwebsocket
 export default {
   data:function(){
     return{
-      wsClient: {},
+      wsClient: null,
       cursorOffset: {x:0,y:0},
     }
   },
@@ -23,7 +23,14 @@ export default {
     "paper": {}
   },
   created (){
-    this.wsClient = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/move')
+    const startWebsocket = () => {
+      this.wsClient = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/move')
+      this.wsClient.onclose=()=>{
+        console.log('websocket disconnect')
+        startWebsocket()
+      }
+    }
+    startWebsocket()
   },
   methods: {
     ...mapMutations({

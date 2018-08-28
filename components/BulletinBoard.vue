@@ -35,13 +35,24 @@ export default {
   },
   created () {
     this.refresh()
-    this.client = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/move')
-    this.client.onmessage=({data})=>{
-      data = JSON.parse(data)
-      if(data.classid === this.classid) this.move(data)
+    const startWebsocket = () =>{
+      this.client = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/move')
+      this.client.onmessage=({data})=>{
+        data = JSON.parse(data)
+        if(data.classid === this.classid) this.move(data)
+      }
+      this.client.onclose=()=>{
+        console.log('websocket disconnect')
+        startWebsocket()
+      }
+      this.refreshClient = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/refresh')
+      this.refreshClient.onmessage = () => this.refresh()
+      this.refreshClient.onclose=()=>{
+        console.log('websocket disconnect')
+        startWebsocket()
+      }
     }
-    this.refreshClient = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/refresh')
-    this.refreshClient.onmessage = () => this.refresh()
+    startWebsocket()
   },
   computed: {
     ...mapState({
