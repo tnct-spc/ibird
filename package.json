@@ -28,6 +28,7 @@
     "nuxt": "^1.4.0",
     "office-convert": "^0.2.2",
     "pg-promise": "^8.4.4",
+    "qrcode": "^1.2.2",
     "sass-loader": "^7.0.3",
     "sechash": "^0.2.1",
     "sequelize": "^4.38.0",
