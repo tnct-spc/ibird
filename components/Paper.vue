@@ -24,7 +24,7 @@ export default {
   },
   created (){
     const startWebsocket = () => {
-      this.wsClient = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/move')
+      this.wsClient = new W3cwebsocket(process.env.wsUrl+'/ws/move')
       this.wsClient.onclose=()=>{
         console.log('websocket disconnect /ws/move')
         setTimeout(() =>{startWebsocket()},1000)
@@ -69,20 +69,20 @@ export default {
       }
     },
     remove: function(){
-      axios.delete('http://' +process.env.mainUrl + '/api/rm-doc', {
+      axios.delete(process.env.httpUrl + '/api/rm-doc', {
         params: {
           classid: this.classid,
           docid: this.paper.docid
         }
       }).then( () => {
-        const c = new W3cwebsocket('ws://' +process.env.mainUrl + '/ws/refresh')
+        const c = new W3cwebsocket(process.env.wsUrl + '/ws/refresh')
         c.onopen = () => c.send('{}')
       }).catch(e =>{
         console.log(e)
       })
     },
     savePosition: function(){
-        axios.put('http://' +process.env.mainUrl + '/api/fix-position', {
+        axios.put(process.env.httpUrl + '/api/fix-position', {
           classid: this.classid,
           docid: this.paper.docid,
           x: this.paper.x,
@@ -92,7 +92,7 @@ export default {
         })
     },
     saveOrder: function(){
-        axios.put('http://' +process.env.mainUrl + '/api/order-doc', {
+        axios.put(process.env.httpUrl + '/api/order-doc', {
           classid: this.classid,
           docid: this.paper.docid,
         }).catch(e =>{
@@ -100,11 +100,11 @@ export default {
         })
     },
     upPaper: function(){
-      axios.put('http://' +process.env.mainUrl + '/api/order-doc', {
+      axios.put(process.env.httpUrl + '/api/order-doc', {
         classid: this.classid,
         docid: this.paper.docid
       }).then( () => {
-        const c = new W3cwebsocket('ws://' +process.env.mainUrl + '/ws/refresh')
+        const c = new W3cwebsocket(process.env.wsUrl + '/ws/refresh')
         c.onopen = () => c.send('{}')
       }).catch(e =>{
         console.log(e)

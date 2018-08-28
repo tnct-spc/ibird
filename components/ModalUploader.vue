@@ -145,7 +145,7 @@ export default{
         .then((response)=>{
           this.$parent.text=this.submitId
           console.log(response)
-          const refresh = new w3cwebsocket('ws://' +process.env.mainUrl + '/ws/refresh')
+          const refresh = new w3cwebsocket(process.env.wsUrl + '/ws/refresh')
           refresh.onopen = () => refresh.send('')
         })
         .catch((error) => {
