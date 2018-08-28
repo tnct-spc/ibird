@@ -1,17 +1,20 @@
 <template>
   <section>
-  <div style="margin-left:5px;margin-right:5px">
+  <div style="margin-left:10%;margin-right:5%">
+    <button type="button" class="btn btn-info" @click="sortDocs()">
+       sort-docs
+    </button>
     <!-- 学年を表示する -->
-    <div id="grid">
+    <div id="grid1">
     <button v-for="(item, index) in obj" @click="switchingClassTable(Object.keys(obj)[index-1])" class="sitayose p">
       {{Object.keys(obj)[index-1]}}　<!--indexが1始まりだったので-1している。要検討 -->
     </button>
     </div>
     <!-- 学年で選択されたクラスを表示する -->
     <div id="grid2">
-    <a :href=item.classid v-for="(item, index) in obj[year]" @click="switchingClass()" class="p">
-      {{ item.course }}
-    </a>
+     <button v-for="(item, index) in obj[year]" @click="switchingClass(item.classid)" class="p">
+        {{ item.course }}
+     </button>
     </div>
   </div>
  </section>
@@ -21,36 +24,37 @@ import axios from 'axios'
 import Vue from 'vue'
 export default {
   props:{
+    "classid":String,
     "classes":Array
   },
   data:()=>{
     return{
       year: "", //現在選択中の学年
-      obj: {},  //学年をKEYにclassidとcourseのオブジェクトの配列を持つ
-      grid:{}
+      obj:{},//学年をKEYにclassidとcourseのオブジェクトの配列を持つ
+      grid:{},
+      grids:0
     }
   },
   mounted(){
       this.classes.sort((a,b)=>{
       return a.classid - b.classid
       })
-      const grid = document.getElementById("grid")
-      let grids = 0
       this.classes.forEach((c)=> {
         if(!this.obj[c.year]){
           Vue.set(this.obj, c.year, [])
-          grids++
+          this.grids++
         } //最初の型を決める
         this.obj[c.year].push({classid: c.classid, course: c.course})
       })
-      grid.style.gridTemplateColumns="repeat("+String(grids)+", 1fr)"
-      for(let courseGrid in this.obj){
+      const grid1 = document.getElementById("grid1")
+      grid1.style.gridTemplateColumns="repeat("+String(this.grids)+", 1fr)"
+      Object.keys(this.obj).forEach((e)=>{
         let grids2 = 0
-        this.obj[courseGrid].forEach((c)=> {
+        this.obj[e].forEach((c)=> {
           grids2++
         })
-        Vue.set(this.grid, courseGrid, grids2)
-      }
+        Vue.set(this.grid, e, grids2)
+      })
   },
   methods:{
     switchingClassTable: function(newYear) { //新年じゃないよ
@@ -58,8 +62,16 @@ export default {
       const grid2 = document.getElementById("grid2")
       grid2.style.gridTemplateColumns="repeat("+String(this.grid[this.year])+", 1fr)"
     },
-    switchingClass: function(index) {}
-  },
+    switchingClass(classid){
+      console.log(classid)
+      this.$parent.classid = classid
+    },
+    sortDocs(){
+      axios.put('../api/sort-docs',{
+        classid:this.classid
+      })
+    }
+  }
 }
 </script>
 
@@ -77,7 +89,7 @@ body{
 .sitayose{
   margin-top: 5px;
 }
-#grid{
+#grid1{
   display: grid;
   grid-template-rows:5%;
   text-align: center;

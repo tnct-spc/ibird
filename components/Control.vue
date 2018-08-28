@@ -1,22 +1,28 @@
 <template>
-  <section>
+ <section>
   <div id="overlay" @dragleave.prevent="onDragLeave($event)" @dragover.prevent="onDragOver($event)" @drop.prevent="onDrop($event)">
-  {{text}}
-  <BulletinBoard :classid="classid"/>
+   {{text}}
+   <BulletinBoard :classid="classid"/>
   </div>
-  </section>
+  <ModalUploader v-if="showModal" @close="showModal=false" :classes="classes" :files="files"/>
+ </section>
 </template>
 <script>
 import axios from 'axios'
+import Vue from 'vue'
 import BulletinBoard from '~/components/BulletinBoard.vue'
+import ModalUploader from '~/components/ModalUploader.vue'
 
 export default{
   props:{
+     "classes":Array,
      "classid":String
   },
-  data:()=>{
+  data:function(){
     return{
-      text:"管理者ページ"
+      text:"管理者ページ",
+      showModal: false,
+      files:{}
     }
   },
   methods: {
@@ -33,25 +39,18 @@ export default{
     event.dataTransfer.dropEffect = "copy"
     overlay.classList.remove("dropover")
     const files = event.dataTransfer.files[0]
+    Vue.set(this.files,"files",files)
     if(!files.type.match('application/pdf')&&!files.type.match('application/vnd.*'))
     {
       this.text="ファイル形式に対応してません"
       return
     }
-    const formData = new FormData()
-    formData.append( 'file', files)
-    formData.append('classids',"["+this.classid+"]")
-    axios.post('../api/upload-file',formData)
-    .then((response)=>{
-      this.text="success"
-    })
-    .catch((error) => {
-      this.text=error
-    })
+    this.showModal = true
   }
  },
  components:{
-   BulletinBoard
+   BulletinBoard,
+   ModalUploader
  },
 }
 </script>

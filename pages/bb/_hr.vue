@@ -36,6 +36,7 @@ export default {
   components:{
     Homeroom
   },
+  middleware: 'auth',
 }
 </script>
 

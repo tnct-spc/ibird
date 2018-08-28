@@ -2,10 +2,10 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('classes', null, {})
+      return queryInterface.dropTable('documents');
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('classes', null, {})
+
   }
 };

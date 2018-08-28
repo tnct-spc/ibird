@@ -1,12 +1,21 @@
 <template>
   <section>
-    <Paper v-for="(paper, paperId) in this.papers(classid)" :key="paperId" :classid=classid :paper-id="paperId+''" :ws-client="client" />
+    <div id="wrapper">
+      <div id="content">
+        <Paper v-for="(paper, i) in sortedPapers"
+          :key="i"
+          :classid="classid"
+          :ws-client="client"
+          :paper="paper"
+      />
+      </div>
+    </div>
   </section>
 </template>
 
 <script>
 import Paper from '~/components/Paper.vue'
-import { mapMutations, mapGetters } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import { w3cwebsocket } from 'websocket'
 import axios from 'axios'
 
@@ -22,36 +31,66 @@ export default {
       refreshClient: {}
     }
   },
+  watch:{
+    classid(){
+      this.refreshClient = new w3cwebsocket('wss://' +process.env.mainUrl + '/ws/refresh')
+      this.refreshClient.onopen = () => this.refreshClient.send('')
+    }
+  },
   created () {
     this.refresh()
-    this.client = new W3cwebsocket('wss://'+process.env.mainUrl+'/ws/move')
-    this.client.onmessage=({data})=>{
-      this.move(JSON.parse(data))
+    const startWebsocket = () =>{
+      this.client = new W3cwebsocket('wss://'+process.env.mainUrl+'/ws/move')
+      this.client.onmessage=({data})=>{
+        data = JSON.parse(data)
+        if(data.classid === this.classid) this.move(data)
+      }
+      this.client.onclose=()=>{
+        console.log('websocket disconnect')
+        startWebsocket()
+      }
+      this.refreshClient = new W3cwebsocket('wss://'+process.env.mainUrl+'/ws/refresh')
+      this.refreshClient.onmessage = () => this.refresh()
+      this.refreshClient.onclose=()=>{
+        console.log('websocket disconnect')
+        startWebsocket()
+      }
     }
-    this.refreshClient = new W3cwebsocket('wss://'+process.env.mainUrl+'/ws/refresh')
-    this.refreshClient.onmessage = d => this.refresh()
+    startWebsocket()
   },
   computed: {
-    ...mapGetters({
+    ...mapState({
       papers: 'papers'
     }),
+    sortedPapers: function(){
+      var papers = Object.values(this.papers).filter(() => true)
+      papers.sort((a,b) => a.updatedAt - b.updatedAt)
+      papers = papers.filter(p => {
+        const buff = new Date(p.endTime)
+        buff.setDate(buff.getDate() + 1)
+        const a = new Date() - new Date(p.startTime) > 0 //開始日を過ぎているかどうか(当日はtrue)
+        const b = buff - new Date() > 0 //終了日より前(当日はtrue)
+        return a&&b
+      })
+      return papers
+    }
   },
   methods:{
     ...mapMutations({
       move: 'move',
-      fixPapers: 'fixPapers'
+      refreshPapers: 'refreshPapers'
     }),
     refresh: function(){
       axios.get('https://' +process.env.mainUrl + '/api/class-docs',{
         params: { classid: this.classid }
       }).then(res =>{
-        var documents = []
-        res.data.forEach(document => {
+        var documents = {}
+        res.data.forEach((document , index)=> {
           document['isSelected'] = false
           document['imgUrl'] = '/jpg/' + document.docid + '.jpg'
-          documents.push(document)
+          documents[document.docid] = document
         });
-        this.fixPapers({classid: this.classid, documents: documents})
+        this.refreshPapers({documents: documents})
       }).catch(e =>{
         console.log(e)
       })
@@ -64,9 +103,31 @@ export default {
 </script>
 <style>
   body{
-    background-color: #d0ae88ff
   }
 </style>
 <style scoped>
+  section {
+    height: 100%;
+    width: 100%;
+  }
+  #wrapper {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+  #wrapper:before {
+    content:"";
+    display: block;
+    padding-top: 56%;
+  }
+  #content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: #d0ae88ff;
+  }
 
 </style>

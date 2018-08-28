@@ -18,14 +18,19 @@ export default {
     }
   },
   created () {
-    this.client = new W3cwebsocket('wss://'+process.env.mainUrl+'/ws/alert')
-    this.client.onmessage=({data})=>{
-      this.message = JSON.parse(data).message;
-
-      var delete_alert = function () {
-        this.message = null
+    const startWebsocket = () => {
+      this.client = new W3cwebsocket('wss://'+process.env.mainUrl+'/ws/alert')
+      this.client.onmessage=({data})=>{
+        this.message = JSON.parse(data).message;
+        var delete_alert = function () {
+          this.message = null
+        }
+        setTimeout(() => {this.message=null},1000*60*5)
       }
-      setTimeout(() => {this.message=null},1000*60*5)
+      this.client.onclose=()=>{
+        console.log('websocket disconnect')
+        startWebsocket()
+      }
     }
   },
 }
