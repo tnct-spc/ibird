@@ -18,7 +18,8 @@
     "cheerio-httpcli": "^0.7.3",
     "child_process": "^1.0.2",
     "cross-env": "^5.0.1",
-    "express": "^4.15.3",
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
     "express-ws": "^4.0.0",
     "fs-extra": "^7.0.0",
     "ip": "^1.1.5",
@@ -28,12 +29,14 @@
     "office-convert": "^0.2.2",
     "pg-promise": "^8.4.4",
     "sass-loader": "^7.0.3",
+    "sechash": "^0.2.1",
     "sequelize": "^4.38.0",
     "sequelize-cli": "^4.0.0",
     "source-map-support": "^0.4.15",
     "url": "^0.11.0",
     "vue": "^2.5.16",
-    "websocket": "^1.0.26"
+    "websocket": "^1.0.26",
+    "whatwg-fetch": "^2.0.4"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",

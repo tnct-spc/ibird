@@ -1,7 +1,9 @@
 import Vue from 'vue'
+import axios from 'axios'
 
 export const state = () => ({
-  papers: {}
+  papers: {},
+  authUser: null
 })
 
 export const mutations = {
@@ -29,5 +31,32 @@ export const mutations = {
     Object.keys(documents).forEach(key => {
       Vue.set(state.papers, key, documents[key])
     })
+  },
+  setUser (state, user) {
+    state.authUser = user
   }
+}
+export const actions = {
+  nuxtServerInit ({ commit }, { req }) {
+    if (req.session && req.session.authUser) {
+      commit('setUser', req.session.authUser)
+    }
+  },
+  async login ({ commit }, { username, password }) {
+    try {
+      const { data } = await axios.post('/api/login', { username, password })
+      commit('setUser', data)
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        throw new Error(error.response.data.message)
+      }
+      throw error
+    }
+  },
+
+  async logout ({ commit }) {
+    await axios.post('/api/logout')
+    commit('setUser', null)
+  }
+
 }
