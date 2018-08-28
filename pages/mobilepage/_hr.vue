@@ -40,7 +40,10 @@ export default{
   },
   //リスト更新
   asyncData ({ params, error }) {
-    return axios.get('http://'+ process.env.mainUrl + '/api/class-docs?classid='+params.hr).then(res =>{
+    //わざとコンフリクト起こすためにコメント
+    return axios.get('http://'+ process.env.mainUrl + '/api/class-docs-mobile',{
+      params: { classid: params.hr }
+    }).then(res =>{
       return {
         documents:res.data
       }
