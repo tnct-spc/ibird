@@ -4,6 +4,12 @@
     <button type="button" class="btn btn-info" @click="sortDocs()">
        sort-docs
     </button>
+    <div>
+        <input v-model="alertMessage" placeholder="緊急伝達事項を入力">
+        <button type="button" class="btn btn-info" @click="showAlert()">
+          アラート表示
+        </button>
+    </div>
     <!-- 学年を表示する -->
     <div id="grid1">
     <button v-for="(item, index) in obj" @click="switchingClassTable(Object.keys(obj)[index-1])" class="sitayose p">
@@ -22,6 +28,8 @@
 <script>
 import axios from 'axios'
 import Vue from 'vue'
+import { w3cwebsocket } from 'websocket'
+
 export default {
   props:{
     "classid":String,
@@ -32,7 +40,8 @@ export default {
       year: "", //現在選択中の学年
       obj:{},//学年をKEYにclassidとcourseのオブジェクトの配列を持つ
       grid:{},
-      grids:0
+      grids:0,
+      alertMessage: ''
     }
   },
   mounted(){
@@ -70,6 +79,10 @@ export default {
       axios.put('../api/sort-docs',{
         classid:this.classid
       })
+    },
+    showAlert(){
+      const refresh = new w3cwebsocket(process.env.wsUrl + '/ws/alert')
+      refresh.onopen = () => refresh.send(this.alertMessage)
     }
   }
 }
