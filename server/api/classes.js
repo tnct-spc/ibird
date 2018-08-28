@@ -69,6 +69,8 @@ router.post('/add-doc', (req, res, next) => {
               x: doc.x,
               y: doc.y,
               priority: doc.priority,
+              openMobile: doc.openMobile,
+              title: doc.title,
               startTime: startTime,
               endTime: endTime,
             })
