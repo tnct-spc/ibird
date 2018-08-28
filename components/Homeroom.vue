@@ -2,7 +2,7 @@
   <section>
     <BulletinBoard :classid=classid />
     <Alert />
-    <QR :url="url" />
+    <QR class="qr" :url="url" />
   </section>
 </template>
 <script>
@@ -32,4 +32,13 @@ export default {
     height: 100%;
     width: 100%;
   }
+  .qr {
+  height:10%;
+  width:10%;
+  left:0;
+  /* right:0;
+  top:0; */
+  bottom:0;
+  position: fixed;
+}
 </style>
