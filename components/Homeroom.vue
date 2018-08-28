@@ -1,8 +1,7 @@
 <template>
-  <section class="container">
+  <section>
     <BulletinBoard :classid=classid />
     <Alert />
-    <p>{{classid}}</p>
   </section>
 </template>
 <script>
@@ -20,4 +19,9 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+  section{
+    height: 100%;
+    width: 100%;
+  }
+</style>
