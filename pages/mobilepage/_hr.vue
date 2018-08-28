@@ -8,7 +8,7 @@
       </thead>
       <tbody>
         <tr v-for="(document) in documents">
-          <td>{{document.docid}}.{{ext}}</td>
+          <td>{{document.title}}.{{ext}}</td>
           <td>
             <button class="btn btn-primary" v-on:click="seeDocument(document)">See</button>
           </td>
@@ -40,7 +40,10 @@ export default{
   },
   //リスト更新
   asyncData ({ params, error }) {
-    return axios.get('https://localhost:3000/api/class-docs?classid='+params.hr).then(res =>{
+    //わざとコンフリクト起こすためにコメント
+    return axios.get(process.env.httpUrl + '/api/class-docs-mobile',{
+      params: { classid: params.hr }
+    }).then(res =>{
       return {
         documents:res.data
       }

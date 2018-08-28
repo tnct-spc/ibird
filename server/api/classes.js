@@ -40,8 +40,8 @@ const classes = sequelize.define('classes', {
       endTime: Sequelize.DATE,
       startTime: Sequelize.DATE,
       updatedAt: Sequelize.DATE,
-      Title: Sequelize.TEXT,
-      OpenMobile: Sequelize.BOOLEAN,
+      title: Sequelize.TEXT,
+      openMobile: Sequelize.BOOLEAN,
     },{
         timestamps: false
     });
@@ -69,6 +69,8 @@ router.post('/add-doc', (req, res, next) => {
               x: doc.x,
               y: doc.y,
               priority: doc.priority,
+              openMobile: doc.openMobile,
+              title: doc.title,
               startTime: startTime,
               endTime: endTime,
             })
@@ -162,7 +164,7 @@ router.get('/class-docs-mobile', (req, res, next) => {
     documents.findAll({
       where: {
         classid: classid,
-        OpenMobile: true,
+        openMobile: true,
       }
     }).then(list =>{
         res.json(list)

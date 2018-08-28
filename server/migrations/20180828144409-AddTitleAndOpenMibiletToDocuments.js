@@ -5,13 +5,13 @@ module.exports = {
     return Promise.all([
       queryInterface.addColumn(
         'documents',
-        'Title',
+        'title',
         {
           type: Sequelize.TEXT
         }),
       queryInterface.addColumn(
         'documents',
-        'OpenMobile',
+        'openMobile',
         {
           type: Sequelize.BOOLEAN
         })
@@ -23,11 +23,11 @@ module.exports = {
     return Promise.all([
       queryInterface.removeColumn(
         'documents',
-        'Title'
+        'title'
       ),
       queryInterface.removeColumn(
         'documents',
-        'OpenMobile'
+        'openMobile'
       )
     ])
   }

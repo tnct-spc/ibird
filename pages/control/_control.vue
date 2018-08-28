@@ -38,7 +38,7 @@ export default {
     Control,
     ControlSelecter
   },
-  middleware: 'auth',
+  // middleware: 'auth',
 }
 </script>
 <style scoped>
