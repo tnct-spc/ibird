@@ -8,6 +8,7 @@
 <script>
 
 import { w3cwebsocket } from 'websocket'
+import { setTimeout } from 'timers';
 const W3cwebsocket = w3cwebsocket
 
 export default {
@@ -28,8 +29,8 @@ export default {
         setTimeout(() => {this.message=null},1000*60*5)
       }
       this.client.onclose=()=>{
-        console.log('websocket disconnect')
-        startWebsocket()
+        console.log('websocket disconnect ws/alert')
+        setTimeout(() =>{startWebsocket()},1000)
       }
     }
   },

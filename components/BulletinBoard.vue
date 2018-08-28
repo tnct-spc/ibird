@@ -46,14 +46,14 @@ export default {
         if(data.classid === this.classid) this.move(data)
       }
       this.client.onclose=()=>{
-        console.log('websocket disconnect')
-        startWebsocket()
+        console.log('websocket disconnect ws/move')
+        setTimeout(() =>{startWebsocket()},1000)
       }
       this.refreshClient = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/refresh')
       this.refreshClient.onmessage = () => this.refresh()
       this.refreshClient.onclose=()=>{
-        console.log('websocket disconnect')
-        startWebsocket()
+        console.log('websocket disconnect ws/refresh')
+        setTimeout(() =>{startWebsocket()},1000)
       }
     }
     startWebsocket()

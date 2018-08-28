@@ -26,8 +26,8 @@ export default {
     const startWebsocket = () => {
       this.wsClient = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/move')
       this.wsClient.onclose=()=>{
-        console.log('websocket disconnect')
-        startWebsocket()
+        console.log('websocket disconnect /ws/move')
+        setTimeout(() =>{startWebsocket()},1000)
       }
     }
     startWebsocket()
