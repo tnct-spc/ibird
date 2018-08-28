@@ -33,7 +33,7 @@ export const mutations = {
       Vue.set(state.papers, key, documents[key])
     })
   },
-  setCursorOffset (state, {x, y}){
+  setCursorOffset (state, {x, y}) {
     state.cursorOffset.x = x
     state.cursorOffset.y = y
   },
