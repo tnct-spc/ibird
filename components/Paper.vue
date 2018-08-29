@@ -121,7 +121,7 @@ img.paper {
   margin: 1rem;
   box-shadow: 0.5rem 0.5rem 0.5rem 0.01rem;
   border:solid 0.1rem black;
-  max-height: calc(50vh - 1rem);
+  max-width: 15%;;
   position: absolute;
 }
 img.paper:hover{
