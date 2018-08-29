@@ -11,7 +11,7 @@
 import axios from 'axios'
 import Vue from 'vue'
 import BulletinBoard from '~/components/BulletinBoard.vue'
-import ModalUploader from '~/components/ModalUploader.vue'
+import ModalUploader from '~/components/control/ModalUploader.vue'
 
 export default{
   props:{
