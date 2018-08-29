@@ -129,14 +129,12 @@ export default {
   }
   #wrapper {
     position: relative;
-    top: 0;
-    left: 0;
     width: 100%;
   }
   #wrapper:before {
     content:"";
     display: block;
-    padding-top: 56%;
+    padding-top: 56.25%;
   }
   #content {
     position: absolute;
@@ -146,5 +144,4 @@ export default {
     right: 0;
     background-color: #d0ae88ff;
   }
-
 </style>
