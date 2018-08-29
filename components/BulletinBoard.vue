@@ -1,7 +1,7 @@
 <template>
   <section>
     <div id="wrapper">
-      <div id="content">
+      <div id="content" ref="fieldElm">
         <Paper v-for="(paper, i) in sortedPapers"
           :key="i"
           :classid="classid"
@@ -58,6 +58,13 @@ export default {
     }
     startWebsocket()
   },
+  mounted() {
+    const x = this.$refs.fieldElm.clientWidth
+    const y = this.$refs.fieldElm.clientHeight
+    console.log(x)
+    console.log(y)
+    this.setbbFieldSize({x: x, y: y})
+  },
   computed: {
     ...mapState({
       papers: 'papers'
@@ -82,7 +89,8 @@ export default {
   methods:{
     ...mapMutations({
       move: 'move',
-      refreshPapers: 'refreshPapers'
+      refreshPapers: 'refreshPapers',
+      setbbFieldSize: 'setbbFieldSize'
     }),
     refresh: function(){
       axios.get(process.env.httpUrl + '/api/class-docs',{

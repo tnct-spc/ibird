@@ -4,7 +4,9 @@ import axios from 'axios'
 export const state = () => ({
   papers: {},
   cursorOffset: {x: 0, y: 0},
-  authUser: null
+  authUser: null,
+  bbFieldSize: {x: 0, y: 0},
+  controlSelecterSize: {x: 0, y: 0}
 })
 
 export const mutations = {
@@ -39,6 +41,14 @@ export const mutations = {
   },
   setUser (state, user) {
     state.authUser = user
+  },
+  setbbFieldSize (state, {x, y}) {
+    state.bbFieldSize.x = x
+    state.bbFieldSize.y = y
+  },
+  setControlSelecterSize (state, {x, y}) {
+    state.controlSelecterSize.x = x
+    state.controlSelecterSize.y = y
   }
 }
 export const actions = {
@@ -63,5 +73,4 @@ export const actions = {
     await axios.post('/api/logout')
     commit('setUser', null)
   }
-
 }
