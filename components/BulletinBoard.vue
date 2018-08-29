@@ -1,7 +1,7 @@
 <template>
   <section>
     <div id="wrapper">
-      <div id="content">
+      <div id="content" ref="fieldElm">
         <Paper v-for="(paper, i) in sortedPapers"
           :key="i"
           :classid="classid"
@@ -33,30 +33,45 @@ export default {
   },
   watch:{
     classid(){
-      this.refreshClient = new w3cwebsocket('wss://' +process.env.mainUrl + '/ws/refresh')
+      this.refreshClient = new w3cwebsocket(process.env.wsUrl + '/ws/refresh')
       this.refreshClient.onopen = () => this.refreshClient.send('')
     }
   },
   created () {
     this.refresh()
     const startWebsocket = () =>{
+<<<<<<< HEAD
       this.client = new W3cwebsocket('wss://'+process.env.mainUrl+'/ws/move')
+=======
+      this.client = new W3cwebsocket(process.env.wsUrl+'/ws/move')
+>>>>>>> feature/Mirroring
       this.client.onmessage=({data})=>{
         data = JSON.parse(data)
         if(data.classid === this.classid) this.move(data)
       }
       this.client.onclose=()=>{
-        console.log('websocket disconnect')
-        startWebsocket()
+        console.log('websocket disconnect ws/move')
+        setTimeout(() =>{startWebsocket()},1000)
       }
+<<<<<<< HEAD
       this.refreshClient = new W3cwebsocket('wss://'+process.env.mainUrl+'/ws/refresh')
+=======
+      this.refreshClient = new W3cwebsocket(process.env.wsUrl+'/ws/refresh')
+>>>>>>> feature/Mirroring
       this.refreshClient.onmessage = () => this.refresh()
       this.refreshClient.onclose=()=>{
-        console.log('websocket disconnect')
-        startWebsocket()
+        console.log('websocket disconnect ws/refresh')
+        setTimeout(() =>{startWebsocket()},1000)
       }
     }
     startWebsocket()
+  },
+  mounted() {
+    const x = this.$refs.fieldElm.clientWidth
+    const y = this.$refs.fieldElm.clientHeight
+    console.log(x)
+    console.log(y)
+    this.setbbFieldSize({x: x, y: y})
   },
   computed: {
     ...mapState({
@@ -66,10 +81,14 @@ export default {
       var papers = Object.values(this.papers).filter(() => true)
       papers.sort((a,b) => a.updatedAt - b.updatedAt)
       papers = papers.filter(p => {
-        const buff = new Date(p.endTime)
-        buff.setDate(buff.getDate() + 1)
-        const a = new Date() - new Date(p.startTime) > 0 //開始日を過ぎているかどうか(当日はtrue)
-        const b = buff - new Date() > 0 //終了日より前(当日はtrue)
+        var startTime = new Date(p.startTime)
+        startTime = new Date(startTime.setHours(startTime.getHours() -9))
+        var endTime = new Date(p.endTime)
+        endTime = new Date(endTime.setHours(endTime.getHours() -9))
+        endTime.setDate(endTime.getDate() + 1)
+
+        const a = new Date() - startTime > 0 //開始日を過ぎているかどうか(当日はtrue)
+        const b = endTime - new Date() > 0 //終了日より前(当日はtrue)
         return a&&b
       })
       return papers
@@ -78,10 +97,15 @@ export default {
   methods:{
     ...mapMutations({
       move: 'move',
-      refreshPapers: 'refreshPapers'
+      refreshPapers: 'refreshPapers',
+      setbbFieldSize: 'setbbFieldSize'
     }),
     refresh: function(){
+<<<<<<< HEAD
       axios.get('https://' +process.env.mainUrl + '/api/class-docs',{
+=======
+      axios.get(process.env.httpUrl + '/api/class-docs',{
+>>>>>>> feature/Mirroring
         params: { classid: this.classid }
       }).then(res =>{
         var documents = {}

@@ -40,6 +40,8 @@ const classes = sequelize.define('classes', {
       endTime: Sequelize.DATE,
       startTime: Sequelize.DATE,
       updatedAt: Sequelize.DATE,
+      title: Sequelize.TEXT,
+      openMobile: Sequelize.BOOLEAN,
     },{
         timestamps: false
     });
@@ -67,6 +69,8 @@ router.post('/add-doc', (req, res, next) => {
               x: doc.x,
               y: doc.y,
               priority: doc.priority,
+              openMobile: doc.openMobile,
+              title: doc.title,
               startTime: startTime,
               endTime: endTime,
             })
@@ -155,20 +159,33 @@ router.get('/class-docs', (req, res, next) => {
     })
 })
 
+router.get('/class-docs-mobile', (req, res, next) => {
+    const classid = req.query.classid
+    documents.findAll({
+      where: {
+        classid: classid,
+        openMobile: true,
+      }
+    }).then(list =>{
+        res.json(list)
+    }).catch(err =>{
+        res.statu(404)
+    })
+})
 router.put('/sort-docs', (req, res, next) => {
     const classid = req.body.classid
     //並べる場所,今はてきとう
     const cleanXYS = [
-      {x:30,y:20},
-      {x:260,y:20},
-      {x:490,y:20},
-      {x:720,y:20},
-      {x:950,y:20},
-      {x:30,y:380},
-      {x:260,y:380},
-      {x:490,y:380},
-      {x:720,y:380},
-      {x:950,y:380},
+      {x:200,y:400},
+      {x:2200,y:400},
+      {x:4200,y:400},
+      {x:6200,y:400},
+      {x:8200,y:400},
+      {x:200,y:5400},
+      {x:2200,y:5400},
+      {x:4200,y:5400},
+      {x:6200,y:5400},
+      {x:8200,y:5400},
     ]
       docList(classid).then(list =>{
         //list並べる順番にsortする処理

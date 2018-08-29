@@ -4,7 +4,8 @@ import axios from 'axios'
 export const state = () => ({
   papers: {},
   cursorOffset: {x: 0, y: 0},
-  authUser: null
+  authUser: null,
+  bbFieldSize: {x: 0, y: 0}
 })
 
 export const mutations = {
@@ -33,12 +34,16 @@ export const mutations = {
       Vue.set(state.papers, key, documents[key])
     })
   },
-  setCursorOffset (state, {x, y}){
+  setCursorOffset (state, {x, y}) {
     state.cursorOffset.x = x
     state.cursorOffset.y = y
   },
   setUser (state, user) {
     state.authUser = user
+  },
+  setbbFieldSize (state, {x, y}) {
+    state.bbFieldSize.x = x
+    state.bbFieldSize.y = y
   }
 }
 export const actions = {
@@ -63,5 +68,4 @@ export const actions = {
     await axios.post('/api/logout')
     commit('setUser', null)
   }
-
 }
