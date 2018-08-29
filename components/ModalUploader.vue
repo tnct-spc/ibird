@@ -5,35 +5,38 @@
        <div class="modal-header"/>
         <div class="modal-body">
           <div id="style">
-           <b-form-checkbox
-           　　　　　　　class="checkbox-inline"
-                       v-for="(item ,key ,index) in obj2"
-                       v-model="obj2[index+1]"
-                       :key = "key"
-                       @input="bulkSelection(index+1)">
-                       {{key}}年
-           </b-form-checkbox>
-         </div>
-         <div id="style2">
-         <div v-for="(item1 ,key ,index) in obj">
+            <div style="float:left;margin-left:10%">
              <b-form-checkbox
-                         v-for = "(item2) in obj[index+1]"
-                         v-model = "item2.submit"
-                         :key = "item2.classid">
-                         {{key}}-{{item2.course}}
-          </b-form-checkbox>
-         </div>
-         </div>
+                         style="display:block"
+                         v-for="(item ,key ,index) in obj2"
+                         v-model="obj2[index+1]"
+                         :key = "key"
+                         @input="bulkSelection(index+1)">
+                         {{key}}年
+             </b-form-checkbox>
+            </div>
+            <div>
+             <div v-for="(item1 ,key ,index) in obj">
+              <b-form-checkbox
+                          style="display:inline-block"
+                          v-for = "(item2) in obj[index+1]"
+                          v-model = "item2.submit"
+                          :key = "item2.classid">
+                          {{key}}-{{item2.course}}
+              </b-form-checkbox>
+             </div>
+            </div>
+          </div>
          <div>
-         <div id="style2">
+         <div id="style">
          <label>掲載開始日</label>
          <input type="date" v-model="startDate"/>
          </div>
-         <div id="style2">
+         <div id="style">
          <label>掲載終了日</label>
          <input type="date" v-model="endDate"/>
          </div>
-         <div id="style2">
+         <div id="style">
          <span>優先度</span>
          <select v-model="selected">
           <option disabled value="">優先度を選択してください</option>
@@ -203,15 +206,10 @@ export default{
 }
 
 .modal-body {
-  margin: 10% 0;
+  margin: 0 0;
 }
 
 #style{
-  text-align: center;
-  grid-template-rows: 5%;
-}
-
-#style2{
   text-align: center;
   margin-top: 5%;
 }
