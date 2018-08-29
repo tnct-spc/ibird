@@ -1,6 +1,7 @@
 <template>
   <div @mousedown="mousedown" ref="fieldElm">
     <p>{{ this.paper }}</p>
+    <p>{{ controlSelecterSize }}</p>
     <img class="paper" :src="paper.imgUrl" id="drag"
       alt="" :style="{
         left: (this.paper.x*this.bbFieldSize.x/10000)+'px',
@@ -38,6 +39,7 @@ export default {
     ...mapState({
       cursorOffset: 'cursorOffset',
       bbFieldSize: 'bbFieldSize',
+      controlSelecterSize: 'controlSelecterSize'
     })
   },
   methods: {
@@ -67,7 +69,8 @@ export default {
           classid: this.classid,
           docid: this.paper.docid,
           x: (e.x-this.cursorOffset.x)*10000/this.bbFieldSize.x,
-          y: (e.y-this.cursorOffset.y)*10000/this.bbFieldSize.y,
+          y: (e.y-this.cursorOffset.y-this.controlSelecterSize.y)*10000/this.bbFieldSize.y,
+          // y: (e.y-this.cursorOffset.y)*10000/this.bbFieldSize.y,
         }))
       }
     },

@@ -1,6 +1,6 @@
 <template>
   <section>
-  <div style="margin-left:10%;margin-right:5%">
+  <div style="margin-left:10%;margin-right:5%" ref="fieldElm">
     <button type="button" class="btn btn-info" @click="sortDocs()">
        sort-docs
     </button>
@@ -29,6 +29,7 @@
 import axios from 'axios'
 import Vue from 'vue'
 import { w3cwebsocket } from 'websocket'
+import { mapMutations } from 'vuex'
 
 export default {
   props:{
@@ -45,6 +46,13 @@ export default {
     }
   },
   mounted(){
+      //selecterのサイズをとるためにやる
+      const x = this.$refs.fieldElm.clientWidth
+      const y = this.$refs.fieldElm.clientHeight
+      console.log('controlx' + x)
+      console.log('controlx' + y)
+      this.setControlSelecterSize({x: x, y: y})
+      //
       this.classes.sort((a,b)=>{
       return a.classid - b.classid
       })
@@ -66,6 +74,9 @@ export default {
       })
   },
   methods:{
+    ...mapMutations({
+      setControlSelecterSize: 'setControlSelecterSize'
+    }),
     switchingClassTable: function(newYear) { //新年じゃないよ
       this.year = newYear
       const grid2 = document.getElementById("grid2")
