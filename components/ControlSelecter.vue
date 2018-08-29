@@ -1,10 +1,10 @@
 <template>
   <section>
-  <div class="background" style="padding:1%">
+  <div class="background" style="padding:1%"  ref="fieldElm">
     <div>
-    <span style="font-size:150%">
-      ControlPage
-    </span>
+      <span style="font-size:150%">
+        ControlPage
+      </span>
     </div>
     <div>
       <span>Alert : </span>
@@ -36,6 +36,7 @@
 import axios from 'axios'
 import Vue from 'vue'
 import { w3cwebsocket } from 'websocket'
+import { mapMutations } from 'vuex'
 
 export default {
   props:{
@@ -52,6 +53,13 @@ export default {
     }
   },
   mounted(){
+      //selecterのサイズをとるためにやる
+      const x = this.$refs.fieldElm.clientWidth
+      const y = this.$refs.fieldElm.clientHeight
+      console.log('controlx' + x)
+      console.log('controlx' + y)
+      this.setControlSelecterSize({x: x, y: y})
+      //
       this.classes.sort((a,b)=>{
       return a.classid - b.classid
       })
@@ -73,6 +81,9 @@ export default {
       })
   },
   methods:{
+    ...mapMutations({
+      setControlSelecterSize: 'setControlSelecterSize'
+    }),
     switchingClassTable: function(newYear) { //新年じゃないよ
       this.year = newYear
       const grid2 = document.getElementById("grid2")
