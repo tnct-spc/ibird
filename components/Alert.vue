@@ -32,6 +32,7 @@ export default {
         console.log('websocket disconnect')
         startWebsocket()
       }
+      startWebsocket()
     }
   },
 }
