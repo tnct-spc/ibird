@@ -26,11 +26,7 @@ export default {
   },
   created (){
     const startWebsocket = () => {
-<<<<<<< HEAD
-      this.wsClient = new W3cwebsocket('wss://'+process.env.mainUrl+'/ws/move')
-=======
       this.wsClient = new W3cwebsocket(process.env.wsUrl+'/ws/move')
->>>>>>> feature/Mirroring
       this.wsClient.onclose=()=>{
         console.log('websocket disconnect /ws/move')
         setTimeout(() =>{startWebsocket()},1000)
@@ -76,32 +72,20 @@ export default {
       }
     },
     remove: function(){
-<<<<<<< HEAD
-      axios.delete('https://' +process.env.mainUrl + '/api/rm-doc', {
-=======
       axios.delete(process.env.httpUrl + '/api/rm-doc', {
->>>>>>> feature/Mirroring
         params: {
           classid: this.classid,
           docid: this.paper.docid
         }
       }).then( () => {
-<<<<<<< HEAD
-        const c = new W3cwebsocket('wss://' +process.env.mainUrl + '/ws/refresh')
-=======
         const c = new W3cwebsocket(process.env.wsUrl + '/ws/refresh')
->>>>>>> feature/Mirroring
         c.onopen = () => c.send('{}')
       }).catch(e =>{
         console.log(e)
       })
     },
     savePosition: function(){
-<<<<<<< HEAD
-        axios.put('https://' +process.env.mainUrl + '/api/fix-position', {
-=======
         axios.put(process.env.httpUrl + '/api/fix-position', {
->>>>>>> feature/Mirroring
           classid: this.classid,
           docid: this.paper.docid,
           x: this.paper.x,
