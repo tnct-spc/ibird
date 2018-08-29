@@ -59,11 +59,11 @@ export default {
     startWebsocket()
   },
   mounted() {
-    const x = this.$refs.fieldElm.clientWidth
-    const y = this.$refs.fieldElm.clientHeight
-    console.log(x)
-    console.log(y)
-    this.setbbFieldSize({x: x, y: y})
+    window.addEventListener('resize', this.handleResize)
+    this.handleResize()
+  },
+  beforeDestroy: function () {
+    window.removeEventListener('resize', this.handleResize)
   },
   computed: {
     ...mapState({
@@ -106,6 +106,11 @@ export default {
       }).catch(e =>{
         console.log(e)
       })
+    },
+    handleResize: function() {
+      const x = this.$refs.fieldElm.clientWidth
+      const y = this.$refs.fieldElm.clientHeight
+      this.setbbFieldSize({x: x, y: y})
     }
   },
   components: {
