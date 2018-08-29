@@ -59,11 +59,11 @@ export default {
     startWebsocket()
   },
   mounted() {
-    const x = this.$refs.fieldElm.clientWidth
-    const y = this.$refs.fieldElm.clientHeight
-    console.log(x)
-    console.log(y)
-    this.setbbFieldSize({x: x, y: y})
+    window.addEventListener('resize', this.handleResize)
+    this.handleResize()
+  },
+  beforeDestroy: function () {
+    window.removeEventListener('resize', this.handleResize)
   },
   computed: {
     ...mapState({
@@ -106,6 +106,11 @@ export default {
       }).catch(e =>{
         console.log(e)
       })
+    },
+    handleResize: function() {
+      const x = this.$refs.fieldElm.clientWidth
+      const y = this.$refs.fieldElm.clientHeight
+      this.setbbFieldSize({x: x, y: y})
     }
   },
   components: {
@@ -124,14 +129,12 @@ export default {
   }
   #wrapper {
     position: relative;
-    top: 0;
-    left: 0;
     width: 100%;
   }
   #wrapper:before {
     content:"";
     display: block;
-    padding-top: 56%;
+    padding-top: 56.25%;
   }
   #content {
     position: absolute;
@@ -141,5 +144,4 @@ export default {
     right: 0;
     background-color: #d0ae88ff;
   }
-
 </style>
