@@ -1,15 +1,11 @@
 <template>
   <section>
-    <div id="wrapper">
-      <div id="content">
-        <Paper v-for="(paper, i) in sortedPapers"
-          :key="i"
-          :classid="classid"
-          :ws-client="client"
-          :paper="paper"
+    <Paper v-for="(paper, i) in sortedPapers"
+      :key="i"
+      :classid="classid"
+      :ws-client="client"
+      :paper="paper"
       />
-      </div>
-    </div>
   </section>
 </template>
 
@@ -107,31 +103,9 @@ export default {
 </script>
 <style>
   body{
+    background-color: #d0ae88ff
   }
 </style>
 <style scoped>
-  section {
-    height: 100%;
-    width: 100%;
-  }
-  #wrapper {
-    position: relative;
-    top: 0;
-    left: 0;
-    width: 100%;
-  }
-  #wrapper:before {
-    content:"";
-    display: block;
-    padding-top: 56%;
-  }
-  #content {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    background-color: #d0ae88ff;
-  }
 
 </style>

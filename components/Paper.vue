@@ -15,7 +15,6 @@ export default {
   data:function(){
     return{
       wsClient: null,
-      cursorOffset: {x:0,y:0},
     }
   },
   props: {
