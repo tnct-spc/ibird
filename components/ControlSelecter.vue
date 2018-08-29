@@ -94,9 +94,6 @@ export default {
 </script>
 
 <style>
-body{
-  background-color: #d0ae88ff;
-}
 </style>
 
 <style scoped>

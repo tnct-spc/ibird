@@ -1,8 +1,11 @@
 <template>
-  <div @mousedown="mousedown">
+  <div @mousedown="mousedown" ref="fieldElm">
     <p>{{ this.paper }}</p>
     <img class="paper" :src="paper.imgUrl" id="drag"
-      alt="" :style="{left: this.paper.x+'px', top: this.paper.y+'px'}" ondragstart="return false;" >
+      alt="" :style="{
+        left: (this.paper.x*this.bbFieldSize.x/10000)+'px',
+        top: (this.paper.y*this.bbFieldSize.y/10000)+'px',
+        }" ondragstart="return false;" >
   </div>
 </template>
 <script>
@@ -33,7 +36,8 @@ export default {
   },
   computed: {
     ...mapState({
-      cursorOffset: 'cursorOffset'
+      cursorOffset: 'cursorOffset',
+      bbFieldSize: 'bbFieldSize',
     })
   },
   methods: {
@@ -62,8 +66,8 @@ export default {
         this.wsClient.send(JSON.stringify({
           classid: this.classid,
           docid: this.paper.docid,
-          x: e.x-this.cursorOffset.x,
-          y: e.y-this.cursorOffset.y,
+          x: (e.x-this.cursorOffset.x)*10000/this.bbFieldSize.x,
+          y: (e.y-this.cursorOffset.y)*10000/this.bbFieldSize.y,
         }))
       }
     },
@@ -118,7 +122,6 @@ img.paper {
   box-shadow: 0.5rem 0.5rem 0.5rem 0.01rem;
   border:solid 0.1rem black;
   max-height: calc(50vh - 1rem);
-  max-width: 15%;
   position: absolute;
 }
 img.paper:hover{
