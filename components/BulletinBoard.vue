@@ -40,11 +40,7 @@ export default {
   created () {
     this.refresh()
     const startWebsocket = () =>{
-<<<<<<< HEAD
-      this.client = new W3cwebsocket('wss://'+process.env.mainUrl+'/ws/move')
-=======
       this.client = new W3cwebsocket(process.env.wsUrl+'/ws/move')
->>>>>>> feature/Mirroring
       this.client.onmessage=({data})=>{
         data = JSON.parse(data)
         if(data.classid === this.classid) this.move(data)
@@ -53,11 +49,7 @@ export default {
         console.log('websocket disconnect ws/move')
         setTimeout(() =>{startWebsocket()},1000)
       }
-<<<<<<< HEAD
-      this.refreshClient = new W3cwebsocket('wss://'+process.env.mainUrl+'/ws/refresh')
-=======
       this.refreshClient = new W3cwebsocket(process.env.wsUrl+'/ws/refresh')
->>>>>>> feature/Mirroring
       this.refreshClient.onmessage = () => this.refresh()
       this.refreshClient.onclose=()=>{
         console.log('websocket disconnect ws/refresh')
@@ -101,11 +93,7 @@ export default {
       setbbFieldSize: 'setbbFieldSize'
     }),
     refresh: function(){
-<<<<<<< HEAD
-      axios.get('https://' +process.env.mainUrl + '/api/class-docs',{
-=======
       axios.get(process.env.httpUrl + '/api/class-docs',{
->>>>>>> feature/Mirroring
         params: { classid: this.classid }
       }).then(res =>{
         var documents = {}
