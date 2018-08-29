@@ -13,7 +13,7 @@
       </button>
       <span> Sort : </span>
       <button type="button" class="btn btn-primary btn-sm" @click="sortDocs()">
-         sort-docs
+         自動並び替え
       </button>
     </div>
   </section>
