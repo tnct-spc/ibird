@@ -1,14 +1,21 @@
 <template>
   <section>
-  <div style="margin-left:10%;margin-right:5%">
-    <button type="button" class="btn btn-info" @click="sortDocs()">
-       sort-docs
-    </button>
+  <div class="background" style="padding:1%">
     <div>
-        <input v-model="alertMessage" placeholder="緊急伝達事項を入力">
-        <button type="button" class="btn btn-info" @click="showAlert()">
+    <span style="font-size:150%">
+      ControlPage
+    </span>
+    </div>
+    <div>
+      <span>Alert : </span>
+      <input v-model="alertMessage" placeholder="緊急伝達事項を入力">
+      <button type="button" class="btn btn-primary btn-sm" @click="showAlert()">
           アラート表示
-        </button>
+      </button>
+      <span> Sort : </span>
+      <button type="button" class="btn btn-primary btn-sm" @click="sortDocs()">
+         sort-docs
+      </button>
     </div>
     <!-- 学年を表示する -->
     <div id="grid1">
@@ -114,4 +121,7 @@ export default {
   grid-template-rows:5%;
   text-align: center;
 }
+.background{
+   background-color: #ffee50
+ }
 </style>

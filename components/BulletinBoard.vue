@@ -8,6 +8,8 @@
           :ws-client="client"
           :paper="paper"
       />
+      </div>
+    </div>
   </section>
 </template>
 
@@ -112,9 +114,9 @@ export default {
 }
 </script>
 <style>
-  body{
-    background-color: #d0ae88ff
-  }
+body{
+  background-image:url("../assets/img/background.png");
+}
 </style>
 <style scoped>
 
