@@ -43,8 +43,8 @@ module.exports = {
     }
   },
   env: {
-    mainUrl: process.env.MAIN_URL || 'ibird.ml:3000',
-    httpUrl: process.env.HTTP_URL || 'https://ibird.ml:3000',
-    wsUrl: process.env.WS_URL || 'wss://ibird.ml:3000'
+    mainUrl: process.env.MAIN_URL || 'ibird.ml',
+    httpUrl: process.env.HTTP_URL || 'https://ibird.ml',
+    wsUrl: process.env.WS_URL || 'wss://ibird.ml'
   }
 }
