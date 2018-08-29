@@ -43,8 +43,12 @@ module.exports = {
     }
   },
   env: {
+<<<<<<< HEAD
     mainUrl: process.env.MAIN_URL || 'localhost:3000',
     httpUrl: process.env.HTTP_URL || 'http://localhost:3000',
     wsUrl: process.env.WS_URL || 'ws://localhost:3000'
+=======
+    mainUrl: process.env.MAIN_URL || 'localhost:3000'
+>>>>>>> parent of 01828be... [add]大きさ変えたけどこれ意味ないやつでは、という
   }
 }

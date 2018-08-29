@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="container">
     <BulletinBoard :classid=classid />
     <Alert />
     <QR class="qr" :url="url" />
