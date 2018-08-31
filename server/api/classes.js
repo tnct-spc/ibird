@@ -270,4 +270,18 @@ router.get('/years-and-courses', (req, res, next) => {
     })
 })
 
+router.get('/classid', (req, res, next) => {
+    const course = req.query.course
+    const year = req.query.year
+    classes.findOne({where:{
+        course: course,
+        year: year
+    }}).then(result => {
+        res.json({classid: result.classid})
+    }).catch(err => {
+        console.log(err)
+        res.sendStatus(400)
+    })
+})
+
 export default router
