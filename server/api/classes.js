@@ -247,5 +247,13 @@ router.delete('/class', (req, res, next) => {
     res.sendStatus(400)
   })
 })
+router.get('/years-and-courses', (req, res, next) => {
+    const obj = {
+        years: [1,2,3,4,5],
+        courses: ['M','E','D','J','C']
+    }
+    console.log(obj)
+    res.json(obj)
+})
 
 export default router
