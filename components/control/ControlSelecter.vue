@@ -1,6 +1,6 @@
 <template>
  <section>
-  <div ref="fieldElm">
+  <div>
     <!-- 学年を表示する -->
     <div id="grid1">
     <button v-for="(item, index) in obj" @click="switchingClassTable(Object.keys(obj)[index-1])" class="sitayose p">
@@ -36,13 +36,6 @@ export default {
     }
   },
   mounted(){
-      //selecterのサイズをとるためにやる
-      const x = this.$refs.fieldElm.clientWidth
-      const y = this.$refs.fieldElm.clientHeight
-      console.log('controlx' + x)
-      console.log('controlx' + y)
-      this.setControlSelecterSize({x: x, y: y})
-      //
       this.classes.sort((a,b)=>{
       return a.classid - b.classid
       })
