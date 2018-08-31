@@ -1,7 +1,7 @@
 <template>
   <section>
   <div class="background" style="padding:1%" >
-   <ControlPanel/>
+   <ControlPanel :classid="classid"/>
    <ControlSelecter :classid="classid" :classes="classes"/>
   </div>
   </section>
