@@ -1,15 +1,6 @@
 <template>
-  <section>
-  <div style="margin-left:10%;margin-right:5%" ref="fieldElm">
-    <button type="button" class="btn btn-info" @click="sortDocs()">
-       sort-docs
-    </button>
-    <div>
-        <input v-model="alertMessage" placeholder="緊急伝達事項を入力">
-        <button type="button" class="btn btn-info" @click="showAlert()">
-          アラート表示
-        </button>
-    </div>
+ <section>
+  <div ref="fieldElm">
     <!-- 学年を表示する -->
     <div id="grid1">
     <button v-for="(item, index) in obj" @click="switchingClassTable(Object.keys(obj)[index-1])" class="sitayose p">
@@ -19,7 +10,7 @@
     <!-- 学年で選択されたクラスを表示する -->
     <div id="grid2">
      <button v-for="(item, index) in obj[year]" @click="switchingClass(item.classid)" class="p">
-        {{ item.course }}
+        {{ year }}{{ item.course }}
      </button>
     </div>
   </div>
@@ -41,8 +32,7 @@ export default {
       year: "", //現在選択中の学年
       obj:{},//学年をKEYにclassidとcourseのオブジェクトの配列を持つ
       grid:{},
-      grids:0,
-      alertMessage: ''
+      grids:0
     }
   },
   mounted(){
@@ -85,27 +75,10 @@ export default {
     switchingClass(classid){
       console.log(classid)
       this.$parent.classid = classid
-    },
-    sortDocs(){
-      axios.put('../api/sort-docs',{
-        classid:this.classid
-      })
-    },
-    showAlert(){
-      const wsClient = new w3cwebsocket(process.env.wsUrl + '/ws/alert')
-      wsClient.onopen = () => {
-        if(this.alertMessage !== ""){
-          // console.log({message: this.alertMessage})
-          wsClient.send(JSON.stringify({message: this.alertMessage}))
-        }
-      }
     }
   }
 }
 </script>
-
-<style>
-</style>
 
 <style scoped>
 .p{
