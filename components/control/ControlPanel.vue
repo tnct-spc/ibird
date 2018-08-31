@@ -20,6 +20,7 @@
 </template>
 <script>
 import { w3cwebsocket } from 'websocket'
+import axios from 'axios'
 const W3cwebsocket = w3cwebsocket
 
 export default{
@@ -28,9 +29,12 @@ export default{
       alertMessage: ''
     }
   },
+  props:{
+    "classid":String,
+  },
   methods:{
     sortDocs(){
-      axios.put('../api/sort-docs',{
+      axios.put(process.env.httpUrl + '/api/sort-docs',{
         classid:this.classid
       })
     },
