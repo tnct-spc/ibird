@@ -16,7 +16,13 @@ module.exports = {
   /*
   ** Global CSS
   */
-  css: ['~/assets/css/main.css'],
+  css: [
+      '@/assets/scss/app.scss',
+      '~/assets/css/main.css'
+  ],
+  modules: [
+  ['bootstrap-vue/nuxt', { css: false }]
+  ],
   /*
   ** Add axios globally
   */
@@ -35,5 +41,10 @@ module.exports = {
         })
       }
     }
+  },
+  env: {
+    mainUrl: process.env.MAIN_URL || 'localhost:3000',
+    httpUrl: process.env.HTTP_URL || 'http://localhost:3000',
+    wsUrl: process.env.WS_URL || 'ws://localhost:3000'
   }
 }

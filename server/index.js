@@ -1,16 +1,30 @@
 import express from 'express'
 import { Nuxt, Builder } from 'nuxt'
+import expressWs from 'express-ws'
+import session from 'express-session'
 
 import api from './api'
+import websocket from './websocket'
 
 const app = express()
-const host = process.env.HOST || '127.0.0.1'
+const host = process.env.HOST || '0.0.0.0'
 const port = process.env.PORT || 3000
 
 app.set('port', port)
 
+app.use(session({
+  secret: 'super-secret-key',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { maxAge: 60000 }
+}))
+
 // Import API Routes
 app.use('/api', api)
+
+// Websocketを使う
+expressWs(app)
+app.use('/ws', websocket)
 
 // Import and Set Nuxt.js options
 let config = require('../nuxt.config.js')

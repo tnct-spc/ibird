@@ -1,0 +1,50 @@
+<template>
+  <section>
+    <div class="bg-danger alert"  v-show="this.message != null">
+      <p class="h1 text-light">{{this.message}}</p>
+    </div>
+  </section>
+</template>
+<script>
+
+import { w3cwebsocket } from 'websocket'
+import { setTimeout } from 'timers';
+const W3cwebsocket = w3cwebsocket
+
+export default {
+  data () {
+    return {
+      client: {},
+      message : null,
+    }
+  },
+  created () {
+   const startWebsocket = () => {
+      this.client = new W3cwebsocket(process.env.wsUrl+'/ws/alert')
+      this.client.onmessage=({data})=>{
+        this.message = JSON.parse(data).message;
+        console.log(this.message)
+        setTimeout(() => {this.message=null},1000*60*1)
+      }
+      this.client.onclose=()=>{
+        console.log('websocket disconnect ws/alert')
+        setTimeout(() =>{startWebsocket()},1000)
+      }
+    }
+    startWebsocket()
+    }
+ }
+</script>
+<style scoped>
+section {
+}
+.alert {
+  height:100%;
+  width:100%;
+  left:0;
+  right:0;
+  top:0;
+  bottom:0;
+  position:absolute;
+}
+</style>
