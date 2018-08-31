@@ -1,6 +1,7 @@
 <template>
  <section>
   <div>
+    <p>classid = {{ classid }}</p>
     <table width="100%">
       <tbody>
         <tr>
@@ -25,7 +26,7 @@ import { mapMutations } from 'vuex'
 export default {
   data:()=>{
     return{
-      classid: '',
+      classid: '0',
       yearIndex: 0,
       courseIndex: 0,
       years: ['1','2','3','4','5'],
@@ -36,10 +37,10 @@ export default {
   },
   watch:{
     yearIndex(){
-      console.log('a')
+      this.getClassid()
     },
     courseIndex(){
-      console.log('a')
+      this.getClassid()
     }
   },
   methods:{
@@ -61,7 +62,13 @@ export default {
       this.courseIndex = index
     },
     getClassid: function(){
-      return '1'
+      axios.get(process.env.httpUrl + '/api/classid',{
+        params: { year: this.years[this.yearIndex], course: this.courses[this.courseIndex] }
+      }).then(res =>{
+        this.classid = res.data.classid
+      }).catch(e =>{
+        console.log(e)
+      })
     }
   }
 }
