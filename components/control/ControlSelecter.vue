@@ -29,11 +29,17 @@ export default {
       classid: '0',
       yearIndex: 0,
       courseIndex: 0,
-      years: ['1','2','3','4','5'],
-      courses: ['M','E','D','J','C'],
+      years: [],
+      courses: [],
     }
   },
   mounted(){
+    axios.get(process.env.httpUrl + '/api/years-and-courses').then(res =>{
+      this.years = res.data.years
+      this.courses = res.data.courses
+    }).catch(e =>{
+      console.log(e)
+    })
   },
   watch:{
     yearIndex(){
