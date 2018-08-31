@@ -74,7 +74,7 @@ export default {
       axios.get(process.env.httpUrl + '/api/classid',{
         params: { year: this.years[this.yearIndex], course: this.courses[this.courseIndex] }
       }).then(res =>{
-        this.$parent.classid = res.data.classid
+        this.$parent.classid = String(res.data.classid)
       }).catch(e =>{
         console.log(e)
       })
