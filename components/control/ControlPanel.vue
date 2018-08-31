@@ -19,6 +19,9 @@
   </section>
 </template>
 <script>
+import { w3cwebsocket } from 'websocket'
+const W3cwebsocket = w3cwebsocket
+
 export default{
   data:()=>{
     return{
