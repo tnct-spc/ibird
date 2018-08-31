@@ -174,6 +174,7 @@ router.get('/class-docs-mobile', (req, res, next) => {
 })
 router.put('/sort-docs', (req, res, next) => {
     const classid = req.body.classid
+    const makeRandom = true
     //並べる場所,今はてきとう
     const cleanXYS = [
       {x:200,y:400},
@@ -187,7 +188,7 @@ router.put('/sort-docs', (req, res, next) => {
       {x:6200,y:5400},
       {x:8200,y:5400},
     ]
-      docList(classid).then(list =>{
+    docList(classid).then(list =>{
         //list並べる順番にsortする処理
         var temp = []
         const now = new Date()
@@ -210,6 +211,10 @@ router.put('/sort-docs', (req, res, next) => {
         for (let i=0; i<sortedList.length; i++) {
           sortedList[i].x = cleanXYS[i].x
           sortedList[i].y = cleanXYS[i].y
+          if (makeRandom){
+            sortedList[i].x += Math.random()*250 - 125
+            sortedList[i].y += Math.random()*250 - 125
+          }
           sortedList[i].save()
         }
         const c = new W3cwebsocket('ws://localhost:3000/ws/refresh')
@@ -248,12 +253,35 @@ router.delete('/class', (req, res, next) => {
   })
 })
 router.get('/years-and-courses', (req, res, next) => {
-    const obj = {
-        years: [1,2,3,4,5],
-        courses: ['M','E','D','J','C']
-    }
-    console.log(obj)
-    res.json(obj)
+  let courseset = new Set()
+  let yearset = new Set()
+  classes.findAll()
+    .then(result => {
+      result.forEach(e => {
+        courseset.add(e.year)
+        yearset.add(e.course)
+      })
+      const obj = {
+        years: Array.from(courseset.values()),
+        courses: Array.from(yearset.values())
+      }
+      console.log(obj)
+      res.json(obj)
+    })
+})
+
+router.get('/classid', (req, res, next) => {
+    const course = req.query.course
+    const year = req.query.year
+    classes.findOne({where:{
+        course: course,
+        year: year
+    }}).then(result => {
+        res.json({classid: result.classid})
+    }).catch(err => {
+        console.log(err)
+        res.sendStatus(400)
+    })
 })
 
 export default router

@@ -1,6 +1,6 @@
 <template>
  <section>
-  <div ref="fieldElm">
+  <div>
     <table width="100%">
       <tbody>
         <tr>
@@ -35,13 +35,6 @@ export default {
     }
   },
   mounted(){
-      //selecterのサイズをとるためにやる
-      const x = this.$refs.fieldElm.clientWidth
-      const y = this.$refs.fieldElm.clientHeight
-      console.log('controlx' + x)
-      console.log('controlx' + y)
-      this.setControlSelecterSize({x: x, y: y})
-      //
   },
   methods:{
     ...mapMutations({

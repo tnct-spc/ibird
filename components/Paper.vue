@@ -89,7 +89,7 @@ export default {
       this.showMenu = true
       console.log(e.x)
       console.log(e.y)
-      this.menuTop = e.y
+      this.menuTop = e.y - this.controlSelecterSize.y
       this.menuLeft = e.x
       return false
     },
