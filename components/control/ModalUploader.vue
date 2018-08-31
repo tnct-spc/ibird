@@ -5,24 +5,17 @@
        <div class="modal-header"/>
         <div class="modal-body">
           <div id="style">
-            <table style="width:100%;margin: 0 auto;">
-            <tm>
-              <b-form-checkbox
-                         @input="bulkSelection3(index+1)"
-                         v-model="all">
-                         全て
-              </b-form-checkbox>
-            </tm>
-            <tm>
-              <b-form-checkbox
-                          style="display:inline"
-                          v-for="(item ,key ,index) in course"
-                          :key = "key"
-                          @input="bulkSelection2(index+1)">
-                          {{key}}科
-              </b-form-checkbox>
-            </tm>
+            <table style="width:100%; margin:0 auto;">
+              <tbody>
+                <tr v-for="_classess in class_matrix">
+                  <td v-for="_class in _classess" style="text-align:left;">
+                    <!--<input type="checkbox">{{_class}}</input>-->
+                    <b-form-checkbox>{{_class}}</b-form-checkbox>
+                  </td>
+                </tr>
+              </tbody>
             </table>
+            <!--
             <div style="float:left;padding-left:25%">
              <b-form-checkbox
                          style="display:block"
@@ -41,6 +34,7 @@
                             {{key}}{{item2.course}}
                 </b-form-checkbox>
             </div>
+            -->
           </div>
          <div>
          <div id="style">
@@ -108,10 +102,50 @@ export default{
     openMobile: true,
     priority:[0,1,2,3,4,5],
     course:{},
-    all:false
+    all:false,
+    class_matrix: {}
    }
   },
   mounted(){
+    // TODO: あとで適当に直して
+    // ココらへんyears_and_courses API
+    // あたりを使ってどうにかして下さい。
+    var data  = {
+      years: [1,2,3,4,5],
+      courses: ["J", "M", "C", "E", "D"]
+    };
+
+    var line = [];
+
+    // 一行目で使う値を用意
+    line.push("全クラス")
+    for(var course of data.courses) {
+      line.push(course + "科");
+    }
+
+    // result => 実際にレンダリングで使う二次元配列
+    var result = [
+        line
+    ];
+
+    for(var year of data.years) {
+      // 1個目は、"[値]年"
+      var line = [year + "年"];
+
+      for(var course of data.courses) {
+        // それ以外は、
+        // "[学年][クラス]"
+        line.push(year + course);
+        console.log(year + course)
+      }
+
+      // 1行resultに追加
+      result.push(line);
+    }
+
+    this.class_matrix = result;
+    // ここまで
+
     this.classes.forEach((c)=> {
       if(!this.course[c.course]){
         Vue.set(this.course, c.course, [])
