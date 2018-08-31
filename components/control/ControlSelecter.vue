@@ -1,18 +1,16 @@
 <template>
  <section>
   <div ref="fieldElm">
-    <!-- 学年を表示する -->
-    <div id="grid1">
-    <button v-for="(item, index) in obj" @click="switchingClassTable(Object.keys(obj)[index-1])" class="sitayose p">
-      {{Object.keys(obj)[index-1]}}　<!--indexが1始まりだったので-1している。要検討 -->
-    </button>
-    </div>
-    <!-- 学年で選択されたクラスを表示する -->
-    <div id="grid2">
-     <button v-for="(item, index) in obj[year]" @click="switchingClass(item.classid)" class="p">
-        {{ year }}{{ item.course }}
-     </button>
-    </div>
+    <table>
+      <tbody>
+        <tr>
+          <td>aaa</td>
+        </tr>
+        <tr>
+          <td>bbb</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
  </section>
 </template>
@@ -25,14 +23,13 @@ import { mapMutations } from 'vuex'
 export default {
   props:{
     "classid":String,
-    "classes":Array
   },
   data:()=>{
     return{
-      year: "", //現在選択中の学年
-      obj:{},//学年をKEYにclassidとcourseのオブジェクトの配列を持つ
-      grid:{},
-      grids:0
+      yearIndex: 0,
+      courseIndex: 0,
+      years: [],
+      courses: [],
     }
   },
   mounted(){
@@ -43,38 +40,14 @@ export default {
       console.log('controlx' + y)
       this.setControlSelecterSize({x: x, y: y})
       //
-      this.classes.sort((a,b)=>{
-      return a.classid - b.classid
-      })
-      this.classes.forEach((c)=> {
-        if(!this.obj[c.year]){
-          Vue.set(this.obj, c.year, [])
-          this.grids++
-        } //最初の型を決める
-        this.obj[c.year].push({classid: c.classid, course: c.course})
-      })
-      const grid1 = document.getElementById("grid1")
-      grid1.style.gridTemplateColumns="repeat("+String(this.grids)+", 1fr)"
-      Object.keys(this.obj).forEach((e)=>{
-        let grids2 = 0
-        this.obj[e].forEach((c)=> {
-          grids2++
-        })
-        Vue.set(this.grid, e, grids2)
-      })
   },
   methods:{
     ...mapMutations({
       setControlSelecterSize: 'setControlSelecterSize'
     }),
-    switchingClassTable: function(newYear) { //新年じゃないよ
-      this.year = newYear
-      const grid2 = document.getElementById("grid2")
-      grid2.style.gridTemplateColumns="repeat("+String(this.grid[this.year])+", 1fr)"
+    switchingClassTable: function(newYear) {
     },
     switchingClass(classid){
-      console.log(classid)
-      this.$parent.classid = classid
     }
   }
 }
