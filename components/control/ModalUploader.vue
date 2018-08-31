@@ -61,9 +61,9 @@
          <div id="style">
          <div>優先度</div>
          <div>小 → 大</div>
-         <div class="btn-group" style="display:inline">
-          <label class="btn btn-secondary" v-for="item in priority">
-           <input type="radio"> {{item}}
+         <div class="btn-group" data-toggle="buttons" style="display:inline">
+          <label class="btn btn-secondary" v-for="(item, index) in priority">
+           <input type="radio" :value=index v-model="selected">{{item}}
           </label>
          </div>
          </div>
