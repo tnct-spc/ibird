@@ -174,6 +174,7 @@ router.get('/class-docs-mobile', (req, res, next) => {
 })
 router.put('/sort-docs', (req, res, next) => {
     const classid = req.body.classid
+    const isRandom = true
     //並べる場所,今はてきとう
     const cleanXYS = [
       {x:200,y:400},
@@ -208,8 +209,8 @@ router.put('/sort-docs', (req, res, next) => {
         var sortedList =[]
         temp.forEach(v => { sortedList.push(v.data)})
         for (let i=0; i<sortedList.length; i++) {
-          sortedList[i].x = cleanXYS[i].x
-          sortedList[i].y = cleanXYS[i].y
+          sortedList[i].x = cleanXYS[i].x + Math.random()
+          sortedList[i].y = cleanXYS[i].y + Math.random()
           sortedList[i].save()
         }
         const c = new W3cwebsocket('ws://localhost:3000/ws/refresh')
