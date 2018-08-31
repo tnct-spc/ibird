@@ -1,5 +1,5 @@
 <template>
-    <section id="wrapper">
+    <section>
       <ControlHeader :classes="classes" :classid="classid"/>
       <ControlUploader id="upload" :classid="classid" :classes="classes"/>
     </section>
@@ -45,9 +45,4 @@ export default {
  #upload{
    height: 100%;
  }
- #wrapper {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-}
 </style>
