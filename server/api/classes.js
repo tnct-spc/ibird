@@ -248,12 +248,21 @@ router.delete('/class', (req, res, next) => {
   })
 })
 router.get('/years-and-courses', (req, res, next) => {
-    const obj = {
-        years: [1,2,3,4,5],
-        courses: ['M','E','D','J','C']
-    }
-    console.log(obj)
-    res.json(obj)
+  let courseset = new Set()
+  let yearset = new Set()
+  classes.findAll()
+    .then(result => {
+      result.forEach(e => {
+        courseset.add(e.year)
+        yearset.add(e.course)
+      })
+      const obj = {
+        years: Array.from(courseset.values()),
+        courses: Array.from(yearset.values())
+      }
+      console.log(obj)
+      res.json(obj)
+    })
 })
 
 export default router
