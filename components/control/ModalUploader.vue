@@ -5,7 +5,25 @@
        <div class="modal-header"/>
         <div class="modal-body">
           <div id="style">
-            <div style="float:left;margin-left:10%">
+            <table style="width:100%;margin: 0 auto;">
+            <tm>
+              <b-form-checkbox
+                         @input="bulkSelection3(index+1)"
+                         v-model="all">
+                         全て
+              </b-form-checkbox>
+            </tm>
+            <tm>
+              <b-form-checkbox
+                          style="display:inline"
+                          v-for="(item ,key ,index) in course"
+                          :key = "key"
+                          @input="bulkSelection2(index+1)">
+                          {{key}}科
+              </b-form-checkbox>
+            </tm>
+            </table>
+            <div style="float:left;padding-left:25%">
              <b-form-checkbox
                          style="display:block"
                          v-for="(item ,key ,index) in obj2"
@@ -15,16 +33,13 @@
                          {{key}}年
              </b-form-checkbox>
             </div>
-            <div>
-             <div v-for="(item1 ,key ,index) in obj">
-              <b-form-checkbox
-                          style="display:inline-block"
-                          v-for = "(item2) in obj[index+1]"
-                          v-model = "item2.submit"
-                          :key = "item2.classid">
-                          {{key}}-{{item2.course}}
-              </b-form-checkbox>
-             </div>
+            <div v-for="(item1 ,key ,index) in obj">
+                <b-form-checkbox
+                            v-for = "(item2) in obj[index+1]"
+                            v-model = "item2.submit"
+                            :key = "item2.classid">
+                            {{key}}{{item2.course}}
+                </b-form-checkbox>
             </div>
           </div>
          <div>
@@ -35,6 +50,8 @@
          <div id="style">
          <label>掲載終了日</label>
          <input type="date" v-model="endDate"/>
+         </div>
+         <div id="style">
          </div>
          <div id="style">
          <span>優先度</span>
@@ -48,11 +65,11 @@
           <option>5</option>
          </select>
          </div>
-         <div id="style2">
+         <div id="style">
           <span>タイトル</span>
           <input v-model="title" placeholder="掲示物のタイトルを入力">
+          <b-form-checkbox style="display:block;margin-top:2%" v-model="openMobile">モバイル向けサイトでも公開</b-form-checkbox>
          </div>
-         <b-form-checkbox v-model="openMobile">モバイル向けサイトでも公開</b-form-checkbox>
          </div>
          </div>
           <div class="modal-footer">
@@ -88,10 +105,21 @@ export default{
     month:"",
     date:{},
     title: '',
-    openMobile: true
+    openMobile: true,
+    priority:[0,1,2,3,4,5],
+    course:{},
+    all:false
    }
   },
   mounted(){
+    this.classes.forEach((c)=> {
+      if(!this.course[c.course]){
+        Vue.set(this.course, c.course, [])
+      }
+      this.course[c.course].push({classid: c.classid, course: c.year})
+    })
+    console.log(Object.keys(this.course))
+    console.log("asdawdasdawd")
     this.date = new Date()
     this.month = this.date.getMonth()+1
     if(this.month<10) this.month = "0" + this.month
@@ -103,7 +131,6 @@ export default{
     this.classes.forEach((c)=> {
       if(!this.obj[c.year]){
         Vue.set(this.obj, c.year, [])
-        this.grids++
       }
       this.obj[c.year].push({classid: c.classid, course: c.course, submit:false})
     })
@@ -143,14 +170,16 @@ export default{
       }
       const formData = new FormData()
       formData.append( 'file', this.files.files)
-      const formData2 = { 'x': 0,
+      const formData2 = {
+                        'x': 0,
                         'y': 0,
                         'startTime':this.startDate,
                         'endTime':this.endDate,
                         'priority':this.selected,
                         'classids':this.submitId,
                         'title': this.title,
-                        'openMobile': this.openMobile }
+                        'openMobile': this.openMobile
+                        }
       axios.post('../api/upload-file',formData)
       .then((response)=>{
         formData2.docid = response.data.docid
@@ -182,6 +211,26 @@ export default{
           e.submit = true
         })
       }
+    },
+    bulkSelection2(){
+    },
+    bulkSelection3(){
+      if(this.all === false){
+        Object.keys(this.obj).forEach((wwww)=>{
+          this.obj[wwww].forEach((eeee)=>{
+            eeee.submit = false
+          })
+        })
+      }
+      else{
+        Object.keys(this.obj).forEach((wwww)=>{
+          this.obj[wwww].forEach((eeee)=>{
+            eeee.submit = true
+          })
+        })
+      }
+    },
+    selectPriority(){
     }
   }
 }
@@ -205,8 +254,8 @@ export default{
 }
 
 .modal-container {
-  width: 50%;
-  margin: 0px auto;
+  width: 90%;
+  margin: 10px auto;
   padding: 20px 30px;
   background-color: #fff;
   border-radius: 2px;
@@ -221,6 +270,6 @@ export default{
 
 #style{
   text-align: center;
-  margin-top: 5%;
+  margin-top: 2%;
 }
 </style>
