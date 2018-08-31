@@ -4,10 +4,12 @@
     <table>
       <tbody>
         <tr>
-          <td>aaa</td>
+          <!--学年 -->
+          <td v-for="(year, index) in years" :key="index" @click="switchingYear(index)" v-bind:style="selectedStyle(index)">{{year}}</td>
         </tr>
         <tr>
-          <td>bbb</td>
+          <!-- 学科 -->
+          <td v-for="(course, index) in courses" :key="index" @click="switchingClass(index)" v-bind:style="selectedStyle2(index)">{{course}}</td>
         </tr>
       </tbody>
     </table>
@@ -28,8 +30,8 @@ export default {
     return{
       yearIndex: 0,
       courseIndex: 0,
-      years: [],
-      courses: [],
+      years: ['1','2','3','4','5'],
+      courses: ['M','E','D','J','C'],
     }
   },
   mounted(){
@@ -45,9 +47,19 @@ export default {
     ...mapMutations({
       setControlSelecterSize: 'setControlSelecterSize'
     }),
-    switchingClassTable: function(newYear) {
+    selectedStyle: function(index){
+      const backgroundColor = index === this.yearIndex ? 'red' : 'white'
+      return { background: backgroundColor }
     },
-    switchingClass(classid){
+    selectedStyle2: function(index){
+      const backgroundColor = index === this.courseIndex ? 'red' : 'white'
+      return { background: backgroundColor }
+    },
+    switchingYear: function(index) {
+      this.yearIndex = index
+    },
+    switchingClass: function(index){
+      this.courseIndex = index
     }
   }
 }
