@@ -39,7 +39,7 @@ export default {
   },
   created () {
     this.refresh()
-    const startWebsocket = () =>{
+    const startWebsocketA = () =>{
       this.client = new W3cwebsocket(process.env.wsUrl+'/ws/move')
       this.client.onmessage=({data})=>{
         data = JSON.parse(data)
@@ -47,16 +47,19 @@ export default {
       }
       this.client.onclose=()=>{
         console.log('websocket disconnect ws/move')
-        setTimeout(() =>{startWebsocket()},1000)
+        setTimeout(() =>{startWebsocketA()},1000)
       }
+    }
+    startWebsocketA()
+    const startWebsocketB = () => {
       this.refreshClient = new W3cwebsocket(process.env.wsUrl+'/ws/refresh')
       this.refreshClient.onmessage = () => this.refresh()
       this.refreshClient.onclose=()=>{
         console.log('websocket disconnect ws/refresh')
-        setTimeout(() =>{startWebsocket()},1000)
+        setTimeout(() =>{startWebsocketB()},1000)
       }
     }
-    startWebsocket()
+    startWebsocketB()
   },
   mounted() {
     window.addEventListener('resize', this.handleResize)
