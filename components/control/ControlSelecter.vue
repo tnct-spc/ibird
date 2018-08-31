@@ -1,7 +1,7 @@
 <template>
  <section>
   <div ref="fieldElm">
-    <table>
+    <table width="100%">
       <tbody>
         <tr>
           <!--学年 -->
@@ -48,11 +48,11 @@ export default {
       setControlSelecterSize: 'setControlSelecterSize'
     }),
     selectedStyle: function(index){
-      const backgroundColor = index === this.yearIndex ? 'red' : 'white'
+      const backgroundColor = index === this.yearIndex ? 'red' : ''
       return { background: backgroundColor }
     },
     selectedStyle2: function(index){
-      const backgroundColor = index === this.courseIndex ? 'red' : 'white'
+      const backgroundColor = index === this.courseIndex ? 'red' : ''
       return { background: backgroundColor }
     },
     switchingYear: function(index) {
