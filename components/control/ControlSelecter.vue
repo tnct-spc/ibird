@@ -23,11 +23,9 @@ import { w3cwebsocket } from 'websocket'
 import { mapMutations } from 'vuex'
 
 export default {
-  props:{
-    "classid":String,
-  },
   data:()=>{
     return{
+      classid: '',
       yearIndex: 0,
       courseIndex: 0,
       years: ['1','2','3','4','5'],
@@ -35,6 +33,14 @@ export default {
     }
   },
   mounted(){
+  },
+  watch:{
+    yearIndex(){
+      console.log('a')
+    },
+    courseIndex(){
+      console.log('a')
+    }
   },
   methods:{
     ...mapMutations({
@@ -53,6 +59,9 @@ export default {
     },
     switchingClass: function(index){
       this.courseIndex = index
+    },
+    getClassid: function(){
+      return '1'
     }
   }
 }
