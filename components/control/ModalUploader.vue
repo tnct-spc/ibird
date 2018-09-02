@@ -48,11 +48,13 @@
           <option>5</option>
          </select>
          </div>
-         <div id="style2">
+         <div id="style">
           <span>タイトル</span>
           <input v-model="title" placeholder="掲示物のタイトルを入力">
          </div>
-         <b-form-checkbox v-model="openMobile">モバイル向けサイトでも公開</b-form-checkbox>
+         <div id="style">
+          <b-form-checkbox v-model="openMobile">モバイル向けサイトでも公開</b-form-checkbox>
+         </div>
          </div>
          </div>
           <div class="modal-footer">
@@ -205,7 +207,7 @@ export default{
 }
 
 .modal-container {
-  width: 50%;
+  width: 580px;
   margin: 0px auto;
   padding: 20px 30px;
   background-color: #fff;
