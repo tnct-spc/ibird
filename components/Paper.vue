@@ -1,8 +1,8 @@
 <template>
   <div @contextmenu.prevent="openremovemenu" @click="mousedown" ref="fieldElm">
 
-    <p>{{ this.paper }}</p>
-    <p>{{ controlSelecterSize }}</p>
+    <!-- <p>{{ this.paper }}</p> -->
+    <!-- <p>{{ controlSelecterSize }}</p> -->
     <img class="paper" :src="paper.imgUrl" id="drag"
       alt="" :style="{
         left: (this.paper.x*this.bbFieldSize.x/10000)+'px',
