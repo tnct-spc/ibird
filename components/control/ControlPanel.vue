@@ -15,6 +15,9 @@
       <button type="button" class="btn btn-primary btn-sm" @click="sortDocs()">
          自動並び替え
       </button>
+      <a  href="/strict" type="button" class="btn btn-standard btn-sm right">
+        クラス設定ページへ
+      </a>
     </div>
   </section>
 </template>
@@ -50,5 +53,8 @@ export default{
   }
 }
 </script>
-<style scoped>
+<style>
+.right{
+  float: right
+}
 </style>
