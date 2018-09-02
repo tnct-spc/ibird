@@ -30,7 +30,7 @@ export default {
     data() {
         return {
             yearsNumber: 5,
-            courses: ['J','M','C'],
+            courses: ['J','M','C','D','E'],
             newCourseName: ''
         }
     },
