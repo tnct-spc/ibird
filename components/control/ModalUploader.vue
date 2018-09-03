@@ -22,7 +22,7 @@
                           v-for = "(item2) in obj[index+1]"
                           v-model = "item2.submit"
                           :key = "item2.classid">
-                          {{key}}-{{item2.course}}
+                          {{key}}{{item2.course}}
               </b-form-checkbox>
              </div>
             </div>
@@ -48,11 +48,13 @@
           <option>5</option>
          </select>
          </div>
-         <div id="style2">
+         <div id="style">
           <span>タイトル</span>
           <input v-model="title" placeholder="掲示物のタイトルを入力">
          </div>
-         <b-form-checkbox v-model="openMobile">モバイル向けサイトでも公開</b-form-checkbox>
+         <div id="style">
+          <b-form-checkbox v-model="openMobile">モバイル向けサイトでも公開</b-form-checkbox>
+         </div>
          </div>
          </div>
           <div class="modal-footer">
@@ -125,7 +127,7 @@ export default{
         })
       }
       if(this.submitId.length === 0||this.endDate === null
-        ||this.startDate >= this.endDate||checker > this.startDate){
+        ||this.startDate >= this.endDate){
         if(this.submitId.length === 0){
           alert("クラスを選択してください")
         }
@@ -134,9 +136,6 @@ export default{
         }
         if(this.startDate >= this.endDate){
           alert("掲載開始日より前に終了日を設定することはできません")
-        }
-        if(checker > this.startDate){
-          alert("掲載開始日を"+this.date.getFullYear()+"年"+this.month+"月"+this.date.getDate()+"日より前には設定できません")
         }
         this.submitId.length = 0
         return
@@ -205,7 +204,7 @@ export default{
 }
 
 .modal-container {
-  width: 50%;
+  width: 580px;
   margin: 0px auto;
   padding: 20px 30px;
   background-color: #fff;

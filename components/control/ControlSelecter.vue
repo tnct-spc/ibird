@@ -2,15 +2,15 @@
  <section>
   <div>
     <p>classid = {{ classid }}</p>
-    <table width="100%">
+    <table width="100%" class="fixedtable">
       <tbody>
         <tr>
           <!--学年 -->
-          <td v-for="(year, index) in years" :key="index" @click="switchingYear(index)" v-bind:style="selectedStyle(index)">{{year}}</td>
+          <td v-for="(year, index) in years" :key="index" @click="switchingYear(index)" align="center" v-bind:style="selectedStyle(index)">{{year}}</td>
         </tr>
         <tr>
           <!-- 学科 -->
-          <td v-for="(course, index) in courses" :key="index" @click="switchingClass(index)" v-bind:style="selectedStyle2(index)">{{course}}</td>
+          <td v-for="(course, index) in courses" :key="index" @click="switchingClass(index)" align="center" v-bind:style="selectedStyle2(index)">{{course}}</td>
         </tr>
       </tbody>
     </table>
@@ -88,17 +88,7 @@ export default {
   border: 2px solid orange;
   background-color: yellow;
 }
-.sitayose{
-  margin-top: 5px;
-}
-#grid1{
-  display: grid;
-  grid-template-rows:5%;
-  text-align: center;
-}
-#grid2{
-  display: grid;
-  grid-template-rows:5%;
-  text-align: center;
+.fixedtable{
+  table-layout: fixed
 }
 </style>
