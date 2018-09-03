@@ -18,10 +18,10 @@
             <td
             style="text-align:left;"
             v-for="(item ,key ,index) in checkYear"
-            v-model="checkYear[key]"
-            :key = "key">
+            :key="key">
                 <b-form-checkbox
-                @input="selectYear(index+1)">
+                @input="selectYear(index+1)"
+                v-model="checkYear[key]">
                 {{key}}年
                 </b-form-checkbox>
             </td>
@@ -30,10 +30,10 @@
             <td
             style="text-align:left;display:block"
             v-for="(item,key) in checkCourse"
-            v-model="checkCourse[key]"
             :key = "key">
                 <b-form-checkbox
-                @input="selectCource(key)">
+                @input="selectCource(key)"
+                v-model="checkCourse[key]">
                 {{key}}科
                 </b-form-checkbox>
             </td>
@@ -111,6 +111,7 @@ export default{
     checkCourse:{},
     submitId:[],
     month:"",
+    day:"",
     date:{},
     title: '',
     openMobile: true,
@@ -128,8 +129,10 @@ export default{
     })
     this.date = new Date()
     this.month = this.date.getMonth()+1
+    this.day = this.date.getDate()
     if(this.month<10) this.month = "0" + this.month
-    const today = [this.date.getFullYear(),this.month,this.date.getDate()]
+    if(this.day<10) this.day = "0" + this.day
+    const today = [this.date.getFullYear(),this.month,this.day]
     this.startDate = today.join('-')
     this.classes.sort((a,b)=>{
     return a.classid - b.classid
@@ -221,6 +224,13 @@ export default{
           e.submit = true
         })
       }
+      else{
+        this.classIdList[index].forEach((e)=>{
+          e.submit = true
+        })
+      }
+      this.classIdList[1].submit = true
+      console.log(index)
     },
     selectCource(key){
       if(this.checkCourse[key] === true){
