@@ -73,7 +73,7 @@ export default {
       papers: 'papers'
     }),
     sortedPapers: function(){
-      var papers = Object.values(this.papers).filter(() => true)
+      /*var papers = Object.values(this.papers).filter(() => true)
       papers.sort((a,b) => a.updatedAt - b.updatedAt)
       papers = papers.filter(p => {
         var startTime = new Date(p.startTime)
@@ -85,8 +85,8 @@ export default {
         const a = new Date() - startTime > 0 //開始日を過ぎているかどうか(当日はtrue)
         const b = endTime - new Date() > 0 //終了日より前(当日はtrue)
         return a&&b
-      })
-      return papers
+      })*/
+      return this.papers
     }
   },
   methods:{
