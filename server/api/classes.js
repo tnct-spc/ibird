@@ -295,4 +295,28 @@ router.get('/classid', (req, res, next) => {
     })
 })
 
+router.get('/RandomSort', (req, res, next) => {
+    const classid = req.query.classid
+    classes.findOne({where: {classid: classid}})
+    .then(result => {
+       res.json({isRandom: result.randomSort})
+    }).catch(err => {
+        res.sendStatus(200)
+        console.log(err)
+    })
+})
+
+router.put('/RandomSort', (req, res, next) => {
+    const classid = req.body.classid
+    const isRandom = req.body.isRandom
+    classes.findById(classid)
+    .then(result => {
+        result.randomSort = isRandom
+        result.save()
+        res.sendStatus(200)
+    }).catch(err => {
+        console.log(err)
+        res.sendStatus(400)
+    })
+})
 export default router
