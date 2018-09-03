@@ -185,7 +185,15 @@ router.get('/class-docs-mobile', (req, res, next) => {
     })
 })
 const sortDocs = (classid) => {
-    const makeRandom = true
+    var makeRandom = true
+    classes.findById(classid)
+      .then(result => {
+          makeRandom = result.randomSort
+      }).catch(err => {
+          console.log(err)
+          return 400
+      })
+      console.log(makeRandom)
     //並べる場所,今はてきとう
     const cleanXYS = [
       {x:200,y:400},
