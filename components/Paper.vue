@@ -89,10 +89,12 @@ export default {
       }
     },
     openremovemenu: function(e){
+      console.log("for-debug")
       this.showMenu = true
+      console.log(this.showMenu)
       console.log(e.x)
       console.log(e.y)
-      this.menuTop = e.y - this.controlSelecterSize.y
+      this.menuTop = e.y - this.BBxy.y
       this.menuLeft = e.x
       return false
     },
