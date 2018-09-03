@@ -39,7 +39,7 @@ export default {
   },
   created () {
     this.refresh()
-    const startWebsocket = () =>{
+    const startWebsocketA = () =>{
       this.client = new W3cwebsocket(process.env.wsUrl+'/ws/move')
       this.client.onmessage=({data})=>{
         data = JSON.parse(data)
@@ -47,20 +47,23 @@ export default {
       }
       this.client.onclose=()=>{
         console.log('websocket disconnect ws/move')
-        setTimeout(() =>{startWebsocket()},1000)
+        setTimeout(() =>{startWebsocketA()},1000)
       }
+    }
+    startWebsocketA()
+    const startWebsocketB = () => {
       this.refreshClient = new W3cwebsocket(process.env.wsUrl+'/ws/refresh')
       this.refreshClient.onmessage = () => this.refresh()
       this.refreshClient.onclose=()=>{
         console.log('websocket disconnect ws/refresh')
-        setTimeout(() =>{startWebsocket()},1000)
+        setTimeout(() =>{startWebsocketB()},1000)
       }
     }
-    startWebsocket()
+    startWebsocketB()
   },
   mounted() {
     window.addEventListener('resize', this.handleResize)
-    this.handleResize()
+    setTimeout(() =>{this.handleResize()},100)
   },
   beforeDestroy: function () {
     window.removeEventListener('resize', this.handleResize)
@@ -70,7 +73,7 @@ export default {
       papers: 'papers'
     }),
     sortedPapers: function(){
-      var papers = Object.values(this.papers).filter(() => true)
+      /*var papers = Object.values(this.papers).filter(() => true)
       papers.sort((a,b) => a.updatedAt - b.updatedAt)
       papers = papers.filter(p => {
         var startTime = new Date(p.startTime)
@@ -82,15 +85,16 @@ export default {
         const a = new Date() - startTime > 0 //開始日を過ぎているかどうか(当日はtrue)
         const b = endTime - new Date() > 0 //終了日より前(当日はtrue)
         return a&&b
-      })
-      return papers
+      })*/
+      return this.papers
     }
   },
   methods:{
     ...mapMutations({
       move: 'move',
       refreshPapers: 'refreshPapers',
-      setbbFieldSize: 'setbbFieldSize'
+      setbbFieldSize: 'setbbFieldSize',
+      setBBxy: 'setBBxy'
     }),
     refresh: function(){
       axios.get(process.env.httpUrl + '/api/class-docs',{
@@ -111,6 +115,8 @@ export default {
       const x = this.$refs.fieldElm.clientWidth
       const y = this.$refs.fieldElm.clientHeight
       this.setbbFieldSize({x: x, y: y})
+      const {left, top} = this.$refs.fieldElm.getBoundingClientRect();
+      this.setBBxy({x: left, y: top})
     }
   },
   components: {

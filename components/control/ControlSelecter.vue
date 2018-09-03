@@ -1,18 +1,19 @@
 <template>
  <section>
-  <div ref="fieldElm">
-    <!-- 学年を表示する -->
-    <div id="grid1">
-    <button v-for="(item, index) in obj" @click="switchingClassTable(Object.keys(obj)[index-1])" class="sitayose p">
-      {{Object.keys(obj)[index-1]}}　<!--indexが1始まりだったので-1している。要検討 -->
-    </button>
-    </div>
-    <!-- 学年で選択されたクラスを表示する -->
-    <div id="grid2">
-     <button v-for="(item, index) in obj[year]" @click="switchingClass(item.classid)" class="p">
-        {{ year }}{{ item.course }}
-     </button>
-    </div>
+  <div>
+    <p>classid = {{ classid }}</p>
+    <table width="100%" class="fixedtable">
+      <tbody>
+        <tr>
+          <!--学年 -->
+          <td v-for="(year, index) in years" :key="index" @click="switchingYear(index)" align="center" v-bind:style="selectedStyle(index)">{{year}}</td>
+        </tr>
+        <tr>
+          <!-- 学科 -->
+          <td v-for="(course, index) in courses" :key="index" @click="switchingClass(index)" align="center" v-bind:style="selectedStyle2(index)">{{course}}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
  </section>
 </template>
@@ -25,56 +26,58 @@ import { mapMutations } from 'vuex'
 export default {
   props:{
     "classid":String,
-    "classes":Array
   },
   data:()=>{
     return{
-      year: "", //現在選択中の学年
-      obj:{},//学年をKEYにclassidとcourseのオブジェクトの配列を持つ
-      grid:{},
-      grids:0
+      classid: '0',
+      yearIndex: 0,
+      courseIndex: 0,
+      years: [],
+      courses: [],
     }
   },
   mounted(){
-      //selecterのサイズをとるためにやる
-      const x = this.$refs.fieldElm.clientWidth
-      const y = this.$refs.fieldElm.clientHeight
-      console.log('controlx' + x)
-      console.log('controlx' + y)
-      this.setControlSelecterSize({x: x, y: y})
-      //
-      this.classes.sort((a,b)=>{
-      return a.classid - b.classid
-      })
-      this.classes.forEach((c)=> {
-        if(!this.obj[c.year]){
-          Vue.set(this.obj, c.year, [])
-          this.grids++
-        } //最初の型を決める
-        this.obj[c.year].push({classid: c.classid, course: c.course})
-      })
-      const grid1 = document.getElementById("grid1")
-      grid1.style.gridTemplateColumns="repeat("+String(this.grids)+", 1fr)"
-      Object.keys(this.obj).forEach((e)=>{
-        let grids2 = 0
-        this.obj[e].forEach((c)=> {
-          grids2++
-        })
-        Vue.set(this.grid, e, grids2)
-      })
+    axios.get(process.env.httpUrl + '/api/years-and-courses').then(res =>{
+      this.years = res.data.years
+      this.courses = res.data.courses
+    }).catch(e =>{
+      console.log(e)
+    })
+  },
+  watch:{
+    yearIndex(){
+      this.getClassid()
+    },
+    courseIndex(){
+      this.getClassid()
+    }
   },
   methods:{
     ...mapMutations({
       setControlSelecterSize: 'setControlSelecterSize'
     }),
-    switchingClassTable: function(newYear) { //新年じゃないよ
-      this.year = newYear
-      const grid2 = document.getElementById("grid2")
-      grid2.style.gridTemplateColumns="repeat("+String(this.grid[this.year])+", 1fr)"
+    selectedStyle: function(index){
+      const backgroundColor = index === this.yearIndex ? 'red' : ''
+      return { background: backgroundColor }
     },
-    switchingClass(classid){
-      console.log(classid)
-      this.$parent.classid = classid
+    selectedStyle2: function(index){
+      const backgroundColor = index === this.courseIndex ? 'red' : ''
+      return { background: backgroundColor }
+    },
+    switchingYear: function(index) {
+      this.yearIndex = index
+    },
+    switchingClass: function(index){
+      this.courseIndex = index
+    },
+    getClassid: function(){
+      axios.get(process.env.httpUrl + '/api/classid',{
+        params: { year: this.years[this.yearIndex], course: this.courses[this.courseIndex] }
+      }).then(res =>{
+        this.$parent.classid = String(res.data.classid)
+      }).catch(e =>{
+        console.log(e)
+      })
     }
   }
 }
@@ -85,17 +88,7 @@ export default {
   border: 2px solid orange;
   background-color: yellow;
 }
-.sitayose{
-  margin-top: 5px;
-}
-#grid1{
-  display: grid;
-  grid-template-rows:5%;
-  text-align: center;
-}
-#grid2{
-  display: grid;
-  grid-template-rows:5%;
-  text-align: center;
+.fixedtable{
+  table-layout: fixed
 }
 </style>

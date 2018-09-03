@@ -51,7 +51,18 @@ const docList = (classid)=>{
     return documents.findAll({
       where: {classid: classid}
     }).then( c =>{
-        return c
+        var returndata = c.filter(p => {
+          var startTime = new Date(p.startTime)
+          startTime = new Date(startTime.setHours(startTime.getHours() -9))
+          var endTime = new Date(p.endTime)
+          endTime = new Date(endTime.setHours(endTime.getHours() -9))
+          endTime.setDate(endTime.getDate() + 1)
+
+          const a = new Date() - startTime > 0 //開始日を過ぎているかどうか(当日はtrue)
+          const b = endTime - new Date() > 0 //終了日より前(当日はtrue)
+          return a&&b
+        })
+      return returndata
     })
 }
 
@@ -62,6 +73,7 @@ router.post('/add-doc', (req, res, next) => {
     const endTime = new Date(doc.endTime)
     let insertData = []
     classids.forEach((e)=>{
+        sortDocs(e)
         insertData.push(
             {
               classid: e,
@@ -161,19 +173,19 @@ router.get('/class-docs', (req, res, next) => {
 
 router.get('/class-docs-mobile', (req, res, next) => {
     const classid = req.query.classid
-    documents.findAll({
-      where: {
-        classid: classid,
-        openMobile: true,
-      }
-    }).then(list =>{
-        res.json(list)
-    }).catch(err =>{
+    docList(classid).then(list => {
+        var returndata = list.filter(p => {
+            console.log(p.openMobile)
+            return p.openMobile
+        })
+        res.json(returndata)
+        console.log(returndata)
+    }).catch(err => {
         res.statu(404)
     })
 })
-router.put('/sort-docs', (req, res, next) => {
-    const classid = req.body.classid
+const sortDocs = (classid) => {
+    const makeRandom = true
     //並べる場所,今はてきとう
     const cleanXYS = [
       {x:200,y:400},
@@ -187,7 +199,7 @@ router.put('/sort-docs', (req, res, next) => {
       {x:6200,y:5400},
       {x:8200,y:5400},
     ]
-      docList(classid).then(list =>{
+    docList(classid).then(list =>{
         //list並べる順番にsortする処理
         var temp = []
         const now = new Date()
@@ -210,16 +222,20 @@ router.put('/sort-docs', (req, res, next) => {
         for (let i=0; i<sortedList.length; i++) {
           sortedList[i].x = cleanXYS[i].x
           sortedList[i].y = cleanXYS[i].y
+          if (makeRandom){
+            sortedList[i].x += Math.random()*250 - 125
+            sortedList[i].y += Math.random()*250 - 125
+          }
           sortedList[i].save()
         }
         const c = new W3cwebsocket('ws://localhost:3000/ws/refresh')
         c.onopen = () => c.send('{}')
-      }).then(result =>{
-          res.sendStatus(200)
-      }).catch(err =>{
-          console.log(err.message)
-          res.sendStatus(400)
       })
+    }
+router.put('/sort-docs', (req, res, next) => {
+    const classid = req.body.classid
+    sortDocs(classid)
+    res.sendStatus(200)
 })
 
 router.put('/class', (req, res, next) => {
@@ -248,12 +264,35 @@ router.delete('/class', (req, res, next) => {
   })
 })
 router.get('/years-and-courses', (req, res, next) => {
-    const obj = {
-        years: [1,2,3,4,5],
-        courses: ['M','E','D','J','C']
-    }
-    console.log(obj)
-    res.json(obj)
+  let courseset = new Set()
+  let yearset = new Set()
+  classes.findAll()
+    .then(result => {
+      result.forEach(e => {
+        courseset.add(e.year)
+        yearset.add(e.course)
+      })
+      const obj = {
+        years: Array.from(courseset.values()),
+        courses: Array.from(yearset.values())
+      }
+      console.log(obj)
+      res.json(obj)
+    })
+})
+
+router.get('/classid', (req, res, next) => {
+    const course = req.query.course
+    const year = req.query.year
+    classes.findOne({where:{
+        course: course,
+        year: year
+    }}).then(result => {
+        res.json({classid: result.classid})
+    }).catch(err => {
+        console.log(err)
+        res.sendStatus(400)
+    })
 })
 
 export default router

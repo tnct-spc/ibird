@@ -1,7 +1,7 @@
 <template>
  <section>
   <div id="overlay" @dragleave.prevent="onDragLeave($event)" @dragover.prevent="onDragOver($event)" @drop.prevent="onDrop($event)">
-   {{text}}
+   <!-- {{text}} -->
    <BulletinBoard :classid="classid"/>
   </div>
   <ModalUploader v-if="showModal" @close="showModal=false" :classes="classes" :files="files"/>

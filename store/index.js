@@ -6,7 +6,8 @@ export const state = () => ({
   cursorOffset: {x: 0, y: 0},
   authUser: null,
   bbFieldSize: {x: 0, y: 0},
-  controlSelecterSize: {x: 0, y: 0}
+  // controlSelecterSize: {x: 0, y: 0},
+  BBxy: {x: 0, y: 0}
 })
 
 export const mutations = {
@@ -46,9 +47,14 @@ export const mutations = {
     state.bbFieldSize.x = x
     state.bbFieldSize.y = y
   },
-  setControlSelecterSize (state, {x, y}) {
+  /* setControlSelecterSize (state, {x, y}) {
     state.controlSelecterSize.x = x
     state.controlSelecterSize.y = y
+  },
+  */
+  setBBxy (state, {x, y}) {
+    state.BBxy.x = x
+    state.BBxy.y = y
   }
 }
 export const actions = {

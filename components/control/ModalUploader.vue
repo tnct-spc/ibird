@@ -167,7 +167,7 @@ export default{
         })
       })
       if(this.submitId.length === 0||this.endDate === null
-        ||this.startDate >= this.endDate||checker > this.startDate){
+        ||this.startDate >= this.endDate){
         if(this.submitId.length === 0){
           alert("クラスを選択してください")
         }
@@ -176,9 +176,6 @@ export default{
         }
         if(this.startDate >= this.endDate){
           alert("掲載開始日より前に終了日を設定することはできません")
-        }
-        if(checker > this.startDate){
-          alert("掲載開始日を"+this.date.getFullYear()+"年"+this.month+"月"+this.date.getDate()+"日より前には設定できません")
         }
         this.submitId.length = 0
         return

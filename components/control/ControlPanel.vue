@@ -15,19 +15,29 @@
       <button type="button" class="btn btn-primary btn-sm" @click="sortDocs()">
          自動並び替え
       </button>
+      <a  href="/strict" type="button" class="btn btn-standard btn-sm right">
+        クラス設定ページへ
+      </a>
     </div>
   </section>
 </template>
 <script>
+import { w3cwebsocket } from 'websocket'
+import axios from 'axios'
+const W3cwebsocket = w3cwebsocket
+
 export default{
   data:()=>{
     return{
       alertMessage: ''
     }
   },
+  props:{
+    "classid":String,
+  },
   methods:{
     sortDocs(){
-      axios.put('../api/sort-docs',{
+      axios.put(process.env.httpUrl + '/api/sort-docs',{
         classid:this.classid
       })
     },
@@ -43,5 +53,8 @@ export default{
   }
 }
 </script>
-<style scoped>
+<style>
+.right{
+  float: right
+}
 </style>
