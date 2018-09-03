@@ -47,7 +47,7 @@ export const mutations = {
     state.bbFieldSize.x = x
     state.bbFieldSize.y = y
   },
-  /*setControlSelecterSize (state, {x, y}) {
+  /* setControlSelecterSize (state, {x, y}) {
     state.controlSelecterSize.x = x
     state.controlSelecterSize.y = y
   },

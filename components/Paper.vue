@@ -79,8 +79,6 @@ export default {
     },
     mousemove: function(e){
       if(this.paper.isSelected){
-        console.log("y:"+ e.y)
-        console.log("sy" + window.screenY)
         this.wsClient.send(JSON.stringify({
           classid: this.classid,
           docid: this.paper.docid,
