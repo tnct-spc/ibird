@@ -5,27 +5,52 @@
        <div class="modal-header"/>
         <div class="modal-body">
           <div id="style">
-            <div style="float:left;margin-left:10%">
-             <b-form-checkbox
-                         style="display:block"
-                         v-for="(item ,key ,index) in obj2"
-                         v-model="obj2[index+1]"
-                         :key = "key"
-                         @input="bulkSelection(index+1)">
-                         {{key}}年
-             </b-form-checkbox>
-            </div>
-            <div>
-             <div v-for="(item1 ,key ,index) in obj">
+           <table style="width:500px;margin:0 auto;">
+            <tbody>
+            <tr>
+            <td style="text-align:left;">
               <b-form-checkbox
-                          style="display:inline-block"
-                          v-for = "(item2) in obj[index+1]"
-                          v-model = "item2.submit"
-                          :key = "item2.classid">
-                          {{key}}{{item2.course}}
+                     @input="selectAll()"
+                     v-model="all">
+                     全て
               </b-form-checkbox>
-             </div>
-            </div>
+            </td>
+            <td
+            style="text-align:left;"
+            v-for="(item ,key ,index) in checkYear"
+            :key="key">
+                <b-form-checkbox
+                @input="selectYear(index+1)"
+                v-model="checkYear[key]">
+                {{key}}年
+                </b-form-checkbox>
+            </td>
+            </tr>
+            <tr>
+            <td
+            style="text-align:left;display:block"
+            v-for="(item,key) in checkCourse"
+            :key = "key">
+                <b-form-checkbox
+                @input="selectCource(key)"
+                v-model="checkCourse[key]">
+                {{key}}科
+                </b-form-checkbox>
+            </td>
+            <td
+            style="text-align:left;"
+            v-for="(item1 ,key ,index) in classIdList">
+                <b-form-checkbox
+                style="display:block"
+                v-for = "(item2) in classIdList[index+1]"
+                v-model = "item2.submit"
+                :key = "item2.classid">
+                {{key}}{{item2.course}}
+                </b-form-checkbox>
+            </td>
+            </tr>
+            </tbody>
+           </table>
           </div>
          <div>
          <div id="style">
@@ -37,23 +62,20 @@
          <input type="date" v-model="endDate"/>
          </div>
          <div id="style">
-         <span>優先度</span>
-         <select v-model="selected">
-          <option disabled value="">優先度を選択してください</option>
-          <option>0</option>
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
-         </select>
+         </div>
+         <div id="style">
+         <div>優先度</div>
+         <div>小 → 大</div>
+         <div class="btn-group" data-toggle="buttons" style="display:inline">
+          <label class="btn btn-secondary" v-for="item in priority">
+           <input type="radio" :value=item v-model="selected">{{item}}
+          </label>
+         </div>
          </div>
          <div id="style">
           <span>タイトル</span>
           <input v-model="title" placeholder="掲示物のタイトルを入力">
-         </div>
-         <div id="style">
-          <b-form-checkbox v-model="openMobile">モバイル向けサイトでも公開</b-form-checkbox>
+          <b-form-checkbox style="display:block;margin-top:2%" v-model="openMobile">モバイル向けサイトでも公開</b-form-checkbox>
          </div>
          </div>
          </div>
@@ -84,33 +106,49 @@ export default{
     selected:0,
     startDate:null,
     endDate:null,
-    obj:{},
-    obj2:{},
+    classIdList:{},
+    checkYear:{},
+    checkCourse:{},
     submitId:[],
     month:"",
+    day:"",
     date:{},
     title: '',
-    openMobile: true
+    openMobile: true,
+    priority:{"なし":0,"あり":1,},
+    course:[],
+    all:false,
+    class_matrix: {}
    }
   },
   mounted(){
+    this.classes.forEach((c)=> {
+      if(!this.course[c.course]){
+        this.course.push(c.course)
+      }
+    })
     this.date = new Date()
     this.month = this.date.getMonth()+1
+    this.day = this.date.getDate()
     if(this.month<10) this.month = "0" + this.month
-    const today = [this.date.getFullYear(),this.month,this.date.getDate()]
-    this.startDate = today.join('-')
+    if(this.day<10) this.day = "0" + this.day
+    const today = [this.date.getFullYear(),this.month,this.day]
+    this.startDate = this.date.getFullYear()+"-"+this.month+"-"+this.day
+    this.endDate = this.date.getFullYear()+"-"+this.month+"-"+String(Number(this.day)+7)
     this.classes.sort((a,b)=>{
     return a.classid - b.classid
     })
     this.classes.forEach((c)=> {
-      if(!this.obj[c.year]){
-        Vue.set(this.obj, c.year, [])
-        this.grids++
+      if(!this.classIdList[c.year]){
+        Vue.set(this.classIdList, c.year, [])
       }
-      this.obj[c.year].push({classid: c.classid, course: c.course, submit:false})
+      this.classIdList[c.year].push({classid: c.classid, course: c.course, submit:false})
     })
-    Object.keys(this.obj).forEach((e)=>{
-      Vue.set(this.obj2,e,false)
+    Object.keys(this.classIdList).forEach((e)=>{
+      Vue.set(this.checkYear,e,false)
+    })
+    this.course.forEach((e)=>{
+      Vue.set(this.checkCourse,e,false)
     })
     this.title = this.files.files.name
   },
@@ -118,14 +156,16 @@ export default{
     submit(){
       this.date = new Date()
       this.month = this.date.getMonth()+1
+      this.day = this.date.getDate()
       if(this.month<10) this.month = "0" + this.month
-      const today = [this.date.getFullYear(),this.month,this.date.getDate()]
+      if(this.day<10) this.day = "0" + this.day
+      const today = [this.date.getFullYear(),this.month,this.day]
       const checker = today.join('-')
-      for(let obj in this.obj){
-        this.obj[obj].forEach((e,i)=>{
-            if(e.submit === true) this.submitId.push(e.classid)
+      Object.keys(this.classIdList).forEach((e)=>{
+        this.classIdList[e].forEach((i)=>{
+            if(i.submit === true) this.submitId.push(i.classid)
         })
-      }
+      })
       if(this.submitId.length === 0||this.endDate === null
         ||this.startDate >= this.endDate){
         if(this.submitId.length === 0){
@@ -142,14 +182,16 @@ export default{
       }
       const formData = new FormData()
       formData.append( 'file', this.files.files)
-      const formData2 = { 'x': 0,
+      const formData2 = {
+                        'x': 0,
                         'y': 0,
                         'startTime':this.startDate,
                         'endTime':this.endDate,
                         'priority':this.selected,
                         'classids':this.submitId,
                         'title': this.title,
-                        'openMobile': this.openMobile }
+                        'openMobile': this.openMobile
+                        }
       axios.post('../api/upload-file',formData)
       .then((response)=>{
         formData2.docid = response.data.docid
@@ -170,15 +212,47 @@ export default{
       })
       this.$emit('close')
     },
-    bulkSelection(index){
-      if(this.obj2[index] === false){
-        this.obj[index].forEach((e)=>{
+    selectYear(index){
+      if(this.checkYear[index] === false){
+        this.classIdList[index].forEach((e)=>{
           e.submit = false
         })
       }
-      else if(this.obj2[index] === true){
-        this.obj[index].forEach((e)=>{
+      else if(this.checkYear[index] === true){
+        this.classIdList[index].forEach((e)=>{
           e.submit = true
+        })
+      }
+    },
+    selectCource(key){
+      if(this.checkCourse[key] === true){
+        Object.keys(this.classIdList).forEach((e)=>{
+          this.classIdList[e].forEach((i)=>{
+            if(i.course===key)i.submit=true
+          })
+        })
+      }
+      else{
+        Object.keys(this.classIdList).forEach((e)=>{
+          this.classIdList[e].forEach((i)=>{
+            if(i.course===key)i.submit=false
+          })
+        })
+      }
+    },
+    selectAll(){
+      if(this.all === false){
+        Object.keys(this.classIdList).forEach((e)=>{
+          this.classIdList[e].forEach((i)=>{
+            i.submit = false
+          })
+        })
+      }
+      else{
+        Object.keys(this.classIdList).forEach((e)=>{
+          this.classIdList[e].forEach((i)=>{
+            i.submit = true
+          })
         })
       }
     }
@@ -204,8 +278,8 @@ export default{
 }
 
 .modal-container {
-  width: 580px;
-  margin: 0px auto;
+  width: 90%;
+  margin: 10px auto;
   padding: 20px 30px;
   background-color: #fff;
   border-radius: 2px;
@@ -220,6 +294,6 @@ export default{
 
 #style{
   text-align: center;
-  margin-top: 5%;
+  margin-top: 2%;
 }
 </style>
