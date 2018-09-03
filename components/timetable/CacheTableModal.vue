@@ -1,7 +1,7 @@
 <template>
   <transition name="cacheTableModal">
-    <div class="overlay" @click="$emit('close')">
-      <div class="panel" @click.stop>
+    <div class="overlay" @click.self="$emit('close')">
+      <div class="panel">
         <h3>CacheTableModal</h3>
         <button @click="$emit('close')">閉じる</button>
       </div>
