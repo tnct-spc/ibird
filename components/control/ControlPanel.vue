@@ -6,18 +6,16 @@
       </span>
     </div>
     <div>
-      <span>Alert : </span>
       <input v-model="alertMessage" placeholder="緊急伝達事項を入力">
       <button type="button" class="btn btn-primary btn-sm" @click="showAlert()">
           アラート表示
       </button>
-      <span> Sort : </span>
       <button type="button" class="btn btn-primary btn-sm" @click="sortDocs()">
          自動並び替え
       </button>
-      <a  href="/strict" type="button" class="btn btn-standard btn-sm right">
-        クラス設定ページへ
-      </a>
+      <button type="button" class="btn btn-primary btn-sm">
+      <a href="/strict">クラス設定ページへ</a>
+      </button>
     </div>
   </section>
 </template>
@@ -53,8 +51,4 @@ export default{
   }
 }
 </script>
-<style>
-.right{
-  float: right
-}
-</style>
+<style scoped></style>
