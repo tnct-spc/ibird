@@ -133,7 +133,8 @@ export default{
     if(this.month<10) this.month = "0" + this.month
     if(this.day<10) this.day = "0" + this.day
     const today = [this.date.getFullYear(),this.month,this.day]
-    this.startDate = today.join('-')
+    this.startDate = this.date.getFullYear()+"-"+this.month+"-"+this.day
+    this.endDate = this.date.getFullYear()+"-"+this.month+"-"+String(Number(this.day)+7)
     this.classes.sort((a,b)=>{
     return a.classid - b.classid
     })
@@ -147,7 +148,6 @@ export default{
       Vue.set(this.checkYear,e,false)
     })
     this.course.forEach((e)=>{
-      console.log(e)
       Vue.set(this.checkCourse,e,false)
     })
     this.title = this.files.files.name
@@ -156,8 +156,10 @@ export default{
     submit(){
       this.date = new Date()
       this.month = this.date.getMonth()+1
+      this.day = this.date.getDate()
       if(this.month<10) this.month = "0" + this.month
-      const today = [this.date.getFullYear(),this.month,this.date.getDate()]
+      if(this.day<10) this.day = "0" + this.day
+      const today = [this.date.getFullYear(),this.month,this.day]
       const checker = today.join('-')
       Object.keys(this.classIdList).forEach((e)=>{
         this.classIdList[e].forEach((i)=>{
@@ -224,13 +226,6 @@ export default{
           e.submit = true
         })
       }
-      else{
-        this.classIdList[index].forEach((e)=>{
-          e.submit = true
-        })
-      }
-      this.classIdList[1].submit = true
-      console.log(index)
     },
     selectCource(key){
       if(this.checkCourse[key] === true){
