@@ -116,8 +116,6 @@ export default {
       const y = this.$refs.fieldElm.clientHeight
       this.setbbFieldSize({x: x, y: y})
       const {left, top} = this.$refs.fieldElm.getBoundingClientRect();
-      console.log(left, top)
-      console.log("fordebug")
       this.setBBxy({x: left, y: top})
     }
   },
