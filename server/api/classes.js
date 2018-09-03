@@ -73,6 +73,7 @@ router.post('/add-doc', (req, res, next) => {
     const endTime = new Date(doc.endTime)
     let insertData = []
     classids.forEach((e)=>{
+        sortDocs(e)
         insertData.push(
             {
               classid: e,
@@ -183,8 +184,7 @@ router.get('/class-docs-mobile', (req, res, next) => {
         res.statu(404)
     })
 })
-router.put('/sort-docs', (req, res, next) => {
-    const classid = req.body.classid
+const sortDocs = (classid) => {
     const makeRandom = true
     //並べる場所,今はてきとう
     const cleanXYS = [
@@ -230,12 +230,12 @@ router.put('/sort-docs', (req, res, next) => {
         }
         const c = new W3cwebsocket('ws://localhost:3000/ws/refresh')
         c.onopen = () => c.send('{}')
-      }).then(result =>{
-          res.sendStatus(200)
-      }).catch(err =>{
-          console.log(err.message)
-          res.sendStatus(400)
       })
+    }
+router.put('/sort-docs', (req, res, next) => {
+    const classid = req.body.classid
+    sortDocs(classid)
+    res.sendStatus(200)
 })
 
 router.put('/class', (req, res, next) => {
