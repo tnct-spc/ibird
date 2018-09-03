@@ -1,5 +1,5 @@
 <template>
-  <div @contextmenu.prevent="openremovemenu" @click="mousedown" ref="fieldElm">
+  <div id="paper" @contextmenu.prevent="openremovemenu" @click="mousedown" ref="fieldElm">
 
     <p>{{ this.paper }}</p>
     <p>{{ controlSelecterSize }}</p>
@@ -7,6 +7,8 @@
       alt="" :style="{
         left: (this.paper.x*this.bbFieldSize.x/10000)+'px',
         top: (this.paper.y*this.bbFieldSize.y/10000)+'px',
+        //left: '0px',
+        //top: '0px'
         }" ondragstart="return false;" >
     <ul id="right-click-menu" tabindex="-1" v-if="showMenu" @blur="closeMenu" :style="{top: menuTop+'px', left: menuLeft+'px'}">
       <li @click="remove">削除</li>
@@ -48,7 +50,8 @@ export default {
     ...mapState({
       cursorOffset: 'cursorOffset',
       bbFieldSize: 'bbFieldSize',
-      controlSelecterSize: 'controlSelecterSize'
+      controlSelecterSize: 'controlSelecterSize',
+      BBxy: 'BBxy'
     })
   },
   methods: {
@@ -76,11 +79,13 @@ export default {
     },
     mousemove: function(e){
       if(this.paper.isSelected){
+        console.log("y:"+ e.y)
+        console.log("sy" + window.screenY)
         this.wsClient.send(JSON.stringify({
           classid: this.classid,
           docid: this.paper.docid,
-          x: (e.x-this.cursorOffset.x)*10000/this.bbFieldSize.x,
-          y: (e.y-this.cursorOffset.y-this.controlSelecterSize.y)*10000/this.bbFieldSize.y,
+          x: (e.pageX-this.cursorOffset.x)*10000/this.bbFieldSize.x,
+          y: (e.pageY-this.cursorOffset.y - this.BBxy.y)*10000/this.bbFieldSize.y,
           // y: (e.y-this.cursorOffset.y)*10000/this.bbFieldSize.y,
         }))
       }
@@ -144,7 +149,7 @@ export default {
 </script>
 <style scoped>
 img.paper {
-  margin: 1rem;
+  margin: 0px;
   box-shadow: 0.5rem 0.5rem 0.5rem 0.01rem;
   border:solid 0.1rem black;
   max-width: 15%;;

@@ -93,7 +93,8 @@ export default {
     ...mapMutations({
       move: 'move',
       refreshPapers: 'refreshPapers',
-      setbbFieldSize: 'setbbFieldSize'
+      setbbFieldSize: 'setbbFieldSize',
+      setBBxy: 'setBBxy'
     }),
     refresh: function(){
       axios.get(process.env.httpUrl + '/api/class-docs',{
@@ -114,6 +115,10 @@ export default {
       const x = this.$refs.fieldElm.clientWidth
       const y = this.$refs.fieldElm.clientHeight
       this.setbbFieldSize({x: x, y: y})
+      const {left, top} = this.$refs.fieldElm.getBoundingClientRect();
+      console.log(left, top)
+      console.log("fordebug")
+      this.setBBxy({x: left, y: top})
     }
   },
   components: {
