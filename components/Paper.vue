@@ -94,7 +94,7 @@ export default {
       console.log(this.showMenu)
       console.log(e.x)
       console.log(e.y)
-      this.menuTop = e.y - this.BBxy.y
+      this.menuTop = e.y - this.BBxy.y + window.pageYOffset
       this.menuLeft = e.x
       return false
     },

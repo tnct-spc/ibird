@@ -63,7 +63,7 @@ export default {
   },
   mounted() {
     window.addEventListener('resize', this.handleResize)
-    this.handleResize()
+    setTimeout(() =>{this.handleResize()},100)
   },
   beforeDestroy: function () {
     window.removeEventListener('resize', this.handleResize)
