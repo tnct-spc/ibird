@@ -20,9 +20,9 @@ const classes = sequelize.define('classes', {
         primaryKey: true,
         autoIncrement: true
     },
-//    documents: Sequelize.JSON,
     year: Sequelize.TEXT,
-    course: Sequelize.TEXT
+    course: Sequelize.TEXT,
+    randomSort: Sequelize.BOOLEAN
   },{
       timestamps: false
   });
