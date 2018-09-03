@@ -41,11 +41,6 @@ export default {
   // middleware: 'auth',
 }
 </script>
-<style>
-body{
-  background-image:url("../../assets/img/minimal_background.png");
-}
-</style>
 <style scoped>
  #upload{
    height: 100%;

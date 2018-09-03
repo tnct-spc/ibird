@@ -39,10 +39,5 @@ export default {
   // middleware: 'auth',
 }
 </script>
-<style>
-body{
-  background-image:url("../../assets/img/minimal_background.png");
-}
-</style>
 <style scoped>
 </style>
