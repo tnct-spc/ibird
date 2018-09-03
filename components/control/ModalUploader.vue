@@ -5,47 +5,52 @@
        <div class="modal-header"/>
         <div class="modal-body">
           <div id="style">
-            <table style="width:100%;margin: 0 auto;">
+           <table style="width:500px;margin:0 auto;">
+            <tbody>
             <tr>
-            <tm>
+            <td style="text-align:left;">
               <b-form-checkbox
-                         @input="selectAll()"
-                         v-model="all">
-                         全てのクラス
+                     @input="selectAll()"
+                     v-model="all">
+                     全て
               </b-form-checkbox>
-            </tm>
-            <tm>
-              <b-form-checkbox
-                          v-for="(item,key) in checkCourse"
-                          v-model="checkCourse[key]"
-                          :key = "key"
-                          @input="selectCource(key)">
-                          {{key}}科
-              </b-form-checkbox>
-            </tm>
-            </tr>
-            <tr>
-            <tm>
-             <b-form-checkbox
-                         v-for="(item ,key ,index) in checkYear"
-                         v-model="checkYear[key]"
-                         :key = "key"
-                         @input="selectYear(index+1)">
-                         {{key}}年
-             </b-form-checkbox>
-            </tm>
-            <tm>
-            <div v-for="(item1 ,key ,index) in classIdList">
+            </td>
+            <td
+            style="text-align:left;"
+            v-for="(item ,key ,index) in checkYear"
+            v-model="checkYear[key]"
+            :key = "key">
                 <b-form-checkbox
-                            v-for = "(item2) in classIdList[index+1]"
-                            v-model = "item2.submit"
-                            :key = "item2.classid">
-                            {{key}}{{item2.course}}
+                @input="selectYear(index+1)">
+                {{key}}年
                 </b-form-checkbox>
-            </div>
-            </tm>
+            </td>
             </tr>
-            </table>
+            <tr>
+            <td
+            style="text-align:left;display:block"
+            v-for="(item,key) in checkCourse"
+            v-model="checkCourse[key]"
+            :key = "key">
+                <b-form-checkbox
+                @input="selectCource(key)">
+                {{key}}科
+                </b-form-checkbox>
+            </td>
+            <td
+            style="text-align:left;"
+            v-for="(item1 ,key ,index) in classIdList">
+                <b-form-checkbox
+                style="display:block"
+                v-for = "(item2) in classIdList[index+1]"
+                v-model = "item2.submit"
+                :key = "item2.classid">
+                {{key}}{{item2.course}}
+                </b-form-checkbox>
+            </td>
+            </tr>
+            </tbody>
+           </table>
           </div>
          <div>
          <div id="style">
@@ -62,8 +67,8 @@
          <div>優先度</div>
          <div>小 → 大</div>
          <div class="btn-group" data-toggle="buttons" style="display:inline">
-          <label class="btn btn-secondary" v-for="(item, index) in priority">
-           <input type="radio" :value=index v-model="selected">{{item}}
+          <label class="btn btn-secondary" v-for="item in priority">
+           <input type="radio" :value=item v-model="selected">{{item}}
           </label>
          </div>
          </div>
@@ -109,9 +114,10 @@ export default{
     date:{},
     title: '',
     openMobile: true,
-    priority:[0,1,2,3,4,5],
+    priority:{"なし":0,"あり":1,},
     course:[],
-    all:false
+    all:false,
+    class_matrix: {}
    }
   },
   mounted(){
@@ -247,8 +253,6 @@ export default{
           })
         })
       }
-    },
-    selectPriority(){
     }
   }
 }
