@@ -73,7 +73,6 @@ router.post('/add-doc', (req, res, next) => {
     const endTime = new Date(doc.endTime)
     let insertData = []
     classids.forEach((e)=>{
-        sortDocs(e)
         insertData.push(
             {
               classid: e,
@@ -86,6 +85,7 @@ router.post('/add-doc', (req, res, next) => {
               startTime: startTime,
               endTime: endTime,
             })
+        sortDocs(e)
     })
     documents.bulkCreate(insertData)
       .then(result =>{
