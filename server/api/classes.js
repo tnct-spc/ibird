@@ -205,7 +205,6 @@ const sortDocs = (classid) => {
         const now = new Date()
         for(let i=0;i<list.length;i++){
           var label = Math.ceil((list[i].endTime - now)/(1000 * 60 * 60 *24))
-          label -= list[i].priority
           temp.push({
             data: list[i],
             label: label
@@ -216,9 +215,17 @@ const sortDocs = (classid) => {
             if (a.label > b.label) return 1;
             return 0;
         });
+        var plis = []
+        var lis = []
+        temp.forEach(v => {
+            if (v.data.priority == 1) {
+                plis.push(v.data)
+            }else{
+                lis.push(v.data)
+            }
+        })
+        var sortedList = plis.concat(lis)
 
-        var sortedList =[]
-        temp.forEach(v => { sortedList.push(v.data)})
         for (let i=0; i<sortedList.length; i++) {
           sortedList[i].x = cleanXYS[i].x
           sortedList[i].y = cleanXYS[i].y
