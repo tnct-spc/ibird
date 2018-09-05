@@ -64,13 +64,23 @@
          <div id="style">
          </div>
          <div id="style">
-         <div>優先度</div>
-         <div>小 → 大</div>
-         <div class="btn-group" data-toggle="buttons" style="display:inline">
+         <!--div class="btn-group" data-toggle="buttons" style="display:inline">
           <label class="btn btn-secondary" v-for="item in priority">
-           <input type="radio" :value=item v-model="selected">{{item}}
+           <input type="radio" :value=item.value v-model="selected">{{item.text}}
           </label>
          </div>
+         <b-form-group>
+         <b-form-checkbox-group buttons v-model="selected" :options="priority">
+           {{selected}}
+         </b-form-checkbox-group>
+         </b-form-group-->
+         <b-form-group label="<code>優先度</code>">
+         <b-form-radio-group
+                          buttons
+                          button-variant="outline-primary"
+                          v-model="selected"
+                          :options="priority"/>
+         </b-form-group>
          </div>
          <div id="style">
           <span>タイトル</span>
@@ -115,7 +125,7 @@ export default{
     date:{},
     title: '',
     openMobile: true,
-    priority:{"なし":0,"あり":1,},
+    priority:[{text:"なし",value:0},{text:"あり",value:1}],
     course:[],
     all:false,
     class_matrix: {}
