@@ -15,7 +15,7 @@ export const mutations = {
     if (state.papers[docid]) {
       try {
         state.papers[docid].x = x
-        state.papers[docid].y = y
+        state.papers[docid].y = y < 0 ? 0 : y
         state.papers[docid].updatedAt = new Date()
       } catch (e) {
         console.log(e)
@@ -26,7 +26,9 @@ export const mutations = {
     Object.keys(state.papers).forEach(key => {
       state.papers[key].isSelected = false
     })
-    state.papers[docid].isSelected = true
+    if (state.papers[docid]) {
+      state.papers[docid].isSelected = true
+    }
   },
   refreshPapers (state, {documents}) {
     Object.keys(state.papers).forEach(key => {

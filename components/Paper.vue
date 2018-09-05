@@ -79,10 +79,11 @@ export default {
     },
     mousemove: function(e){
       if(this.paper.isSelected){
+        const x=(e.pageX-this.cursorOffset.x)*10000/this.bbFieldSize.x
         this.wsClient.send(JSON.stringify({
           classid: this.classid,
           docid: this.paper.docid,
-          x: (e.pageX-this.cursorOffset.x)*10000/this.bbFieldSize.x,
+          x: x<0?0:x,
           y: (e.pageY-this.cursorOffset.y - this.BBxy.y)*10000/this.bbFieldSize.y,
           // y: (e.y-this.cursorOffset.y)*10000/this.bbFieldSize.y,
         }))
@@ -154,6 +155,7 @@ img.paper {
   border:solid 0.1rem black;
   max-width: 15%;;
   position: absolute;
+  z-index:0;
 }
 img.paper:hover{
   box-shadow: 0.5rem 0.5rem 0.5rem 0.01rem;

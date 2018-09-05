@@ -67,7 +67,7 @@ export default {
       setControlSelecterSize: 'setControlSelecterSize'
     }),
     selectedStyle: function(index){
-      const backgroundColor = index === this.yearIndex ? 'primary' : 'secondory'
+      const backgroundColor = index === this.yearIndex ? 'primary' : 'outline-secondary'
       return backgroundColor
     },
     selectedStyle2: function(index){
