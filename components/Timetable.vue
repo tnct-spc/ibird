@@ -9,6 +9,10 @@
 
 <script>
 import axios from 'axios'
+const holidayData = require("../.timetable/holidays_22900_1532075748963.json")
+const weekdaysData = require("../.timetable/weekdays_22900_1532076326046.json")
+const weekenddaysData = require("../.timetable/weekenddays_22900_1532076061582.json")
+
 export default {
     data : function(){
         return {
@@ -23,59 +27,31 @@ export default {
         }
     },
     created : function(){
+        console.log(holidayData)
         this.timer();
     },
     computed : {
         object : function() {
-
-            // if(this.hour < 5 && this.hour > 0){
-            //     return null;
-            // }
-
             if(this.dayOfWeek == 6){
-                // const params = {file : 'weekenddays_22900_1532076061582.json'};
-                // axios.get('/sendtable',{params})
-                //     .then((res) =>{
-                //         this.results = response.data.results;
-                    //     this.results = JSON.parse();
-                    //     return this.results;
-                    // });
-                this.results = require("../.timetable/weekenddays_22900_1532076061582.json");
-                return JSON.parse(this.results);
+                return weekenddaysData;
             }else if(this.dayOfWeek == 0 ||this.holidays.indexOf([this.month,this.day]) != -1 || (this.month == 1 && this.dayOfWeek == 1 && 7 < this.day && this.day < 15)
             || (this.month == 7 && this.dayOfWeek == 1 && 14 < this.day && this.day < 22)
             || (this.month == 9 && this.dayOfWeek == 1 && 14 < this.day && this.day < 22)
             || (this.month == 10 && this.dayOfWeek == 1 && 7 < this.day && this.day < 15)
             || (this.SubstituteHoliday() == true)){
-                // const params = {file : 'holidays_22900_1532075748963.json'};
-                // axios.get('/sendtable',{params})
-                //     .then((res) =>{
-                //         this.results = response.data.results;
-                //         this.results = JSON.parse();
-                //         return this.results;
-                //     });
-                this.results = require("../.timetable/holidays_22900_1532075748963.json");
-                return JSON.parse(this.results);
+                return holidayData;
             } else {
-                // const params = {file : 'weekdays_22900_1532076326046.json'};
-                // axios.get('/sendtable',{params})
-                //     .then((res) =>{
-                //         this.results = response.data.results;
-                //         this.results = JSON.parse();
-                //         return this.results;
-                //     });
-                this.results = require("../.timetable/weekdays_22900_1532076326046.json");
-                return JSON.parse(this.results);
+                return weekdaysData;
             }
         },
         set : function(){
             var i = 0;
-            var make = object.timetable[this.hour];
+            var make = this.object.timetable[this.hour];
                 while(1){
                     if (make[i].min >= this.minute){
                         break;
                     }else if(make.length >= i){
-                        make = object.timetable[this.hour + 1];
+                        make = this.object.timetable[this.hour + 1];
                     }else{
                         i++;
                     }
