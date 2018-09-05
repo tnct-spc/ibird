@@ -41,6 +41,11 @@ export default {
   // middleware: 'auth',
 }
 </script>
+<style>
+body{
+  background-color: #39cd48
+}
+</style>
 <style scoped>
  #upload{
    height: 100%;

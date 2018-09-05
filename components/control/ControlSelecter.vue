@@ -1,7 +1,6 @@
 <template>
  <section>
   <div>
-    <p>classid = {{ classid }}</p>
     <table width="100%" class="fixedtable">
       <tbody>
         <tr>
