@@ -1,19 +1,30 @@
 <template>
  <section>
-  <div>
-    <p>classid = {{ classid }}</p>
-    <table width="100%" class="fixedtable">
-      <tbody>
-        <tr>
-          <!--学年 -->
-          <td v-for="(year, index) in years" :key="index" @click="switchingYear(index)" align="center" v-bind:style="selectedStyle(index)">{{year}}</td>
-        </tr>
-        <tr>
-          <!-- 学科 -->
-          <td v-for="(course, index) in courses" :key="index" @click="switchingClass(index)" align="center" v-bind:style="selectedStyle2(index)">{{course}}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="d-flex flex-column align-items-stretch">
+
+        <!--学年 -->
+        <b-button-group>
+          <b-button v-for="(year, index) in years" 
+            :key="index"
+            @click="switchingYear(index)"
+            align="center"
+            :variant="selectedStyle(index)"
+            class="class-button"
+            >
+            {{year}}
+          </b-button>
+        </b-button-group>
+        <!-- 学科 -->
+        <b-button-group>
+          <b-button v-for="(course, index) in courses"
+            :key="index"
+            @click="switchingClass(index)"
+            align="center"
+            :variant="selectedStyle2(index)"
+          >
+          {{course}}
+          </b-button>
+        </b-button-group>
   </div>
  </section>
 </template>
@@ -29,7 +40,6 @@ export default {
   },
   data:()=>{
     return{
-      classid: '0',
       yearIndex: 0,
       courseIndex: 0,
       years: [],
@@ -57,12 +67,12 @@ export default {
       setControlSelecterSize: 'setControlSelecterSize'
     }),
     selectedStyle: function(index){
-      const backgroundColor = index === this.yearIndex ? 'red' : ''
-      return { background: backgroundColor }
+      const backgroundColor = index === this.yearIndex ? 'primary' : 'secondory'
+      return backgroundColor
     },
     selectedStyle2: function(index){
-      const backgroundColor = index === this.courseIndex ? 'red' : ''
-      return { background: backgroundColor }
+      const backgroundColor = index === this.courseIndex ? 'primary' : 'secondory'
+      return backgroundColor
     },
     switchingYear: function(index) {
       this.yearIndex = index
@@ -84,11 +94,17 @@ export default {
 </script>
 
 <style scoped>
+.classbutton {
+  width: 100%;
+}
 .p{
   border: 2px solid orange;
   background-color: yellow;
 }
 .fixedtable{
   table-layout: fixed
+}
+.btn-group > button{
+  width:100%
 }
 </style>
