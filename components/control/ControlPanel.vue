@@ -8,16 +8,16 @@
     </div>
     <div>
       <input v-model="alertMessage" placeholder="緊急伝達事項を入力">
-      <button type="button" class="btn btn-primary btn-sm" @click="showAlert()">
-         アラート表示
+      <button type="button" class="btn btn-outline-primary btn-sm mx-1" @click="showAlert()">
+          アラート表示
       </button>
-      <button style="margin-left:5px" type="button" class="btn btn-primary btn-sm" @click="sortDocs()">
+      <button type="button" class="btn btn-outline-primary btn-sm mx-1" @click="sortDocs()">
          並び替え
       </button>
-      <button style="margin-left:5px" type="button" class="btn btn-primary btn-sm">
+      <button type="button" class="btn btn-outline-primary btn-sm mx-1">
       <a href="/strict">クラス設定ページへ</a>
       </button>
-      <b-form-group style="display:inline;margin-left:5px" label="<code>ランダム設定</code>">
+      <b-form-group style="display:inline;" label="<code>ランダム設定</code>">
       <b-form-radio-group
                        buttons
                        button-variant="outline-primary"
