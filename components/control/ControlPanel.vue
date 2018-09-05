@@ -4,18 +4,27 @@
       <span style="font-size:150%">
         ControlPage
       </span>
+      <span>classid = {{classid}}</span>
     </div>
     <div>
       <input v-model="alertMessage" placeholder="緊急伝達事項を入力">
-      <button type="button" class="btn btn-outline-primary btn-sm" @click="showAlert()">
+      <button type="button" class="btn btn-outline-primary btn-sm mx-1" @click="showAlert()">
           アラート表示
       </button>
-      <button type="button" class="btn btn-outline-primary btn-sm" @click="sortDocs()">
-         自動並び替え
+      <button type="button" class="btn btn-outline-primary btn-sm mx-1" @click="sortDocs()">
+         並び替え
       </button>
-      <button type="button" class="btn btn-outline-primary btn-sm">
+      <button type="button" class="btn btn-outline-primary btn-sm mx-1">
       <a href="/strict">クラス設定ページへ</a>
       </button>
+      <b-form-group style="display:inline;" label="<code>ランダム設定</code>">
+      <b-form-radio-group
+                       buttons
+                       button-variant="outline-primary"
+                       v-model="isRandom"
+                       @input="randomSort()"
+                       :options="Random"/>
+      </b-form-group>
     </div>
   </section>
 </template>
@@ -27,16 +36,31 @@ const W3cwebsocket = w3cwebsocket
 export default{
   data:()=>{
     return{
-      alertMessage: ''
+      alertMessage: '',
+      isRandom:null,
+      Random:[{text:"オン",value:true},{text:"オフ",value:false}]
     }
   },
   props:{
     "classid":String,
   },
+  mounted(){
+    axios.get(process.env.httpUrl + '/api/RandomSort',{params:{
+      classid:this.classid
+    }}).then((response)=>{
+      this.isRandom = response.data.isRandom
+    })
+  },
   methods:{
     sortDocs(){
       axios.put(process.env.httpUrl + '/api/sort-docs',{
         classid:this.classid
+      })
+    },
+    randomSort(){
+      axios.put(process.env.httpUrl + '/api/RandomSort',{
+      classid : this.classid,
+      isRandom : this.isRandom
       })
     },
     showAlert(){
