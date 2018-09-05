@@ -3,16 +3,14 @@
       <h1>次の電車</h1>
       <p v-if = "object !== undefined && holidays !== undefined" class = "lineinfo">{{object.station,object.line,object.going}}</p>
        <p v-if = "object !== undefined && holidays !== undefined" class = "traininfo">{{set.min,set.kind,set.going}}</p>
-      <p class = "nowtime">現在時刻 {{ hour }}：{{ minute }}</p>
+      <p class = "nowtime">現在時刻 {{ hour }}：{{ minutes }}</p>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
-
 export default {
-    name : 'Timetable',
-    data :function() {
+    data : function(){
         return {
             year : new Date().getFullYear(),
             month : new Date().getMonth() + 1,
@@ -21,44 +19,54 @@ export default {
             minute : new Date().getMinutes(),
             dayOfWeek : new Date().getDay(),
             holidays : [[1,1],[2,11],[4,29],[5,3],[5,4],[5,5],[8,11],[11,3],[11,23],[12,23],[3,this.VerinalEquinox(this.year)],[9,this.AutumnalEquinox(this.year)]],
+            results : [],
         }
+    },
+    created : function(){
+        this.timer();
     },
     computed : {
         object : function() {
-            // var holidays = [[1,1],[2,11],[4,29],[5,3],[5,4],[5,5],[8,11],[11,3],[11,23],[12,23],[3,this.VerinalEquinox(this.year)],[9,this.AutumnalEquinox(this.year)]];
-            // var holidaysresult = holidays.indexOf([this.month,this.day]);
 
             // if(this.hour < 5 && this.hour > 0){
             //     return null;
             // }
 
             if(this.dayOfWeek == 6){
-                const params = {file : 'weekenddays_22900_1532076061582.json'};
-                axios.get('/timetable',{ params })
-                    .then((res) =>{
-                        var o = JSON.parse(res);
-                        return o;
-                    });
+                // const params = {file : 'weekenddays_22900_1532076061582.json'};
+                // axios.get('/sendtable',{params})
+                //     .then((res) =>{
+                //         this.results = response.data.results;
+                    //     this.results = JSON.parse();
+                    //     return this.results;
+                    // });
+                this.results = require("../.timetable/weekenddays_22900_1532076061582.json");
+                return JSON.parse(this.results);
             }else if(this.dayOfWeek == 0 ||this.holidays.indexOf([this.month,this.day]) != -1 || (this.month == 1 && this.dayOfWeek == 1 && 7 < this.day && this.day < 15)
             || (this.month == 7 && this.dayOfWeek == 1 && 14 < this.day && this.day < 22)
             || (this.month == 9 && this.dayOfWeek == 1 && 14 < this.day && this.day < 22)
             || (this.month == 10 && this.dayOfWeek == 1 && 7 < this.day && this.day < 15)
             || (this.SubstituteHoliday() == true)){
-                const params = {file : 'holidays_22900_1532075748963.json'};
-                axios.get('/timetable',{ params })
-                    .then((res) =>{
-                        var o = JSON.parse(res);
-                        return o;
-                    });
+                // const params = {file : 'holidays_22900_1532075748963.json'};
+                // axios.get('/sendtable',{params})
+                //     .then((res) =>{
+                //         this.results = response.data.results;
+                //         this.results = JSON.parse();
+                //         return this.results;
+                //     });
+                this.results = require("../.timetable/holidays_22900_1532075748963.json");
+                return JSON.parse(this.results);
             } else {
-                const params = {file : 'weekdays_22900_1532076326046.json'};
-                axios.get('/timetable',{ params })
-                    .then((res) =>{
-                        var o = JSON.parse(res);
-                        return o;
-                    });
+                // const params = {file : 'weekdays_22900_1532076326046.json'};
+                // axios.get('/sendtable',{params})
+                //     .then((res) =>{
+                //         this.results = response.data.results;
+                //         this.results = JSON.parse();
+                //         return this.results;
+                //     });
+                this.results = require("../.timetable/weekdays_22900_1532076326046.json");
+                return JSON.parse(this.results);
             }
-
         },
         set : function(){
             var i = 0;
@@ -74,6 +82,13 @@ export default {
                 }
                 return make[i];
             },
+        minutes : function(){
+            if(new Date().getMinutes() < 10){
+                return 0 + new Date().getMinutes();
+            }else{
+                return new Date().getMinutes();
+            }
+        },
     },
     methods : {
         VerinalEquinox : function(year){
@@ -98,7 +113,7 @@ export default {
                 default : return 23;
             }
         },
-        SubstituteHoliday: function(){
+        SubstituteHoliday : function(){
             var i = 0;
             while(1){
                 if(this.holidays.indexOf([this.month,this.day - i]) == -1){
@@ -110,6 +125,15 @@ export default {
                     i++;
                 }
             }
+        },
+        timer : function(){
+            this.year = new Date().getFullYear();
+            this.month = new Date().getMonth() + 1;
+            this.day = new Date().getDate();
+            this.hour = new Date().getHours();
+            this.minute = new Date().getMinutes();
+            this.dayOfWeek = new Date().getDay();
+            setTimeout(this.timer,1000);
         }
     },
 }
