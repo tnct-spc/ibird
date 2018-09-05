@@ -9,7 +9,7 @@
             @click="switchingYear(index)"
             align="center"
             :variant="selectedStyle(index)"
-            class="class-button"
+            class="class-button my-1"
             >
             {{year}}
           </b-button>
