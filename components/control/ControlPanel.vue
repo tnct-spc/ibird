@@ -44,6 +44,15 @@ export default{
   props:{
     "classid":String,
   },
+  watch:{
+    classid(){
+      axios.get(process.env.httpUrl + '/api/RandomSort',{params:{
+        classid:this.classid
+      }}).then((response)=>{
+        this.isRandom = response.data.isRandom
+      })
+    }
+  },
   mounted(){
     axios.get(process.env.httpUrl + '/api/RandomSort',{params:{
       classid:this.classid
