@@ -7,13 +7,13 @@
     </div>
     <div>
       <input v-model="alertMessage" placeholder="緊急伝達事項を入力">
-      <button type="button" class="btn btn-primary btn-sm" @click="showAlert()">
+      <button type="button" class="btn btn-outline-primary btn-sm" @click="showAlert()">
           アラート表示
       </button>
-      <button type="button" class="btn btn-primary btn-sm" @click="sortDocs()">
+      <button type="button" class="btn btn-outline-primary btn-sm" @click="sortDocs()">
          自動並び替え
       </button>
-      <button type="button" class="btn btn-primary btn-sm">
+      <button type="button" class="btn btn-outline-primary btn-sm">
       <a href="/strict">クラス設定ページへ</a>
       </button>
     </div>
