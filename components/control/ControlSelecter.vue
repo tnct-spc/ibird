@@ -1,6 +1,7 @@
 <template>
  <section>
   <div class="d-flex flex-column align-items-stretch">
+    <link href="https://fonts.googleapis.com/css?family=Baloo+Tammudu" rel="stylesheet">
 
         <!--学年 -->
         <b-button-group>
@@ -105,6 +106,7 @@ export default {
   table-layout: fixed
 }
 .btn-group > button{
+  font-family: 'Sawarabi+Mincho', cursive;
   width:100%
 }
 </style>
