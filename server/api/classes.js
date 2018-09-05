@@ -85,11 +85,11 @@ router.post('/add-doc', (req, res, next) => {
               startTime: startTime,
               endTime: endTime,
             })
-        sortDocs(e)
     })
     documents.bulkCreate(insertData)
       .then(result =>{
         res.sendStatus(200)
+        classids.forEach(e => { sortDocs(e) })
       }).catch(err =>{
         console.log(err)
         res.sendStatus(400)
