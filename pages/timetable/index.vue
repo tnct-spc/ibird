@@ -1,7 +1,7 @@
 <template>
 <div>
   <button @click="openModal">モーダル表示</button>
-  <cache-table-modal v-if="showModal" @close="closeModal"/>
+  <cache-table-modal :showModal="showModal" @close="closeModal"/>
 </div>
 </template>
 <script>
