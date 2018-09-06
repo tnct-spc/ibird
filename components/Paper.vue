@@ -50,7 +50,6 @@ export default {
     ...mapState({
       cursorOffset: 'cursorOffset',
       bbFieldSize: 'bbFieldSize',
-      controlSelecterSize: 'controlSelecterSize',
       BBxy: 'BBxy'
     })
   },
