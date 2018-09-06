@@ -2,16 +2,14 @@
  <section>
   <div class="d-flex flex-column align-items-stretch">
     <link href="https://fonts.googleapis.com/css?family=Baloo+Tammudu" rel="stylesheet">
-
         <!--学年 -->
         <b-button-group>
-          <b-button v-for="(year, index) in years" 
+          <b-button v-for="(year, index) in years"
             :key="index"
             @click="switchingYear(index)"
             align="center"
             :variant="selectedStyle(index)"
-            class="class-button my-1"
-            >
+            class="class-button my-1">
             {{year}}
           </b-button>
         </b-button-group>
@@ -21,8 +19,7 @@
             :key="index"
             @click="switchingClass(index)"
             align="center"
-            :variant="selectedStyle2(index)"
-          >
+            :variant="selectedStyle2(index)">
           {{course}}
           </b-button>
         </b-button-group>
@@ -45,7 +42,7 @@ export default {
       courseIndex: 0,
       years: [],
       courses: [],
-    }
+      }
   },
   mounted(){
     axios.get(process.env.httpUrl + '/api/years-and-courses').then(res =>{
@@ -61,6 +58,9 @@ export default {
     },
     courseIndex(){
       this.getClassid()
+    },
+    classid(){
+      history.replaceState('','',this.classid)
     }
   },
   methods:{

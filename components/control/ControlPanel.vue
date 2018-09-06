@@ -2,22 +2,19 @@
   <section>
     <div>
       <span style="font-size:150%">
-        ControlPage
+        iBird Control Page
       </span>
       <span>classid = {{classid}}</span>
     </div>
     <div>
       <input v-model="alertMessage" placeholder="緊急伝達事項を入力">
       <button type="button" class="btn btn-outline-primary btn-sm mx-1" @click="showAlert()">
-          アラート表示
+         アラート表示
       </button>
       <button type="button" class="btn btn-outline-primary btn-sm mx-1" @click="sortDocs()">
          並び替え
       </button>
-      <button type="button" class="btn btn-outline-primary btn-sm mx-1">
-      <a href="/strict">クラス設定ページへ</a>
-      </button>
-      <b-form-group style="display:inline;" label="<code>ランダム設定</code>">
+      <b-form-group style="display:inline;" label="<code>少しずらしてリアルに表示</code>">
       <b-form-radio-group
                        buttons
                        button-variant="outline-primary"
@@ -25,6 +22,9 @@
                        @input="randomSort()"
                        :options="Random"/>
       </b-form-group>
+      <button type="button" class="btn btn-outline-primary btn-sm mx-1">
+      <a href="/strict">クラス設定ページへ</a>
+      </button>
     </div>
   </section>
 </template>
@@ -38,7 +38,7 @@ export default{
     return{
       alertMessage: '',
       isRandom:null,
-      Random:[{text:"オン",value:true},{text:"オフ",value:false}]
+      Random:[{text:"適用",value:true},{text:"適用しない",value:false}]
     }
   },
   props:{

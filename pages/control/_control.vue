@@ -22,7 +22,8 @@ export default {
       //ここでurlの確認
       var eflag = true
       classlist.forEach(c => {
-        if(String(c.classid) === params.control) eflag = false
+        if(String(c.classid) ===params.control) eflag = false
+        else if(!params.control)eflag = false
       })
       if(eflag) throw new URIError("URIちがうよ");
 

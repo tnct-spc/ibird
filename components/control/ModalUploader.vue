@@ -74,7 +74,7 @@
            {{selected}}
          </b-form-checkbox-group>
          </b-form-group-->
-         <b-form-group label="<code>優先度</code>">
+         <b-form-group label="<code>優先</code>">
          <b-form-radio-group
                           buttons
                           button-variant="outline-primary"
@@ -83,18 +83,18 @@
          </b-form-group>
          </div>
          <div id="style">
-          <span>タイトル</span>
-          <input v-model="title" placeholder="掲示物のタイトルを入力">
+          <span>ファイル名 </span>
+          <input v-model="title" placeholder="掲示物のファイル名を入力">
           <b-form-checkbox style="display:block;margin-top:2%" v-model="openMobile">モバイル向けサイトでも公開</b-form-checkbox>
          </div>
          </div>
          </div>
           <div class="modal-footer">
             <button class="btn btn-secondar mr-auto btn-primary" @click="$emit('close')">
-              やっぱりやめる
+              キャンセル
             </button>
             <button class="btn btn-primary" @click="submit()">
-              ドキュメントの提出
+              アップロード
             </button>
           </div>
         </div>
@@ -125,10 +125,9 @@ export default{
     date:{},
     title: '',
     openMobile: true,
-    priority:[{text:"なし",value:0},{text:"あり",value:1}],
+    priority:[{text:"しない",value:0},{text:"する",value:1}],
     course:[],
-    all:false,
-    class_matrix: {}
+    all:false
    }
   },
   mounted(){
@@ -288,7 +287,7 @@ export default{
 }
 
 .modal-container {
-  width: 90%;
+  width: 800px;
   margin: 10px auto;
   padding: 20px 30px;
   background-color: #fff;
