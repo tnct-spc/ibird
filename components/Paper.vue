@@ -1,5 +1,5 @@
 <template>
-  <div id="paper" @contextmenu.prevent="openremovemenu" @click="click" @mousedown="mousedown" @mouseup="mouseup" ref="fieldElm">
+  <div id="paper" @contextmenu.prevent="openremovemenu" @mousedown="mousedown" @mouseup="mouseup" ref="fieldElm">
 
     <!-- <p>{{ this.paper }}</p> -->
     <!-- <p>{{ controlSelecterSize }}</p> -->
@@ -59,9 +59,6 @@ export default {
       selectedcard: 'selectCard',
       setCursorOffset: 'setCursorOffset'
     }),
-    click: function(e){
-
-    },
     mousedown: function(e){
       this.setCursorOffset({x: e.offsetX, y: e.offsetY})
       this.selectedcard({docid: this.paper.docid})
