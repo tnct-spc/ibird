@@ -1,5 +1,5 @@
 <template>
-  <div id="paper" @contextmenu.prevent="openremovemenu" @click="mousedown" ref="fieldElm">
+  <div id="paper" @contextmenu.prevent="openremovemenu" @click="click" @mousedown="mousedown" @mouseup="mouseup" ref="fieldElm">
 
     <!-- <p>{{ this.paper }}</p> -->
     <!-- <p>{{ controlSelecterSize }}</p> -->
@@ -59,23 +59,19 @@ export default {
       selectedcard: 'selectCard',
       setCursorOffset: 'setCursorOffset'
     }),
+    click: function(e){
+
+    },
     mousedown: function(e){
-      /*if (e.button == 2) {
-        this.openremovemenu(e.x, e.y)
-        return
-      }*/
-      if (!this.showMenu){
-        this.setCursorOffset({x: e.offsetX, y: e.offsetY})
-        if (this.paper.isSelected) {
-          this.savePosition()
-          this.saveOrder()
-          this.selectedcard({docid: null})
-          document.removeEventListener('mousemove',this.mousemove)
-        } else {
-          this.selectedcard({docid: this.paper.docid})
-          document.addEventListener('mousemove',this.mousemove)
-        }
-      }
+      this.setCursorOffset({x: e.offsetX, y: e.offsetY})
+      this.selectedcard({docid: this.paper.docid})
+      document.addEventListener('mousemove',this.mousemove)
+    },
+    mouseup: function(e){
+      this.savePosition()
+      this.saveOrder()
+      this.selectedcard({docid: null})
+      document.removeEventListener('mousemove',this.mousemove)
     },
     mousemove: function(e){
       if(this.paper.isSelected){
