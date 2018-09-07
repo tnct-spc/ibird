@@ -1,24 +1,22 @@
 <template>
   <div>
-    <img class='weather_forecast' :src="url" alt=''>
-    <button @click="reload()">button2</button>
+    <img v-bind:src="weatherMap">
+    <button @click="reload()">reload</button>
   </div>
 </template>
 <script>
+import axios from 'axios'
 export default {
-  data:function(){
+  data () {
     return{
-      url: 'http://localhost:3000/api/yolp?lat=' + lat + '&lon=' + lon + '&z=' + z + '&width=' + width + '&height=' + height
-      lat:
-      lon:
-      z:
-      width:
-      height:
+      weatherMap: "https://map.yahooapis.jp/map/V1/static?appid=dj0zaiZpPXVZaDlrczVieXNFYSZzPWNvbnN1bWVyc2VjcmV0Jng9ZGE-&lat=35.632789&lon=139.294293&z=15&width=undefined&height=undefined&mode=map&overlay=type:rainfall"
     }
   },
   methods: {
-    reload:function() {
-      location.reload()
+    reload() {
+      axios.get('http://localhost:3000/api/yolp')
+      // , {headers: {'Content-Type': 'image/jpeg'}}
+      .then(res => (console.log(res.data)))
     }
   }
 }

@@ -5,9 +5,9 @@ import fetch from 'node-fetch'
 const router = Router()
 
 router.get('/yolp', function (req, res, next) {
-    const lat = req.query.lat
-    const lon = req.query.lon
-    const z = req.query.z
+    const lat = '35.632789'
+    const lon = '139.294293'
+    const z = '15'
     const width = req.query.width
     const height = req.query.height
 
