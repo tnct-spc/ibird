@@ -113,7 +113,7 @@ const sortDocs = (classid) => {
       }
       sortedList[i].x = cleanXYS[i].x
       sortedList[i].y = cleanXYS[i].y
-      if (makeRandom && i < 9) {
+      if (makeRandom && (i < 9 || sortedList.length === 10)) {
         sortedList[i].x += Math.random() * 250 - 125
         sortedList[i].y += Math.random() * 250 - 125
       }
