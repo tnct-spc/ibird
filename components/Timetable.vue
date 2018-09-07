@@ -1,22 +1,21 @@
 <template>
    <div class = "timetable">
-        <h1>次の電車</h1>
-        <p class="lineinfo">{{stationData.station,stationData.line,stationData.going}}</p>
-        <p class="nowtime">現在時刻 {{ hour }}：{{ minute }} : {{ second }}</p>
+        <p class="lineinfo">{{stationData.station}} {{stationData.line}} {{stationData.going}}</p>
+        <p v-if="nextTime" class="traininfo">{{nextTime.kind}} {{nextTime.going}}行き {{nextTime.hour}} : {{nextTime.min}}</p>
+        <p v-else>ぬる</p>
+        <p class="nowtime">{{ hour }}：{{ minute }} : {{ second }}</p>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
-const holidayData = require("../.timetable/holidays_22900_1532075748963.json")
-const weekdaysData = require("../.timetable/weekdays_22900_1532076326046.json")
-const weekenddaysData = require("../.timetable/weekenddays_22900_1532076061582.json")
+const holidayData = require("../.timetable/holidays_22900_1532075792594.json")
+const weekdaysData = require("../.timetable/weekdays_22900_1532075866616.json")
+const weekenddaysData = require("../.timetable/weekenddays_22900_1532076033115.json")
 
 export default {
     data : function(){
         return {
-            year : new Date().getFullYear(),
-            day : new Date().getDate(),
             hour : new Date().getHours(),
             minute : new Date().getMinutes(),
             second : new Date().getSeconds(),
@@ -24,12 +23,11 @@ export default {
         }
     },
     created : function(){
-        console.log(holidayData)
+        console.log(this.stationData);
         this.timer();
     },
     computed : {
         stationData : function() {
-            console.log(this.dayOfWeek)
             if(this.dayOfWeek == 0){
                 return holidayData
             }else if(this.dayOfWeek == 6){
@@ -37,17 +35,39 @@ export default {
             }else{
                 return weekdaysData
             }
+        },
+        nextTime : function(){
+            return this.getNextTime(this.hour, this.minute)
         }
     },
     methods : {
+        getNextTime : function(nHour, nMinute){ //現在の時間と分が引数(0≦nHour≦24, 0≦nMinute≦59)
+            nHour = nHour==0 ? 24 : nHour
+            const times = this.stationData.timetable[nHour]
+            for (var i = 0; i < times.length; i++) {
+                if(times[i].min > nMinute){
+                    times[i].hour = nHour
+                    return times[i]
+                }
+            }
+            var limitter = 0 //無限ループをしないため
+            while(limitter<1000){
+                nHour = nHour==24 ? 1 : nHour+1
+                const times = this.stationData.timetable[nHour]
+                if(times.length!==0){
+                    times[0].hour = nHour
+                    return times[0]
+                }
+                limitter++
+            }
+            return null
+        },
         timer : function(){
-            this.year = new Date().getFullYear();
-            this.day = new Date().getDate();
             this.hour = new Date().getHours();
             this.minute = new Date().getMinutes();
             this.second = new Date().getSeconds();
             this.dayOfWeek = new Date().getDay();
-            setTimeout(this.timer,100);
+            setTimeout(this.timer,1000);
         }
     },
 }
@@ -55,17 +75,8 @@ export default {
 
 <style scoped>
 .timetable{
-    left : 0;
-    bottom : 0; 
-    height : 40%;
-    width : 40%;
     background-color : olivedrab;
     border : outset 1em forestgreen;
-}
-
-h1{
-    color : white
-  
 }
 .stationinfo{
     margin : 1em;
