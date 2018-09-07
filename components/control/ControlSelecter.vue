@@ -33,7 +33,6 @@
 import axios from 'axios'
 import Vue from 'vue'
 import { w3cwebsocket } from 'websocket'
-import { mapMutations } from 'vuex'
 
 export default {
   props:{
@@ -64,9 +63,6 @@ export default {
     }
   },
   methods:{
-    ...mapMutations({
-      setControlSelecterSize: 'setControlSelecterSize'
-    }),
     selectedStyle: function(index){
       const backgroundColor = index === this.yearIndex ? 'primary' : 'outline-dark'
       return backgroundColor
