@@ -31,7 +31,7 @@ const officeToPDF = (filepath) => {
 const pdfToJpg = (pdfPath) => {
   var jpgPath = pdfPath.slice(0,-4) + ".jpg"
   jpgPath = 'static/jpg/' + filename(jpgPath)
-  child_process.execSync('convert -density 300  ' + pdfPath.slice(0,-4) + ".pdf " + jpgPath)
+  child_process.execSync('convert -density 300  ' + pdfPath.slice(0,-4) + ".pdf[0] " + jpgPath)
   return filename(jpgPath)
 }
 
