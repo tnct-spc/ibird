@@ -194,7 +194,7 @@ const sortDocs = (classid) => {
       return 400
     })
   // 並べる場所,今はてきとう
-  const cleanXYS = [
+  let cleanXYS = [
     {x: 200, y: 400},
     {x: 2200, y: 400},
     {x: 4200, y: 400},
@@ -224,11 +224,17 @@ const sortDocs = (classid) => {
     })
     let sortedList = plis.concat(lis)
     for (let i = 0; i < sortedList.length; i++) {
+      if (cleanXYS.length <= i) {
+        cleanXYS.push({
+          x: cleanXYS[i - 1].x + 50,
+          y: cleanXYS[i - 1].y + 50
+        })
+      }
       sortedList[i].x = cleanXYS[i].x
       sortedList[i].y = cleanXYS[i].y
-      if (makeRandom) {
-        sortedList[i].x += Math.random()*250 - 125
-        sortedList[i].y += Math.random()*250 - 125
+      if (makeRandom && i < 9) {
+        sortedList[i].x += Math.random() * 250 - 125
+        sortedList[i].y += Math.random() * 250 - 125
       }
       sortedList[i].save()
     }
