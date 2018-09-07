@@ -209,29 +209,25 @@ const sortDocs = (classid) => {
     ]
     docList(classid).then(list =>{
         //list並べる順番にsortする処理
-        var temp = []
         const now = new Date()
-        for(let i=0;i<list.length;i++){
-          var label = Math.ceil((list[i].endTime - now)/(1000 * 60 * 60 *24))
-          temp.push({
-            data: list[i],
-            label: label
-          })
-        }
-        temp.sort((a,b) => {
-            if (a.label < b.label) return -1;
-            if (a.label > b.label) return 1;
-            return 0;
-        });
+        var temp = list
+        temp.sort((a, b) => {
+          if (a.endTime < b.endTime) return -1;
+          if (a.endTime > b.endTime) return 1;
+          if (a.docid < b.docid) return -1;
+          if (a.docid > b.docid) return 1;
+          return 0
+        })
         var plis = []
         var lis = []
         temp.forEach(v => {
-            if (v.data.priority == 1) {
-                plis.push(v.data)
-            }else{
-                lis.push(v.data)
+            if (v.priority === 1) {
+                plis.push(v)
+            } else {
+                lis.push(v)
             }
         })
+        console.log(sortedList)
         var sortedList = plis.concat(lis)
 
         for (let i=0; i<sortedList.length; i++) {
