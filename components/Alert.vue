@@ -1,7 +1,9 @@
 <template>
   <section>
-    <div class="bg-danger alert"  v-show="this.message != null">
-      <p class="h1 text-light">{{this.message}}</p>
+    <div class="alert-div"  v-show="this.message != null">
+      <b-alert class=" b-alertc" show variant="danger">
+        <p class="text-center alert-text">{{this.message}}</p>
+      </b-alert>
     </div>
   </section>
 </template>
@@ -24,7 +26,7 @@ export default {
       this.client.onmessage=({data})=>{
         this.message = JSON.parse(data).message;
         console.log(this.message)
-        setTimeout(() => {this.message=null},1000*60*1)
+        setTimeout(() => {this.message=null},1000*60*30)
       }
       this.client.onclose=()=>{
         console.log('websocket disconnect ws/alert')
@@ -36,15 +38,15 @@ export default {
  }
 </script>
 <style scoped>
-section {
+.alert-div {
+  width: 50%;
+  height: 2%;
+  right: 3%;
+  bottom:3%;
+  position:fixed;
 }
-.alert {
-  height:100%;
-  width:100%;
-  left:0;
-  right:0;
-  top:0;
-  bottom:0;
-  position:absolute;
+.alert-text {
+  font-size: 150%;
 }
+
 </style>
