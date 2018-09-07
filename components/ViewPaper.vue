@@ -33,7 +33,7 @@ export default{
 </script>
 <style scoped>
 img.paper {
-  width: 90%;
+  width: 80%;
 }
 
 .modal-mask {
@@ -54,7 +54,7 @@ img.paper {
 }
 
 .modal-container {
-  width: 500px;
+  max-width: 600px;
   max-height: 950%;
   margin: 0px auto;
   padding: 10px;
