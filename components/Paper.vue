@@ -70,6 +70,7 @@ export default {
       document.removeEventListener('mousemove',this.mousemove)
     },
     mousemove: function(e){
+      if(this.showMenu) return
       if(this.paper.isSelected){
         const x=(e.pageX-this.cursorOffset.x)*10000/this.bbFieldSize.x
         this.wsClient.send(JSON.stringify({
