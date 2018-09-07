@@ -10,7 +10,8 @@ module.exports = {
       { hid: 'description', name: 'description', content: 'Nuxt.js project' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'stylesheet', href: '/https://fonts.googleapis.com/css?family=Sawarabi+Mincho' }
     ]
   },
   /*
@@ -43,6 +44,8 @@ module.exports = {
     }
   },
   env: {
-    mainUrl: process.env.MAIN_URL || 'localhost:3000'
+    mainUrl: process.env.MAIN_URL || 'localhost:3000',
+    httpUrl: process.env.HTTP_URL || 'http://localhost:3000',
+    wsUrl: process.env.WS_URL || 'ws://localhost:3000'
   }
 }

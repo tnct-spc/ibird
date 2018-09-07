@@ -8,6 +8,7 @@
 <script>
 
 import { w3cwebsocket } from 'websocket'
+import { setTimeout } from 'timers';
 const W3cwebsocket = w3cwebsocket
 
 export default {
@@ -18,21 +19,21 @@ export default {
     }
   },
   created () {
-    this.client = new W3cwebsocket('ws://'+process.env.mainUrl+'/ws/alert')
-    this.client.onmessage=({data})=>{
-      this.message = JSON.parse(data).message;
-      console.log("message add")
-      console.log(this.message)
-
-      var delete_alert = function () {
-        this.message = null
-        console.log("message deleted")
+   const startWebsocket = () => {
+      this.client = new W3cwebsocket(process.env.wsUrl+'/ws/alert')
+      this.client.onmessage=({data})=>{
+        this.message = JSON.parse(data).message;
+        console.log(this.message)
+        setTimeout(() => {this.message=null},1000*60*1)
       }
-      console.log(this.message)
-      setTimeout(() => {this.message=null},1000*60*5)
+      this.client.onclose=()=>{
+        console.log('websocket disconnect ws/alert')
+        setTimeout(() =>{startWebsocket()},1000)
+      }
     }
-  },
-}
+    startWebsocket()
+    }
+ }
 </script>
 <style scoped>
 section {

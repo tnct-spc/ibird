@@ -28,7 +28,7 @@ export default {
     },
     created : function(){
         console.log(holidayData)
-        this.timer();
+        // this.timer();
     },
     computed : {
         object : function() {
@@ -47,7 +47,7 @@ export default {
         set : function(){
             var i = 0;
             var make = this.object.timetable[this.hour];
-                while(1){
+                while(false){
                     if (make[i].min >= this.minute){
                         break;
                     }else if(make.length >= i){
@@ -91,7 +91,7 @@ export default {
         },
         SubstituteHoliday : function(){
             var i = 0;
-            while(1){
+            while(false){
                 if(this.holidays.indexOf([this.month,this.day - i]) == -1){
                     break;
                 }else if(dayOfWeek - i != 0){
