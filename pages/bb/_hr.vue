@@ -16,7 +16,7 @@ export default {
     }
   },
   asyncData ({ params, error }) {
-    return axios.get('http://' +process.env.mainUrl + '/api/classes-list').then(res =>{
+    return axios.get('http://localhost:3000/api/classes-list').then(res =>{
       const classlist = res.data
       //ここでurlの確認
       var eflag = true
@@ -36,8 +36,8 @@ export default {
   components:{
     Homeroom
   },
+  // middleware: 'auth',
 }
 </script>
-
 <style scoped>
 </style>
