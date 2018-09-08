@@ -1,7 +1,6 @@
 <template>
  <section>
   <div id="overlay" @dragleave.prevent="onDragLeave($event)" @dragover.prevent="onDragOver($event)" @drop.prevent="onDrop($event)">
-   {{text}}
    <BulletinBoard :classid="classid"/>
   </div>
   <ModalUploader v-if="showModal" @close="showModal=false" :classes="classes" :files="files"/>
@@ -11,7 +10,7 @@
 import axios from 'axios'
 import Vue from 'vue'
 import BulletinBoard from '~/components/BulletinBoard.vue'
-import ModalUploader from '~/components/ModalUploader.vue'
+import ModalUploader from '~/components/control/ModalUploader.vue'
 
 export default{
   props:{

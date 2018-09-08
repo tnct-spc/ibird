@@ -6,7 +6,7 @@ export const state = () => ({
   cursorOffset: {x: 0, y: 0},
   authUser: null,
   bbFieldSize: {x: 0, y: 0},
-  controlSelecterSize: {x: 0, y: 0}
+  BBxy: {x: 0, y: 0}
 })
 
 export const mutations = {
@@ -14,7 +14,7 @@ export const mutations = {
     if (state.papers[docid]) {
       try {
         state.papers[docid].x = x
-        state.papers[docid].y = y
+        state.papers[docid].y = y < 0 ? 0 : y
         state.papers[docid].updatedAt = new Date()
       } catch (e) {
         console.log(e)
@@ -25,7 +25,9 @@ export const mutations = {
     Object.keys(state.papers).forEach(key => {
       state.papers[key].isSelected = false
     })
-    state.papers[docid].isSelected = true
+    if (state.papers[docid]) {
+      state.papers[docid].isSelected = true
+    }
   },
   refreshPapers (state, {documents}) {
     Object.keys(state.papers).forEach(key => {
@@ -46,9 +48,9 @@ export const mutations = {
     state.bbFieldSize.x = x
     state.bbFieldSize.y = y
   },
-  setControlSelecterSize (state, {x, y}) {
-    state.controlSelecterSize.x = x
-    state.controlSelecterSize.y = y
+  setBBxy (state, {x, y}) {
+    state.BBxy.x = x
+    state.BBxy.y = y
   }
 }
 export const actions = {

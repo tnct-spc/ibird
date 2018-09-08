@@ -1,12 +1,12 @@
 <template>
-    <section id="wrapper">
-      <ControlSelecter :classes="classes" :classid="classid"/>
-      <Control id="upload" :classid="classid" :classes="classes"/>
+    <section>
+      <ControlHeader :classes="classes" :classid="classid"/>
+      <ControlUploader id="upload" :classid="classid" :classes="classes"/>
     </section>
 </template>
 <script>
-import Control from '~/components/Control.vue'
-import ControlSelecter from '~/components/ControlSelecter.vue'
+import ControlUploader from '~/components/control/ControlUploader.vue'
+import ControlHeader from '~/components/control/ControlHeader.vue'
 import axios from 'axios'
 
 export default {
@@ -22,7 +22,8 @@ export default {
       //ここでurlの確認
       var eflag = true
       classlist.forEach(c => {
-        if(String(c.classid) === params.control) eflag = false
+        if(String(c.classid) ===params.control) eflag = false
+        else if(!params.control)eflag = false
       })
       if(eflag) throw new URIError("URIちがうよ");
 
@@ -35,19 +36,19 @@ export default {
     })
   },
   components:{
-    Control,
-    ControlSelecter
+    ControlUploader,
+    ControlHeader
   },
   // middleware: 'auth',
 }
 </script>
+<style>
+body{
+  background-color: #39cd48
+}
+</style>
 <style scoped>
  #upload{
    height: 100%;
  }
- #wrapper {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-}
 </style>
