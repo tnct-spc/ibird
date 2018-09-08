@@ -11,7 +11,7 @@ services:
       - "./docker/nginx/conf.d:/etc/nginx/conf.d"
       - "./docker/nginx/sslkey:/sslkey"
     links:
-      - node_express
+        - node_express
   node_express:
     build:
       context: ./docker/node
@@ -22,8 +22,8 @@ services:
       - ".docker_node_modules:/src/node_modules"
     working_dir: /src
     command: [sh, -c, yarn install && yarn run dev]
-    ports:
-      - "3000:3000"
+    expose:
+      - "3000"
   postgres:
     build:
       context: ./docker/postgres
