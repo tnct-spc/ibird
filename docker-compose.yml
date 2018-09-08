@@ -3,7 +3,7 @@ services:
   nginx:
     build:
       context: ./docker/nginx
-    container_name: nginx
+    container_name: ibird.nginx
     ports:
       - "80:80"
       - "443:443"
@@ -15,7 +15,7 @@ services:
   node_express:
     build:
       context: ./docker/node
-    container_name: node_express
+    container_name: ibird.node_express
     hostname: localhost
     volumes:
       - ".:/src"
@@ -27,7 +27,7 @@ services:
   postgres:
     build:
       context: ./docker/postgres
-    container_name: postgre
+    container_name: ibird.postgre
     hostname: localhost
     environment:
       PGDATA: /var/lib/pgsql/data
