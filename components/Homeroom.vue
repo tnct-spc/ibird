@@ -38,7 +38,7 @@ export default {
   .qr {
   height:10%;
   width:10%;
-  left:-2%;
+  left:16%;
   /* right:0;
   top:0; */
   bottom:0;
@@ -46,7 +46,8 @@ export default {
 }
 .timetableparent {
   height: auto;
-  left: 8%;
+  width: auto;
+  left: 0;
   bottom: 0;
   position: fixed;
 }

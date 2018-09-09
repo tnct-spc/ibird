@@ -1,9 +1,12 @@
 <template>
    <div>
-        <p>{{stationData.station}} {{stationData.line}} {{stationData.direction}}</p>
-        <p v-for="(time, index) in nextTimes(2)" :key="index">
-            {{time.kind}} {{time.going}}行き {{time.hour}} : {{time.min}}
-        </p>
+    <b-card :header="stationData.station + ' ' + stationData.line + ' ' + stationData.direction" no-body>
+        <b-list-group flush>
+            <b-list-group-item v-for="(time, index) in nextTimes(2)" :key="index">
+                {{time.kind}} {{time.going}}行き {{time.hour}} : {{time.min}}
+            </b-list-group-item>
+        </b-list-group>
+    </b-card>
   </div>
 </template>
 
