@@ -47,8 +47,8 @@ export default {
 .timetableparent {
   height: auto;
   width: auto;
-  left: 0;
-  bottom: 0;
+  left: 0.5%;
+  bottom: 0.5%;
   position: fixed;
 }
 </style>
