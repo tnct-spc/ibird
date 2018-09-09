@@ -1,35 +1,78 @@
 import Vue from 'vue'
+import axios from 'axios'
 
 export const state = () => ({
-  papers: { }
+  papers: {},
+  cursorOffset: {x: 0, y: 0},
+  authUser: null,
+  bbFieldSize: {x: 0, y: 0},
+  BBxy: {x: 0, y: 0}
 })
 
-export const getters = {
-  papers (state) {
-    return classid => {
-      return state.papers[classid]
-    }
-  }
-}
-
 export const mutations = {
-  move (state, { classid, paperId, x, y }) {
-    if (state.papers[classid]) {
+  move (state, { docid, x, y }) {
+    if (state.papers[docid]) {
       try {
-        state.papers[classid][paperId].x = x
-        state.papers[classid][paperId].y = y
+        state.papers[docid].x = x
+        state.papers[docid].y = y < 0 ? 0 : y
+        state.papers[docid].updatedAt = new Date()
       } catch (e) {
         console.log(e)
       }
     }
   },
-  selectCard (state, {classid, paperId}) {
-    for (var i = 0; i < state.papers[classid].length; i++) {
-      state.papers[classid][i].isSelected = false
+  selectCard (state, {docid}) {
+    Object.keys(state.papers).forEach(key => {
+      state.papers[key].isSelected = false
+    })
+    if (state.papers[docid]) {
+      state.papers[docid].isSelected = true
     }
-    state.papers[classid][paperId].isSelected = true
   },
-  fixPapers (state, {classid, documents}) {
-    Vue.set(state.papers, classid, documents)
+  refreshPapers (state, {documents}) {
+    Object.keys(state.papers).forEach(key => {
+      Vue.delete(state.papers, key)
+    })
+    Object.keys(documents).forEach(key => {
+      Vue.set(state.papers, key, documents[key])
+    })
+  },
+  setCursorOffset (state, {x, y}) {
+    state.cursorOffset.x = x
+    state.cursorOffset.y = y
+  },
+  setUser (state, user) {
+    state.authUser = user
+  },
+  setbbFieldSize (state, {x, y}) {
+    state.bbFieldSize.x = x
+    state.bbFieldSize.y = y
+  },
+  setBBxy (state, {x, y}) {
+    state.BBxy.x = x
+    state.BBxy.y = y
+  }
+}
+export const actions = {
+  nuxtServerInit ({ commit }, { req }) {
+    if (req.session && req.session.authUser) {
+      commit('setUser', req.session.authUser)
+    }
+  },
+  async login ({ commit }, { username, password }) {
+    try {
+      const { data } = await axios.post('/api/login', { username, password })
+      commit('setUser', data)
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        throw new Error(error.response.data.message)
+      }
+      throw error
+    }
+  },
+
+  async logout ({ commit }) {
+    await axios.post('/api/logout')
+    commit('setUser', null)
   }
 }

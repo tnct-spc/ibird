@@ -1,3 +1,12 @@
+const environment = process.env.NODE_ENV || 'development'
+const env = environment === 'production' ? {
+  httpUrl: process.env.HTTP_URL || 'https://ibird.ml',
+  wsUrl: process.env.WS_URL || 'wss://ibird.ml'
+} : {
+  httpUrl: process.env.HTTP_URL || 'https://localhost',
+  wsUrl: process.env.WS_URL || 'wss://localhost'
+}
+
 module.exports = {
   /*
   ** Headers of the page
@@ -17,11 +26,11 @@ module.exports = {
   ** Global CSS
   */
   css: [
-      '@/assets/scss/app.scss',
-      '~/assets/css/main.css'
+    '@/assets/scss/app.scss',
+    '~/assets/css/main.css'
   ],
   modules: [
-  ['bootstrap-vue/nuxt', { css: false }]
+    ['bootstrap-vue/nuxt', { css: false }]
   ],
   /*
   ** Add axios globally
@@ -42,7 +51,5 @@ module.exports = {
       }
     }
   },
-  env: {
-    mainUrl: process.env.MAIN_URL || 'ibird.ml'
-  }
+  env: env
 }

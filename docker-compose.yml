@@ -3,7 +3,7 @@ services:
   nginx:
     build:
       context: ./docker/nginx
-    container_name: nginx
+    container_name: ibird.nginx
     ports:
       - "80:80"
       - "443:443"
@@ -11,23 +11,25 @@ services:
       - "./docker/nginx/conf.d:/etc/nginx/conf.d"
       - "./docker/nginx/sslkey:/sslkey"
     links:
-      - node_express
+        - node_express
   node_express:
     build:
       context: ./docker/node
-    container_name: node_express
+    container_name: ibird.node_express
     hostname: localhost
     volumes:
       - ".:/src"
       - ".docker_node_modules:/src/node_modules"
     working_dir: /src
-    command: [sh, -c, yarn install && yarn run dev]
-    ports:
-      - "3000:3000"
+    #develop,productionで良しなにコメントアウトする
+    command: [sh, -c, yarn install && yarn run build && yarn run start]
+    #command: [sh, -c, yarn install && yarn run dev]
+    expose:
+      - "3000"
   postgres:
     build:
       context: ./docker/postgres
-    container_name: postgre
+    container_name: ibird.postgres
     hostname: localhost
     environment:
       PGDATA: /var/lib/pgsql/data
