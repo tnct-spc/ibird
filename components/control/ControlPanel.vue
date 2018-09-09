@@ -7,7 +7,7 @@
       <span>classid = {{classid}}</span>
     </div>
     <div>
-      <input v-model="alertMessage" placeholder="緊急伝達事項を入力">
+      <input v-model="alertMessage" placeholder="for-debug緊急伝達事項を入力">
       <button type="button" class="btn btn-outline-primary btn-sm mx-1" @click="showAlert()">
          アラート表示
       </button>
