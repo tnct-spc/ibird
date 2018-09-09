@@ -1,3 +1,14 @@
+const environment = process.env.NODE_ENV || 'development'
+const env = environment === "production" ? {
+  mainUrl: process.env.MAIN_URL || 'ibird.ml',
+  httpUrl: process.env.HTTP_URL || 'https://ibird.ml',
+  wsUrl: process.env.WS_URL || 'wss://ibird.ml'
+} : {
+  mainUrl: process.env.MAIN_URL || 'localhost',
+  httpUrl: process.env.HTTP_URL || 'https://localhost',
+  wsUrl: process.env.WS_URL || 'wss://localhost'
+}
+
 module.exports = {
   /*
   ** Headers of the page
@@ -42,9 +53,5 @@ module.exports = {
       }
     }
   },
-  env: {
-    mainUrl: process.env.MAIN_URL || 'localhost',
-    httpUrl: process.env.HTTP_URL || 'https://localhost',
-    wsUrl: process.env.WS_URL || 'wss://localhost'
-  }
+  env: env
 }

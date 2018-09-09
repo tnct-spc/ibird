@@ -21,7 +21,9 @@ services:
       - ".:/src"
       - ".docker_node_modules:/src/node_modules"
     working_dir: /src
+    #develop,productionで良しなにコメントアウトする
     command: [sh, -c, yarn install && yarn run build && yarn run start]
+    #command: [sh, -c, yarn install && yarn run dev]
     expose:
       - "3000"
   postgres:
