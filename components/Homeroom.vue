@@ -3,7 +3,7 @@
     <BulletinBoard :classid="classid" />
     <Alert />
     <QR class="qr" :url="url" />
-    <TimetableParent />
+    <TimetableParent class="timetableparent" />
   </section>
 </template>
 <script>
@@ -42,6 +42,12 @@ export default {
   /* right:0;
   top:0; */
   bottom:0;
+  position: fixed;
+}
+.timetableparent {
+  height: auto;
+  left: 8%;
+  bottom: 0;
   position: fixed;
 }
 </style>

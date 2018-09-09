@@ -1,10 +1,9 @@
 <template>
-   <div class = "timetable">
-        <p class="lineinfo">{{stationData.station}} {{stationData.line}} {{stationData.going}}</p>
-        <p v-for="(time, index) in nextTimes(5)" :key="index" class="traininfo">
+   <div>
+        <p>{{stationData.station}} {{stationData.line}} {{stationData.going}}</p>
+        <p v-for="(time, index) in nextTimes(2)" :key="index">
             {{time.kind}} {{time.going}}行き {{time.hour}} : {{time.min}}
         </p>
-        <p class="nowtime">{{ hour }}：{{ minute }}</p>
   </div>
 </template>
 
@@ -87,20 +86,4 @@ export default {
 </script>
 
 <style scoped>
-.timetable{
-    background-color : olivedrab;
-    border : outset 1em forestgreen;
-}
-.stationinfo{
-    margin : 1em;
-}
-
-.traininfo{
-    margin : 1em;
-}
-
-.nowtime{
-    color : white;
-
-}
 </style>
