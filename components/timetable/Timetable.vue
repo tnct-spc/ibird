@@ -10,9 +10,9 @@
 
 <script>
 import axios from 'axios'
-const holidayData = require("../.timetable/holidays_22900_1532075792594.json")
-const weekdaysData = require("../.timetable/weekdays_22900_1532075866616.json")
-const weekenddaysData = require("../.timetable/weekenddays_22900_1532076033115.json")
+const holidayData = require("~/.timetable/holidays_22900_1532075792594.json")
+const weekdaysData = require("~/.timetable/weekdays_22900_1532075866616.json")
+const weekenddaysData = require("~/.timetable/weekenddays_22900_1532076033115.json")
 
 export default {
     data : function(){
