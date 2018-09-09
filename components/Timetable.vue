@@ -1,9 +1,10 @@
 <template>
    <div class = "timetable">
         <p class="lineinfo">{{stationData.station}} {{stationData.line}} {{stationData.going}}</p>
-        <p v-if="nextTime" class="traininfo">{{nextTime.kind}} {{nextTime.going}}行き {{nextTime.hour}} : {{nextTime.min}}</p>
-        <p v-else>ぬる</p>
-        <p class="nowtime">{{ hour }}：{{ minute }} : {{ second }}</p>
+        <p v-for="(time, index) in nextTimes(5)" :key="index" class="traininfo">
+            {{time.kind}} {{time.going}}行き {{time.hour}} : {{time.min}}
+        </p>
+        <p class="nowtime">{{ hour }}：{{ minute }}</p>
   </div>
 </template>
 
@@ -18,7 +19,6 @@ export default {
         return {
             hour : new Date().getHours(),
             minute : new Date().getMinutes(),
-            second : new Date().getSeconds(),
             dayOfWeek : new Date().getDay()
         }
     },
@@ -36,11 +36,25 @@ export default {
                 return weekdaysData
             }
         },
-        nextTime : function(){
-            return this.getNextTime(this.hour, this.minute)
-        }
     },
     methods : {
+        nextTimes : function(elementNumber){ //何個の要素かを引数として取る
+            const times = []
+            var buff = null
+            for(var i = 0; i< elementNumber; i++){
+                console.log(i)
+                if(!buff){
+                    const firstTime = this.getNextTime(this.hour, this.minute)
+                    times.push(firstTime)
+                    buff = firstTime
+                }else{
+                    const time = this.getNextTime(buff.hour, buff.min)
+                    times.push(time)
+                    buff = time
+                }
+            }
+            return times
+        },
         getNextTime : function(nHour, nMinute){ //現在の時間と分が引数(0≦nHour≦24, 0≦nMinute≦59)
             nHour = nHour==0 ? 24 : nHour
             const times = this.stationData.timetable[nHour]
@@ -65,7 +79,6 @@ export default {
         timer : function(){
             this.hour = new Date().getHours();
             this.minute = new Date().getMinutes();
-            this.second = new Date().getSeconds();
             this.dayOfWeek = new Date().getDay();
             setTimeout(this.timer,1000);
         }
