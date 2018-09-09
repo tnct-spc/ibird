@@ -21,13 +21,13 @@ services:
       - ".:/src"
       - ".docker_node_modules:/src/node_modules"
     working_dir: /src
-    command: [sh, -c, yarn install && yarn run dev]
+    command: [sh, -c, yarn install && yarn run build && yarn run start]
     expose:
       - "3000"
   postgres:
     build:
       context: ./docker/postgres
-    container_name: ibird.postgre
+    container_name: ibird.postgres
     hostname: localhost
     environment:
       PGDATA: /var/lib/pgsql/data
