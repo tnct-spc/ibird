@@ -8,7 +8,12 @@ import moment from 'moment'
 export default {
   data () {
     return{
-      weatherMap: null
+      weatherMap: null,
+      lat: '35.632789',
+      lon: '139.294293',
+      zoom: '15',
+      width: 'undefind',
+      height: 'undefind'
       }
   },
    mounted () {
@@ -20,12 +25,7 @@ export default {
   methods: {
     reload: async function() {
       var now = await moment().format('YYYYMMHHmm')
-      const lat = '35.632789'
-      const lon = '139.294293'
-      const z = '15'
-      var width = 'undefind'
-      var height = 'undefind'
-      this.weatherMap = 'https://map.yahooapis.jp/map/V1/static?appid=dj0zaiZpPXVZaDlrczVieXNFYSZzPWNvbnN1bWVyc2VjcmV0Jng9ZGE-&lat=' + lat + '&lon=' + lon + '&z=' + z + '&width=' + width + '&height=' + height + '&mode=map&overlay=type:rainfall|date:' + now + '|datelabel:on&output=jpeg'
+      this.weatherMap = 'https://map.yahooapis.jp/map/V1/static?appid=dj0zaiZpPXVZaDlrczVieXNFYSZzPWNvbnN1bWVyc2VjcmV0Jng9ZGE-&lat=' + this.lat + '&lon=' + this.lon + '&z=' + this.zoom + '&width=' + this.width + '&height=' + this.height + '&mode=map&overlay=type:rainfall|date:' + now + '|datelabel:on&output=jpeg'
     }
   }
 }
