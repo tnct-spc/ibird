@@ -1,8 +1,8 @@
 <template>
   <section>
-    <div class="alert-div"  v-show="this.message != null">
+    <div class="alert-div my-10"  v-show="this.message != null">
       <b-alert class=" b-alertc" show variant="danger">
-        <p class="text-center alert-text">{{this.message}}</p>
+        <p class="text-danger text-center my-auto alert-text">{{this.message}}</p>
       </b-alert>
     </div>
   </section>
@@ -46,7 +46,7 @@ export default {
   position:fixed;
 }
 .alert-text {
-  font-size: 150%;
+  font-size: 200%;
 }
 
 </style>
