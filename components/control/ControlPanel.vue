@@ -73,11 +73,15 @@ export default{
       })
     },
     showAlert(){
-      const wsClient = new w3cwebsocket(process.env.wsUrl + '/ws/alert')
-      wsClient.onopen = () => {
-        if(this.alertMessage !== ""){
-          // console.log({message: this.alertMessage})
-          wsClient.send(JSON.stringify({message: this.alertMessage}))
+      if (this.alertMessage.length > 100){
+        alert("アラートの最大表示は100文字です")
+      } else{
+        const wsClient = new w3cwebsocket(process.env.wsUrl + '/ws/alert')
+        wsClient.onopen = () => {
+          if(this.alertMessage !== ""){
+            // console.log({message: this.alertMessage})
+            wsClient.send(JSON.stringify({message: this.alertMessage}))
+          }
         }
       }
     }
