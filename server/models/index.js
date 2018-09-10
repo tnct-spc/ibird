@@ -1,9 +1,10 @@
+'use strict'
 const Sequelize = require('sequelize')
 const classesModel = require('./classes')
 const documentsModel = require('./documents')
 const usersModel = require('./documents')
 
-const sequelize = new Sequelize('ibird', 'postgres', 'password',{
+const sequelize = new Sequelize('ibird', 'postgres', 'password', {
   host: 'postgres',
   dialect: 'postgres',
   operatorsAliases: false,

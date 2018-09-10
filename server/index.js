@@ -19,7 +19,6 @@ app.use(session({
   cookie: { maxAge: 60000 }
 }))
 
-
 // Import API Routes
 app.use('/api', api)
 
