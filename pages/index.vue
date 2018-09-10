@@ -1,16 +1,10 @@
 <template>
-  <section class="container">
-    <Timetable />
-  </section>
+  <h1>
+    Welcome to iBird
+  </h1>
 </template>
 
 <script>
-import Timetable from '~/components/Timetable.vue'
-export default {
-  components: {
-    Timetable,
-  },
-}
 </script>
 
 <style scoped></style>

@@ -1,18 +1,17 @@
 <template>
-   <div class = "timetable">
-        <p class="lineinfo">{{stationData.station}} {{stationData.line}} {{stationData.going}}</p>
-        <p v-for="(time, index) in nextTimes(5)" :key="index" class="traininfo">
-            {{time.kind}} {{time.going}}行き {{time.hour}} : {{time.min}}
-        </p>
-        <p class="nowtime">{{ hour }}：{{ minute }}</p>
+   <div>
+    <b-card :header="stationData.station + ' ' + stationData.line + ' ' + stationData.direction" no-body>
+        <b-list-group flush>
+            <b-list-group-item v-for="(time, index) in nextTimes(2)" :key="index">
+                {{time.kind}} {{time.going}}行き {{time.hour}} : {{time.min}}
+            </b-list-group-item>
+        </b-list-group>
+    </b-card>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
-const holidayData = require("../.timetable/holidays_22900_1532075792594.json")
-const weekdaysData = require("../.timetable/weekdays_22900_1532075866616.json")
-const weekenddaysData = require("../.timetable/weekenddays_22900_1532076033115.json")
 
 export default {
     data : function(){
@@ -22,6 +21,11 @@ export default {
             dayOfWeek : new Date().getDay()
         }
     },
+    props: {
+        "holidayData": Object,
+        "weekdaysData": Object,
+        "weekenddaysData": Object,
+    },
     created : function(){
         console.log(this.stationData);
         this.timer();
@@ -29,11 +33,11 @@ export default {
     computed : {
         stationData : function() {
             if(this.dayOfWeek == 0){
-                return holidayData
+                return this.holidayData
             }else if(this.dayOfWeek == 6){
-                return holidayData
+                return this.weekenddaysData
             }else{
-                return weekdaysData
+                return this.weekdaysData
             }
         },
     },
@@ -87,20 +91,4 @@ export default {
 </script>
 
 <style scoped>
-.timetable{
-    background-color : olivedrab;
-    border : outset 1em forestgreen;
-}
-.stationinfo{
-    margin : 1em;
-}
-
-.traininfo{
-    margin : 1em;
-}
-
-.nowtime{
-    color : white;
-
-}
 </style>
