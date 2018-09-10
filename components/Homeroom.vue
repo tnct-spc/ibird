@@ -38,17 +38,15 @@ export default {
   .qr {
   height:10%;
   width:10%;
-  left:16%;
-  /* right:0;
-  top:0; */
-  bottom:0;
+  left: 7%;
+  bottom: 1%;
   position: fixed;
 }
 .timetableparent {
   height: auto;
   width: auto;
-  left: 0.5%;
-  bottom: 0.5%;
+  left: 1%;
+  bottom: 1%;
   position: fixed;
 }
 </style>
