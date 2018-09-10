@@ -1,53 +1,15 @@
 import { Router } from 'express'
-import Sequelize from 'sequelize'
 import parser from 'body-parser'
 import { w3cwebsocket } from 'websocket'
 import models from '../models'
 
-const classm = models.classes
+const classes = models.classes
+const documents = models.documents
+
 const W3cwebsocket = w3cwebsocket
 const router = Router()
 router.use(parser.urlencoded({ extended: false }));
 router.use(parser.json());
-
-const sequelize = new Sequelize('ibird', 'postgres', 'password',{
-    host: 'postgres',
-    dialect: 'postgres',
-    operatorsAliases: false,
-    logging: false
-})
-const classes = sequelize.define('classes', {
-    classid: {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-    },
-    year: Sequelize.TEXT,
-    course: Sequelize.TEXT,
-    randomSort: Sequelize.BOOLEAN
-  },{
-      timestamps: false
-  });
-  const documents = sequelize.define('documents', {
-      id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-      },
-      docid: Sequelize.STRING,
-      classid: Sequelize.INTEGER,
-      x: Sequelize.INTEGER,
-      y: Sequelize.INTEGER,
-      priority: Sequelize.INTEGER,
-      endTime: Sequelize.DATE,
-      startTime: Sequelize.DATE,
-      updatedAt: Sequelize.DATE,
-      title: Sequelize.TEXT,
-      openMobile: Sequelize.BOOLEAN,
-    },{
-        timestamps: false
-    });
-
 //classidを渡したらドキュメントのリストを返してくれます
 const docList = (classid)=>{
     return documents.findAll({
@@ -216,7 +178,7 @@ router.delete('/rm-doc', (req, res, next) => {
 })
 
 router.get('/classes-list', (req, res, next) => {
-    classm.findAll().then(c => {
+    classes.findAll().then(c => {
         const list = []
         c.forEach((value, index, array) =>{
             delete value.dataValues.documents

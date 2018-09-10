@@ -1,16 +1,16 @@
+
 'use strict'
 module.exports = (sequelize, DataTypes) => {
-  var classes = sequelize.define('classes', {
-    classid: {
+  const users = sequelize.define('users', {
+    id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true
     },
-    year: DataTypes.TEXT,
-    course: DataTypes.TEXT,
-    randomSort: DataTypes.BOOLEAN
+    username: DataTypes.TEXT,
+    hashedPassword: DataTypes.TEXT
   }, {
     timestamps: false
   })
-  return classes
+  return users
 }

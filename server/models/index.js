@@ -1,5 +1,7 @@
 const Sequelize = require('sequelize')
 const classesModel = require('./classes')
+const documentsModel = require('./documents')
+const usersModel = require('./documents')
 
 const sequelize = new Sequelize('ibird', 'postgres', 'password',{
   host: 'postgres',
@@ -9,11 +11,10 @@ const sequelize = new Sequelize('ibird', 'postgres', 'password',{
 })
 
 const classes = classesModel(sequelize, Sequelize)
-// BlogTag will be our way of tracking relationship between Blog and Tag models
-// each Blog can have multiple tags and each Tag can have multiple blogs
-// const BlogTag = sequelize.define('blog_tag', {})
-// const Blog = BlogModel(sequelize, Sequelize)
-// const Tag = TagModel(sequelize, Sequelize)
+const documents = documentsModel(sequelize, Sequelize)
+const users = usersModel(sequelize, Sequelize)
 module.exports = {
-  classes
+  classes,
+  documents,
+  users
 }
