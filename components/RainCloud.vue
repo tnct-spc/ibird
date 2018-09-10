@@ -15,7 +15,7 @@ export default {
     this.reload()
     setInterval(() => {
       this.reload()
-    }, 120000)
+    }, 60000)
   },
   methods: {
     reload: async function() {
