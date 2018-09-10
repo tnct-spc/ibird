@@ -2,6 +2,7 @@ import { Router } from 'express'
 import parser from 'body-parser'
 import { w3cwebsocket } from 'websocket'
 import models from '../models'
+import docList from '../lib/doclist'
 
 const classes = models.classes
 const documents = models.documents
@@ -10,25 +11,7 @@ const W3cwebsocket = w3cwebsocket
 const router = Router()
 router.use(parser.urlencoded({ extended: false }));
 router.use(parser.json());
-//classidを渡したらドキュメントのリストを返してくれます
-const docList = (classid)=>{
-    return documents.findAll({
-      where: {classid: classid}
-    }).then( c =>{
-        var returndata = c.filter(p => {
-          var startTime = new Date(p.startTime)
-          startTime = new Date(startTime.setHours(startTime.getHours() -9))
-          var endTime = new Date(p.endTime)
-          endTime = new Date(endTime.setHours(endTime.getHours() -9))
-          endTime.setDate(endTime.getDate() + 1)
 
-          const a = new Date() - startTime > 0 //開始日を過ぎているかどうか(当日はtrue)
-          const b = endTime - new Date() > 0 //終了日より前(当日はtrue)
-          return a&&b
-        })
-      return returndata
-    })
-}
 const sortDocs = (classid) => {
   var makeRandom = ''
   classes.findById(classid)
