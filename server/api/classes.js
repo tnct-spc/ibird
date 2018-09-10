@@ -2,7 +2,9 @@ import { Router } from 'express'
 import Sequelize from 'sequelize'
 import parser from 'body-parser'
 import { w3cwebsocket } from 'websocket'
+import models from '../models'
 
+const classm = models.classes
 const W3cwebsocket = w3cwebsocket
 const router = Router()
 router.use(parser.urlencoded({ extended: false }));
@@ -214,7 +216,7 @@ router.delete('/rm-doc', (req, res, next) => {
 })
 
 router.get('/classes-list', (req, res, next) => {
-    classes.findAll().then(c => {
+    classm.findAll().then(c => {
         const list = []
         c.forEach((value, index, array) =>{
             delete value.dataValues.documents
