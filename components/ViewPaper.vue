@@ -41,7 +41,6 @@ export default{
     const element = document.getElementById(this.docid)
     this.width = element.naturalWidth
     this.height = element.naturalHeight
-    alert(String(this.width)+String(this.height))
     if((this.height/this.width)<0.9) this.style="max-width:"+60+"%;max-height:"+100+"%;"
     else this.style="max-width:"+30+"%;max-height:"+100+"%;"
   }
