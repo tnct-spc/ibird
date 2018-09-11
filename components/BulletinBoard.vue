@@ -1,9 +1,9 @@
 <template>
   <section>
     <div id="wrapper">
-      <ViewPaper v-if="showPaper" @close="showPaper=false" :paper="papers[docid]"/>
+      <ViewPaper v-if="showPaper" @close="showPaper=false" :paper="papers[docid]" :docid="docid"/>
       <div id="content" ref="fieldElm">
-       <div v-for="(paper, i) in sortedPapers" @dblclick="viewPaper(paper.docid)">
+       <div :id=i v-for="(paper, i) in sortedPapers" @dblclick="viewPaper(paper.docid)">
         <Paper
           :key="i"
           :classid="classid"

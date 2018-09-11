@@ -2,14 +2,14 @@
   <section>
     <div class="modal-mask" @click="$emit('close')">
       <div class="modal-wrapper">
-        <div class="modal-container">
+        <div class="modal-container" :style="style">
           <div class="modal-body">
-            <img class="paper"
-            :src="paper.imgUrl"
-            :style="{
-              left: (this.paper.x*this.bbFieldSize.x/10000)+'px',
-              top: (this.paper.y*this.bbFieldSize.y/10000)+'px',
-              }"/>
+            <img :id="docid" class="paper"
+             :src="paper.imgUrl"
+             :style="{
+               left: (this.paper.x*this.bbFieldSize.x/10000)+'px',
+               top: (this.paper.y*this.bbFieldSize.y/10000)+'px',
+               }"/>
           </div>
         </div>
       </div>
@@ -20,7 +20,15 @@
 import { mapState, mapMutations } from 'vuex'
 export default{
   props:{
-    "paper":{}
+    "paper":Object,
+    "docid":String
+  },
+  data(){
+    return{
+      width:0,
+      height:0,
+      style:""
+    }
   },
   computed: {
     ...mapState({
@@ -28,12 +36,21 @@ export default{
       bbFieldSize: 'bbFieldSize',
       BBxy: 'BBxy'
     })
+  },
+  mounted(){
+    const element = document.getElementById(this.docid)
+    this.width = element.naturalWidth
+    this.height = element.naturalHeight
+    alert(String(this.width)+String(this.height))
+    if((this.height/this.width)<0.9) this.style="max-width:"+60+"%;max-height:"+100+"%;"
+    else this.style="max-width:"+30+"%;max-height:"+100+"%;"
   }
 }
 </script>
 <style scoped>
 img.paper {
-  width: 80%;
+  width: 100%;
+  height: 100%;
 }
 
 .modal-mask {
@@ -54,8 +71,6 @@ img.paper {
 }
 
 .modal-container {
-  max-width: 600px;
-  max-height: 950%;
   margin: 0px auto;
   padding: 10px;
   background-color: #000000;
