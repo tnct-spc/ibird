@@ -44,7 +44,7 @@ export default {
       }
   },
   mounted(){
-    axios.get(process.env.httpUrl + '/api/years-and-courses').then(res =>{
+    axios.get(process.env.httpUrl + '/api/v2/years-and-courses').then(res =>{
       this.years = res.data.years
       res.data.courses.forEach((e,i)=>{
         switch (e) {

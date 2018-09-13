@@ -97,7 +97,7 @@ export default {
       setBBxy: 'setBBxy'
     }),
     refresh: function(){
-      axios.get(process.env.httpUrl + '/api/class-docs',{
+      axios.get(process.env.httpUrl + '/api/v2/docs',{
         params: { classid: this.classid }
       }).then(res =>{
         var documents = {}

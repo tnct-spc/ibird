@@ -97,7 +97,7 @@ export default {
       //this.showMenu = false
     },
     remove: function(){
-      axios.delete(process.env.httpUrl + '/api/rm-doc', {
+      axios.delete(process.env.httpUrl + '/api/v2/doc', {
         params: {
           classid: this.classid,
           docid: this.paper.docid
@@ -110,7 +110,7 @@ export default {
       })
     },
     savePosition: function(){
-        axios.put(process.env.httpUrl + '/api/fix-position', {
+        axios.put(process.env.httpUrl + '/api/v2/doc', {
           classid: this.classid,
           docid: this.paper.docid,
           x: this.paper.x,

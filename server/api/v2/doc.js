@@ -31,7 +31,7 @@ router.get('/docs-mobile', (req, res, next) => {
   })
 })
 
-router.put('/docs', (req, res, next) => {
+router.post('/docs', (req, res, next) => {
   const classids = req.body.classids
   const doc = req.body
   const startTime = new Date(doc.startTime)
