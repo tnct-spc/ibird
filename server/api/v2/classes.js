@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import parser from 'body-parser'
-import models from '../models'
+import models from '../../models'
 
 const classes = models.classes
 const router = Router()
