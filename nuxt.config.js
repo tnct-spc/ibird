@@ -1,10 +1,12 @@
+const host = "localhost:3000"
+
 const environment = process.env.NODE_ENV || 'development'
 const env = environment === 'production' ? {
-  httpUrl: process.env.HTTP_URL || 'https://ibird.ml',
-  wsUrl: process.env.WS_URL || 'wss://ibird.ml'
+  httpUrl: process.env.HTTP_URL || 'https://tokyo-ct.ibird.ml',
+  wsUrl: process.env.WS_URL || 'wss://tokyo-ct.ibird.ml'
 } : {
-  httpUrl: process.env.HTTP_URL || 'https://localhost',
-  wsUrl: process.env.WS_URL || 'wss://localhost'
+  httpUrl: process.env.HTTP_URL || 'http://' + host,
+  wsUrl: process.env.WS_URL || 'ws://' + host
 }
 
 module.exports = {

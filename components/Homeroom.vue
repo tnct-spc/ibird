@@ -3,12 +3,14 @@
     <BulletinBoard :classid="classid" />
     <Alert />
     <QR class="qr" :url="url" />
+    <TimetableParent class="timetableparent" />
   </section>
 </template>
 <script>
 import BulletinBoard from '~/components/BulletinBoard.vue'
 import Alert from '~/components/Alert.vue'
 import QR from '~/components/QR.vue'
+import TimetableParent from '~/components/timetable/TimetableParent.vue'
 
 export default {
   props: {
@@ -17,7 +19,8 @@ export default {
   components: {
     BulletinBoard,
     Alert,
-    QR
+    QR,
+    TimetableParent,
   },
   computed: {
     url: function(){
@@ -35,10 +38,15 @@ export default {
   .qr {
   height:10%;
   width:10%;
-  left:-2%;
-  /* right:0;
-  top:0; */
-  bottom:0;
+  left: 7%;
+  bottom: 1%;
+  position: fixed;
+}
+.timetableparent {
+  height: auto;
+  width: auto;
+  left: 1%;
+  bottom: 1%;
   position: fixed;
 }
 </style>
