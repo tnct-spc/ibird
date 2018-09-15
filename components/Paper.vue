@@ -7,6 +7,7 @@
       alt="" :style="{
         left: (this.paper.x*this.bbFieldSize.x/10000)+'px',
         top: (this.paper.y*this.bbFieldSize.y/10000)+'px',
+        'max-width': 15 * paper.imgSize.x / 2483 + '%',
         //left: '0px',
         //top: '0px'
         }" ondragstart="return false;" >
@@ -146,7 +147,6 @@ img.paper {
   margin: 0px;
   box-shadow: 0.5rem 0.5rem 0.5rem 0.01rem;
   border:solid 0.1rem black;
-  max-width: 15%;;
   position: absolute;
   z-index:0;
 }
