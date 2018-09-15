@@ -120,7 +120,7 @@ export default {
         })
     },
     saveOrder: function(){
-        axios.put(process.env.httpUrl + '/api/order-doc', {
+        axios.put(process.env.httpUrl + '/api/v2/doc', {
           classid: this.classid,
           docid: this.paper.docid,
         }).catch(e =>{
@@ -128,7 +128,7 @@ export default {
         })
     },
     upPaper: function(){
-      axios.put(process.env.httpUrl + '/api/order-doc', {
+      axios.put(process.env.httpUrl + '/api/v2/doc', {
         classid: this.classid,
         docid: this.paper.docid
       }).then( () => {

@@ -96,7 +96,7 @@ export default {
       this.courseIndex = index
     },
     getClassid: function(){
-      axios.get(process.env.httpUrl + '/api/classid',{
+      axios.get(process.env.httpUrl + '/api/v2/class-id',{
         params: { year: this.years[this.yearIndex], course: this.courses[this.courseIndex] }
       }).then(res =>{
         this.$parent.classid = String(res.data.classid)
