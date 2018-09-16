@@ -1,20 +1,19 @@
 import { Router } from 'express'
 
-import users from './users'
 import timetable from './timetable'
 import weather from './weather_forecast'
-import upload_file from './upload-file'
-import classes from './classes'
+import uploadFile from './upload-file'
 import auth from './auth'
+import sort from './sort'
+import v2 from './v2'
 
 const router = Router()
 
-// Add USERS Routes
-router.use(users)
 router.use(weather)
-router.use(upload_file)
-router.use(classes)
+router.use(uploadFile)
 router.use(timetable)
 router.use(auth)
+router.use(sort)
+router.use('/v2', v2)
 
 export default router

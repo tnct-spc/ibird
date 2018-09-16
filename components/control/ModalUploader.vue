@@ -204,7 +204,7 @@ export default{
       axios.post('../api/upload-file',formData)
       .then((response)=>{
         formData2.docid = response.data.docid
-        axios.post('../api/add-doc',formData2)
+        axios.post('../api/v2/docs',formData2)
         .then((response)=>{
           this.$parent.text=this.submitId
           console.log(response)

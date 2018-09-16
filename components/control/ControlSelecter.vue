@@ -44,7 +44,7 @@ export default {
       }
   },
   mounted(){
-    axios.get(process.env.httpUrl + '/api/years-and-courses').then(res =>{
+    axios.get(process.env.httpUrl + '/api/v2/years-and-courses').then(res =>{
       this.years = res.data.years
       res.data.courses.forEach((e,i)=>{
         switch (e) {
@@ -96,7 +96,7 @@ export default {
       this.courseIndex = index
     },
     getClassid: function(){
-      axios.get(process.env.httpUrl + '/api/classid',{
+      axios.get(process.env.httpUrl + '/api/v2/class-id',{
         params: { year: this.years[this.yearIndex], course: this.courses[this.courseIndex] }
       }).then(res =>{
         this.$parent.classid = String(res.data.classid)
