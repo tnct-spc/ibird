@@ -48,7 +48,9 @@ router.post('/docs', (req, res, next) => {
         openMobile: doc.openMobile,
         title: doc.title,
         startTime: startTime,
-        endTime: endTime
+        endTime: endTime,
+        sizeX: doc.imgsize.width,
+        sizeY: doc.imgsize.height
       })
   })
   documents.bulkCreate(insertData)
