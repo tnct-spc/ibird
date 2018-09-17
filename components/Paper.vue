@@ -7,7 +7,7 @@
       alt="" :style="{
         left: (this.paper.x*this.bbFieldSize.x/10000)+'px',
         top: (this.paper.y*this.bbFieldSize.y/10000)+'px',
-        'max-width': 15 * paper.imgSize.x / 2483 + '%',
+        'max-width': 15 * paper.sizeX / 2483 + '%',
         //left: '0px',
         //top: '0px'
         }" ondragstart="return false;" >
