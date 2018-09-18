@@ -1,8 +1,8 @@
 import { Router } from 'express'
 import parser from 'body-parser'
-import models from '../../models'
-import sortDocs from '../../lib/sortdocs'
-import docList from '../../lib/doclist'
+import models from '../models'
+import sortDocs from '../lib/sortdocs'
+import docList from '../lib/doclist'
 
 const documents = models.documents
 const router = Router()

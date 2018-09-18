@@ -97,7 +97,7 @@ export default {
       //this.showMenu = false
     },
     remove: function(){
-      axios.delete(process.env.httpUrl + '/api/v2/doc', {
+      axios.delete(process.env.httpUrl + '/api/doc', {
         params: {
           classid: this.classid,
           docid: this.paper.docid
@@ -110,7 +110,7 @@ export default {
       })
     },
     savePosition: function(){
-        axios.put(process.env.httpUrl + '/api/v2/doc', {
+        axios.put(process.env.httpUrl + '/api/doc', {
           classid: this.classid,
           docid: this.paper.docid,
           x: this.paper.x,
@@ -120,7 +120,7 @@ export default {
         })
     },
     saveOrder: function(){
-        axios.put(process.env.httpUrl + '/api/v2/doc', {
+        axios.put(process.env.httpUrl + '/api/doc', {
           classid: this.classid,
           docid: this.paper.docid,
         }).catch(e =>{
@@ -128,7 +128,7 @@ export default {
         })
     },
     upPaper: function(){
-      axios.put(process.env.httpUrl + '/api/v2/doc', {
+      axios.put(process.env.httpUrl + '/api/doc', {
         classid: this.classid,
         docid: this.paper.docid
       }).then( () => {
