@@ -20,10 +20,11 @@ module.exports = {
   },
   down: (queryInterface, Sequelize) => {
     return Promise.all([
-      queryInterface.removeColumn(
+      /* queryInterface.removeColumn(
         'documents',
         'classid',
       ),
+      
       queryInterface.addColumn(
         'classes',
         'docids',
@@ -34,6 +35,7 @@ module.exports = {
         'id',
         Sequelize.INTEGER
       )
+      */
     ])
   }
 };
