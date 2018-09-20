@@ -1,20 +1,24 @@
 <template>
   <section>
     <div id="wrapper">
+      <ViewPaper v-if="showPaper" @close="showPaper=false" :paper="papers[docid]" :docid="docid"/>
       <div id="content" ref="fieldElm">
-        <Paper v-for="(paper, i) in sortedPapers"
+       <div :id=i v-for="(paper, i) in sortedPapers" @dblclick="viewPaper(paper.docid)">
+        <Paper
           :key="i"
           :classid="classid"
           :ws-client="client"
           :paper="paper"
-      />
+        />
       </div>
+     </div>
     </div>
   </section>
 </template>
 
 <script>
 import Paper from '~/components/Paper.vue'
+import ViewPaper from '~/components/ViewPaper.vue'
 import { mapState, mapMutations } from 'vuex'
 import { w3cwebsocket } from 'websocket'
 import axios from 'axios'
@@ -27,8 +31,10 @@ export default {
   },
   data () {
     return {
+      showPaper:false,
       client: {},
-      refreshClient: {}
+      refreshClient: {},
+      docid:""
     }
   },
   watch:{
@@ -90,6 +96,10 @@ export default {
     }
   },
   methods:{
+    viewPaper(docid){
+      this.docid = docid
+      this.showPaper = true
+    },
     ...mapMutations({
       move: 'move',
       refreshPapers: 'refreshPapers',
@@ -105,7 +115,7 @@ export default {
           document['isSelected'] = false
           document['imgUrl'] = '/jpg/' + document.docid + '.jpg'
           documents[document.docid] = document
-        });
+        })
         this.refreshPapers({documents: documents})
       }).catch(e =>{
         console.log(e)
@@ -120,7 +130,8 @@ export default {
     }
   },
   components: {
-    Paper
+    Paper,
+    ViewPaper
   }
 }
 </script>

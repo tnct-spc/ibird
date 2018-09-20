@@ -14,24 +14,11 @@ Ctr+C
 ```
 
 DBが更新された場合はDBをリセットしないと動かないことがる
-sequelize-cliを使う
+docker-compose upをしてる状態で
 ```
-node_modules/.bin/sequelize 
-#もしくはglobalにinstallして
-sequelize
+sudo docker exec -it ibird.node_express sh resetdb.sh   
 ```
-下の例ではglobalにinstallしている
-docker-composeで起動してる状態で
-```
-cd server
-
-#DB作成
-sequelize db:migrate
-
-#seed(初期データ)作成
-sequelzie db:seed:undo:all
-sequelize db:seed:all
-```
+これでDBをリセットしてくれる
 
 
 
