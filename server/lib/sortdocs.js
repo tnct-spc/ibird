@@ -5,6 +5,7 @@ import docList from './doclist'
 const W3cwebsocket = w3cwebsocket
 const classes = models.classes
 
+// 上方向にあるドキュメントの高さを求める
 const laiderSearch = (right, width, matrix) => {
   let sealings = []
   for (let i = 0; i <= 4; i++) {
@@ -45,26 +46,35 @@ export default classid => {
       else lis.push(v)
     })
     let sortedList = plis.concat(lis)
-    let cleanX = 0
-    let cleanY = 300
+    const paperClose = 300
+    let cleanX = paperClose
+    let cleanY = paperClose
     let oldPaperSizeX = 0
     let paperMatrix = []
+    // ソートされたものを配置するfor
     for (let i = 0; i < sortedList.length; i++) {
-      let sizeX = sortedList[i].sizeX * 0.60
+      let sizeX = sortedList[i].sizeX * 0.60 // 紙の解像度と謎な座標系を合わせるための定数
       let sizeY = sortedList[i].sizeY * 1.06
+      // 左側に飛び出したときの場合分け
       if (cleanX + oldPaperSizeX + 200 < 10000 - sizeX) {
-        cleanX += oldPaperSizeX + 200
+        cleanX += oldPaperSizeX + paperClose
       } else {
         cleanX = 0
         cleanY = 5000
-        cleanX += 200
+        cleanX += paperClose
       }
-      cleanY = laiderSearch(cleanX, sizeX, paperMatrix) + 300
+      cleanY = laiderSearch(cleanX, sizeX, paperMatrix) + paperClose
       paperMatrix.push({
         bottom: cleanY + sizeY,
         right: cleanX + sizeX,
         left: cleanX
       })
+      if (cleanY + sizeY > 10000) {
+        sortedList[i - 1].x = 8000
+        sortedList[i - 1].y = 5000
+        cleanX = 8000
+        cleanY = 5000
+      }
       sortedList[i].x = cleanX
       sortedList[i].y = cleanY
       if (makeRandom && (i < 9 || sortedList.length === 10)) {
