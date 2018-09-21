@@ -15,6 +15,7 @@ export default classid => {
       return 400
     })
   // 並べる場所,今はてきとう
+  /*
   let cleanXYS = [
     {x: 200, y: 400},
     {x: 2200, y: 400},
@@ -27,6 +28,7 @@ export default classid => {
     {x: 6200, y: 5000},
     {x: 8200, y: 5000}
   ]
+  */
   docList(classid).then(list => {
     // list並べる順番にsortする処理
     let temp = list
@@ -44,20 +46,31 @@ export default classid => {
       else lis.push(v)
     })
     let sortedList = plis.concat(lis)
+    let cleanX = 0
+    let cleanY = 400
+    let oldPaperSizeX = 0
     for (let i = 0; i < sortedList.length; i++) {
+      let sizeX = sortedList[i].sizeX
+      let sizeY = sortedList[i].sizeY
+      cleanX += oldPaperSizeX * 0.602 + 200
+      /*
       if (cleanXYS.length <= i) {
         cleanXYS.push({
           x: cleanXYS[i - 1].x + 50,
           y: cleanXYS[i - 1].y + 50
         })
       }
-      sortedList[i].x = cleanXYS[i].x
-      sortedList[i].y = cleanXYS[i].y
+      */
+      sortedList[i].x = cleanX
+      sortedList[i].y = cleanY
+      /*
       if (makeRandom && (i < 9 || sortedList.length === 10)) {
         sortedList[i].x += Math.random() * 250 - 125
         sortedList[i].y += Math.random() * 250 - 125
       }
+      */
       sortedList[i].save()
+      oldPaperSizeX = sizeX
     }
     const c = new W3cwebsocket('ws://localhost:3000/ws/refresh')
     c.onopen = () => c.send('{}')
