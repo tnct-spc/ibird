@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "password",
+    "database": "ibird",
+    "host": "postgres",
+    "dialect": "postgresql"
+  },
+  "test": {
+    "username": "postgres",
+    "password": "password",
+    "database": "ibird",
+    "host": "postgres",
+    "dialect": "postgresql"
+  },
+  "production": {
+    "username": "postgres",
+    "password": "password",
+    "database": "ibird",
+    "host": "postgres",
+    "dialect": "postgresql"
+  }
+}
