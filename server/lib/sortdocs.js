@@ -46,9 +46,11 @@ export default classid => {
       else lis.push(v)
     })
     let sortedList = plis.concat(lis)
-    const paperClose = 300
-    let cleanX = paperClose
-    let cleanY = paperClose
+    // 掲示物どうしの間隔
+    const paperCloseX = 100
+    const paperCloseY = 300
+    let cleanX = 0
+    let cleanY = paperCloseY
     let oldPaperSizeX = 0
     let paperMatrix = []
     // ソートされたものを配置するfor
@@ -56,14 +58,15 @@ export default classid => {
       let sizeX = sortedList[i].sizeX * 0.60 // 紙の解像度と謎な座標系を合わせるための定数
       let sizeY = sortedList[i].sizeY * 1.06
       // 左側に飛び出したときの場合分け
-      if (cleanX + oldPaperSizeX + 200 < 10000 - sizeX) {
-        cleanX += oldPaperSizeX + paperClose
+      if (cleanX + oldPaperSizeX + paperCloseX < 10000 - sizeX) {
+        cleanX += oldPaperSizeX + paperCloseX
       } else {
         cleanX = 0
         cleanY = 5000
-        cleanX += paperClose
+        cleanX += paperCloseX
       }
-      cleanY = laiderSearch(cleanX, sizeX, paperMatrix) + paperClose
+      cleanY = laiderSearch(cleanX, sizeX, paperMatrix) + paperCloseY
+      // あとからx軸がかぶってる紙の高さを得るためにストック
       paperMatrix.push({
         bottom: cleanY + sizeY,
         right: cleanX + sizeX,
