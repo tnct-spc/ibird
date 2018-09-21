@@ -7,7 +7,7 @@ const router = Router()
 router.use(parser.urlencoded({ extended: false }))
 router.use(parser.json())
 
-router.get('/classes', (req, res, next) => {
+router.get('/', (req, res, next) => {
   classes.findAll().then(c => {
     const list = []
     c.forEach((value, index, array) => {
