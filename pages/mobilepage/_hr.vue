@@ -40,7 +40,7 @@ export default{
   },
   //リスト更新
   asyncData ({ params, error }) {
-    return axios.get('http://localhost:3000/api/class-docs-mobile',{
+    return axios.get('http://localhost:3000/api/docs-mobile',{
       params: { classid: params.hr }
     }).then(res =>{
       return {
