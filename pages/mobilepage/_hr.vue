@@ -41,7 +41,7 @@ export default{
   //リスト更新
   asyncData ({ params, error }) {
     //わざとコンフリクト起こすためにコメント
-    return axios.get(process.env.httpUrl + '/api/class-docs-mobile',{
+    return axios.get(process.env.httpUrl + '/api/v2/docs-mobile',{
       params: { classid: params.hr }
     }).then(res =>{
       return {
