@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('documents', {
@@ -25,10 +25,10 @@ module.exports = {
       },
       priority: {
         type: Sequelize.INTEGER
-      },
-    });
+      }
+    })
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('documents');
+    return queryInterface.dropTable('documents')
   }
-};
+}

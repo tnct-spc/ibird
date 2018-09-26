@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -9,8 +9,8 @@ module.exports = {
         x: 0,
         y: 0,
         priority: 1,
-        endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1),
+        endTime: new Date(2020, 1, 1),
+        startTime: new Date(2001, 1, 1),
         title: 'タイトルテスト',
         openMobile: true
       },
@@ -20,8 +20,8 @@ module.exports = {
         x: 0,
         y: 0,
         priority: 1,
-        endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1),
+        endTime: new Date(2020, 1, 1),
+        startTime: new Date(2001, 1, 1),
         title: 'タイトルテスト',
         openMobile: true
       },
@@ -31,8 +31,8 @@ module.exports = {
         x: 0,
         y: 0,
         priority: 1,
-        endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1),
+        endTime: new Date(2020, 1, 1),
+        startTime: new Date(2001, 1, 1),
         title: 'タイトルテスト',
         openMobile: false
       },
@@ -42,8 +42,8 @@ module.exports = {
         x: 0,
         y: 0,
         priority: 1,
-        endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1),
+        endTime: new Date(2020, 1, 1),
+        startTime: new Date(2001, 1, 1),
         title: 'タイトルテスト',
         openMobile: true
       },
@@ -53,8 +53,8 @@ module.exports = {
         x: 0,
         y: 0,
         priority: 1,
-        endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1),
+        endTime: new Date(2020, 1, 1),
+        startTime: new Date(2001, 1, 1),
         title: 'タイトルテスト',
         openMobile: true
       },
@@ -64,8 +64,8 @@ module.exports = {
         x: 0,
         y: 0,
         priority: 1,
-        endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1),
+        endTime: new Date(2020, 1, 1),
+        startTime: new Date(2001, 1, 1),
         title: 'タイトルテスト',
         openMobile: true
       },
@@ -75,8 +75,8 @@ module.exports = {
         x: 0,
         y: 0,
         priority: 1,
-        endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1),
+        endTime: new Date(2020, 1, 1),
+        startTime: new Date(2001, 1, 1),
         title: 'タイトルテスト',
         openMobile: true
       },
@@ -86,8 +86,8 @@ module.exports = {
         x: 0,
         y: 0,
         priority: 1,
-        endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1),
+        endTime: new Date(2020, 1, 1),
+        startTime: new Date(2001, 1, 1),
         title: 'タイトルテスト',
         openMobile: true
       },
@@ -97,8 +97,8 @@ module.exports = {
         x: 0,
         y: 0,
         priority: 1,
-        endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1),
+        endTime: new Date(2020, 1, 1),
+        startTime: new Date(2001, 1, 1),
         title: 'タイトルテスト',
         openMobile: true
       },
@@ -108,8 +108,8 @@ module.exports = {
         x: 0,
         y: 0,
         priority: 1,
-        endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1),
+        endTime: new Date(2020, 1, 1),
+        startTime: new Date(2001, 1, 1),
         title: 'タイトルテスト',
         openMobile: true
       },
@@ -119,8 +119,8 @@ module.exports = {
         x: 0,
         y: 0,
         priority: 1,
-        endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1),
+        endTime: new Date(2020, 1, 1),
+        startTime: new Date(2001, 1, 1),
         title: 'タイトルテスト',
         openMobile: true
       },
@@ -130,8 +130,8 @@ module.exports = {
         x: 0,
         y: 0,
         priority: 1,
-        endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1),
+        endTime: new Date(2020, 1, 1),
+        startTime: new Date(2001, 1, 1),
         title: 'タイトルテスト',
         openMobile: true
       },
@@ -141,8 +141,8 @@ module.exports = {
         x: 0,
         y: 0,
         priority: 1,
-        endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1),
+        endTime: new Date(2020, 1, 1),
+        startTime: new Date(2001, 1, 1),
         title: 'タイトルテスト',
         openMobile: true
       },
@@ -152,8 +152,8 @@ module.exports = {
         x: 0,
         y: 0,
         priority: 1,
-        endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1),
+        endTime: new Date(2020, 1, 1),
+        startTime: new Date(2001, 1, 1),
         title: 'タイトルテスト',
         openMobile: true
       },
@@ -163,8 +163,8 @@ module.exports = {
         x: 0,
         y: 0,
         priority: 1,
-        endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1),
+        endTime: new Date(2020, 1, 1),
+        startTime: new Date(2001, 1, 1),
         title: 'タイトルテスト',
         openMobile: true
       },
@@ -174,8 +174,8 @@ module.exports = {
         x: 0,
         y: 0,
         priority: 1,
-        endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1),
+        endTime: new Date(2020, 1, 1),
+        startTime: new Date(2001, 1, 1),
         title: 'タイトルテスト',
         openMobile: true
       },
@@ -185,8 +185,8 @@ module.exports = {
         x: 0,
         y: 0,
         priority: 1,
-        endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1),
+        endTime: new Date(2020, 1, 1),
+        startTime: new Date(2001, 1, 1),
         title: 'タイトルテスト',
         openMobile: true
       },
@@ -196,8 +196,8 @@ module.exports = {
         x: 0,
         y: 0,
         priority: 1,
-        endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1),
+        endTime: new Date(2020, 1, 1),
+        startTime: new Date(2001, 1, 1),
         title: 'タイトルテスト',
         openMobile: true
       },
@@ -207,8 +207,8 @@ module.exports = {
         x: 0,
         y: 0,
         priority: 1,
-        endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1),
+        endTime: new Date(2020, 1, 1),
+        startTime: new Date(2001, 1, 1),
         title: 'タイトルテスト',
         openMobile: true
       },
@@ -218,8 +218,8 @@ module.exports = {
         x: 0,
         y: 0,
         priority: 1,
-        endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1),
+        endTime: new Date(2020, 1, 1),
+        startTime: new Date(2001, 1, 1),
         title: 'タイトルテスト',
         openMobile: true
       },
@@ -229,8 +229,8 @@ module.exports = {
         x: 0,
         y: 0,
         priority: 1,
-        endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1),
+        endTime: new Date(2020, 1, 1),
+        startTime: new Date(2001, 1, 1),
         title: 'タイトルテスト',
         openMobile: true
       },
@@ -240,8 +240,8 @@ module.exports = {
         x: 0,
         y: 0,
         priority: 1,
-        endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1),
+        endTime: new Date(2020, 1, 1),
+        startTime: new Date(2001, 1, 1),
         title: 'タイトルテスト',
         openMobile: true
       },
@@ -251,8 +251,8 @@ module.exports = {
         x: 0,
         y: 0,
         priority: 1,
-        endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1),
+        endTime: new Date(2020, 1, 1),
+        startTime: new Date(2001, 1, 1),
         title: 'タイトルテスト',
         openMobile: true
       },
@@ -262,8 +262,8 @@ module.exports = {
         x: 0,
         y: 0,
         priority: 1,
-        endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1),
+        endTime: new Date(2020, 1, 1),
+        startTime: new Date(2001, 1, 1),
         title: 'タイトルテスト',
         openMobile: true
       },
@@ -273,15 +273,15 @@ module.exports = {
         x: 0,
         y: 0,
         priority: 1,
-        endTime: new Date(2020,1,1),
-        startTime: new Date(2001,1,1),
+        endTime: new Date(2020, 1, 1),
+        startTime: new Date(2001, 1, 1),
         title: 'タイトルテスト',
         openMobile: true
-      },
+      }
     ], {})
   },
 
   down: (queryInterface, Sequelize) => {
 
   }
-};
+}
