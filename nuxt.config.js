@@ -1,3 +1,14 @@
+const host = "localhost:3000"
+
+const environment = process.env.NODE_ENV || 'development'
+const env = environment === 'production' ? {
+  httpUrl: process.env.HTTP_URL || 'https://ibird.ml',
+  wsUrl: process.env.WS_URL || 'wss://ibird.ml'
+} : {
+  httpUrl: process.env.HTTP_URL || 'http://' + host,
+  wsUrl: process.env.WS_URL || 'ws://' + host
+}
+
 module.exports = {
   /*
   ** Headers of the page
@@ -10,19 +21,18 @@ module.exports = {
       { hid: 'description', name: 'description', content: 'Nuxt.js project' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', href: '/https://fonts.googleapis.com/css?family=Sawarabi+Mincho' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
   /*
   ** Global CSS
   */
   css: [
-      '@/assets/scss/app.scss',
-      '~/assets/css/main.css'
+    '@/assets/scss/app.scss',
+    '~/assets/css/main.css'
   ],
   modules: [
-  ['bootstrap-vue/nuxt', { css: false }]
+    ['bootstrap-vue/nuxt', { css: false }]
   ],
   /*
   ** Add axios globally
@@ -43,9 +53,5 @@ module.exports = {
       }
     }
   },
-  env: {
-    mainUrl: process.env.MAIN_URL || 'localhost:3000',
-    httpUrl: process.env.HTTP_URL || 'http://localhost:3000',
-    wsUrl: process.env.WS_URL || 'ws://localhost:3000'
-  }
+  env: env
 }

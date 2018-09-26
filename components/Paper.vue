@@ -1,5 +1,5 @@
 <template>
-  <div id="paper" @contextmenu.prevent="openremovemenu" @click="mousedown" ref="fieldElm">
+  <div id="paper" @contextmenu.prevent="openremovemenu" @mousedown="mousedown" @mouseup="mouseup" ref="fieldElm">
 
     <!-- <p>{{ this.paper }}</p> -->
     <!-- <p>{{ controlSelecterSize }}</p> -->
@@ -50,7 +50,6 @@ export default {
     ...mapState({
       cursorOffset: 'cursorOffset',
       bbFieldSize: 'bbFieldSize',
-      controlSelecterSize: 'controlSelecterSize',
       BBxy: 'BBxy'
     })
   },
@@ -60,24 +59,18 @@ export default {
       setCursorOffset: 'setCursorOffset'
     }),
     mousedown: function(e){
-      /*if (e.button == 2) {
-        this.openremovemenu(e.x, e.y)
-        return
-      }*/
-      if (!this.showMenu){
-        this.setCursorOffset({x: e.offsetX, y: e.offsetY})
-        if (this.paper.isSelected) {
-          this.savePosition()
-          this.saveOrder()
-          this.selectedcard({docid: null})
-          document.removeEventListener('mousemove',this.mousemove)
-        } else {
-          this.selectedcard({docid: this.paper.docid})
-          document.addEventListener('mousemove',this.mousemove)
-        }
-      }
+      this.setCursorOffset({x: e.offsetX, y: e.offsetY})
+      this.selectedcard({docid: this.paper.docid})
+      document.addEventListener('mousemove',this.mousemove)
+    },
+    mouseup: function(e){
+      this.savePosition()
+      this.saveOrder()
+      this.selectedcard({docid: null})
+      document.removeEventListener('mousemove',this.mousemove)
     },
     mousemove: function(e){
+      if(this.showMenu) return
       if(this.paper.isSelected){
         const x=(e.pageX-this.cursorOffset.x)*10000/this.bbFieldSize.x
         this.wsClient.send(JSON.stringify({
@@ -104,7 +97,7 @@ export default {
       //this.showMenu = false
     },
     remove: function(){
-      axios.delete(process.env.httpUrl + '/api/rm-doc', {
+      axios.delete(process.env.httpUrl + '/api/doc', {
         params: {
           classid: this.classid,
           docid: this.paper.docid
@@ -117,7 +110,7 @@ export default {
       })
     },
     savePosition: function(){
-        axios.put(process.env.httpUrl + '/api/fix-position', {
+        axios.put(process.env.httpUrl + '/api/doc', {
           classid: this.classid,
           docid: this.paper.docid,
           x: this.paper.x,
@@ -127,7 +120,7 @@ export default {
         })
     },
     saveOrder: function(){
-        axios.put(process.env.httpUrl + '/api/order-doc', {
+        axios.put(process.env.httpUrl + '/api/doc', {
           classid: this.classid,
           docid: this.paper.docid,
         }).catch(e =>{
@@ -135,7 +128,7 @@ export default {
         })
     },
     upPaper: function(){
-      axios.put(process.env.httpUrl + '/api/order-doc', {
+      axios.put(process.env.httpUrl + '/api/doc', {
         classid: this.classid,
         docid: this.paper.docid
       }).then( () => {

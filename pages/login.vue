@@ -20,7 +20,7 @@
         <hr>
         <b-btn class="warning" @click="logout">Logout</b-btn>
         <p>
-          <b-link href="/control/1">コントロールページ</b-link>
+          <b-link href="/control/">コントロールページ</b-link>
         </p>
       </b-alert>
     </div>
@@ -62,7 +62,6 @@ export default {
 }
 </script>
 
-<style>
 <style>
 .container {
   padding: 100px;

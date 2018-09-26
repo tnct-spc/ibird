@@ -17,12 +17,13 @@ export default {
     }
   },
   asyncData ({ params, error }) {
-    return axios.get('http://localhost:3000/api/classes-list').then(res =>{
+    return axios.get('http://localhost:3000/api/classes').then(res =>{
       const classlist = res.data
       //ここでurlの確認
       var eflag = true
       classlist.forEach(c => {
-        if(String(c.classid) === params.control) eflag = false
+        if(String(c.classid) ===params.control) eflag = false
+        else if(!params.control)eflag = false
       })
       if(eflag) throw new URIError("URIちがうよ");
 
