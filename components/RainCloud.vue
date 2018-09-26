@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img v-bind:src="weatherMap">
+    <img v-bind:src="weatherMap" height="300" width="300">
   </div>
 </template>
 <script>
@@ -11,9 +11,9 @@ export default {
       weatherMap: null,
       lat: '35.632789',
       lon: '139.294293',
-      zoom: '15',
-      width: 'undefind',
-      height: 'undefind'
+      zoom: '12',
+      width: '500',
+      height: '500'
       }
   },
    mounted () {

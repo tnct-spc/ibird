@@ -1,5 +1,5 @@
 <template>
-  <svg ref="qrcode" v-html="svgCode" height="100" width="100"></svg>
+  <svg ref="qrcode" v-html="svgCode" height="100%" width="100%"></svg>
 </template>
 <script>
 import QRCode from 'qrcode'

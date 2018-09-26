@@ -1,4 +1,4 @@
-const host = "localhost:3000"
+const host = "192.168.2.17:3000"
 
 const environment = process.env.NODE_ENV || 'development'
 const env = environment === 'production' ? {
