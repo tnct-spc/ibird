@@ -2,7 +2,7 @@
 const Sequelize = require('sequelize')
 const classesModel = require('./classes')
 const documentsModel = require('./documents')
-const usersModel = require('./documents')
+const usersModel = require('./users')
 
 const sequelize = new Sequelize('ibird', 'postgres', 'password', {
   host: 'postgres',
