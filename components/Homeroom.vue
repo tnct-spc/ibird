@@ -41,21 +41,21 @@ section{
 .qr {
   height:10%;
   width:10%;
-  left: 18%;
+  left: 0%;
   bottom: 3%;
   position: fixed;
 }
 .timetableparent {
   height: 10%;
   width:10%;
-  left: 1%;
+  left: 10%;
   bottom: 5%;
   position: fixed;
 }
 .raincloud {
   height: 10%;
   width: 10%;
-  left: 12%;
+  left: 22%;
   bottom: 5%;
   position: fixed;
 }
