@@ -3,6 +3,7 @@
     <BulletinBoard :classid="classid" />
     <Alert />
     <QR class="qr" :url="url" />
+    <RainCloud class="raincloud" />
     <TimetableParent class="timetableparent" />
   </section>
 </template>
@@ -10,6 +11,7 @@
 import BulletinBoard from '~/components/BulletinBoard.vue'
 import Alert from '~/components/Alert.vue'
 import QR from '~/components/QR.vue'
+import RainCloud from '~/components/RainCloud.vue'
 import TimetableParent from '~/components/timetable/TimetableParent.vue'
 
 export default {
@@ -20,6 +22,7 @@ export default {
     BulletinBoard,
     Alert,
     QR,
+    RainCloud,
     TimetableParent,
   },
   computed: {
@@ -31,22 +34,29 @@ export default {
 </script>
 
 <style scoped>
-  section{
-    height: 100%;
-    width: 100%;
-  }
-  .qr {
+section{
+  height: 100%;
+  width: 100%;
+}
+.qr {
   height:10%;
   width:10%;
-  left: 7%;
-  bottom: 1%;
+  left: 0%;
+  bottom: 3%;
   position: fixed;
 }
 .timetableparent {
-  height: auto;
-  width: auto;
-  left: 1%;
-  bottom: 1%;
+  height: 10%;
+  width:10%;
+  left: 10%;
+  bottom: 5%;
+  position: fixed;
+}
+.raincloud {
+  height: 10%;
+  width: 10%;
+  left: 22%;
+  bottom: 5%;
   position: fixed;
 }
 </style>
