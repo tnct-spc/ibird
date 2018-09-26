@@ -143,7 +143,11 @@ export default{
     if(this.day<10) this.day = "0" + this.day
     const today = [this.date.getFullYear(),this.month,this.day]
     this.startDate = this.date.getFullYear()+"-"+this.month+"-"+this.day
-    this.endDate = this.date.getFullYear()+"-"+this.month+"-"+String(Number(this.day)+7)
+    this.date.setDate((Number(this.day)+7))
+    if(this.date.getDate()<this.day)this.month++
+    this.day = this.date.getDate()
+    if(this.day<10) this.day = "0" + this.day
+    this.endDate = this.date.getFullYear()+"-"+this.month+"-"+this.day
     this.classes.sort((a,b)=>{
     return a.classid - b.classid
     })
@@ -287,7 +291,7 @@ export default{
 }
 
 .modal-container {
-  width: 800px;
+  width: 650px;
   margin: 10px auto;
   padding: 20px 30px;
   background-color: #fff;
