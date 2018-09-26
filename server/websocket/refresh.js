@@ -6,6 +6,7 @@ expressWs(router)
 
 var receivers = []
 router.ws('/refresh', function (ws, req) {
+  const idx = receivers.push(ws) - 1
   ws.on('message', msg => {
     receivers.forEach((receiver, receiverId) => {
       try {
