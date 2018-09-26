@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -9,10 +9,10 @@ module.exports = {
         autoIncrement: true
       },
       classid: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.INTEGER
       },
       docid: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING
       },
       x: {
         type: Sequelize.INTEGER
@@ -20,7 +20,7 @@ module.exports = {
       y: {
         type: Sequelize.INTEGER
       },
-     startTime: {
+      startTime: {
         type: Sequelize.DATE
       },
       endTime: {
@@ -28,11 +28,11 @@ module.exports = {
       },
       priority: {
         type: Sequelize.INTEGER
-      },
-    });
+      }
+    })
   },
 
   down: (queryInterface, Sequelize) => {
 
   }
-};
+}
