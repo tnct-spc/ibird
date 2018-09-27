@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import parser from 'body-parser'
 import sechash from 'sechash'
-import models from '../models'
+import models from '../../models'
 
 const users = models.users
 const router = Router()
@@ -14,7 +14,7 @@ const hashopt = {
   salt: 'asdfghjkl' // ソルトの設定
 }
 
-router.post('/login', (req, res, next) => {
+router.post('/', (req, res, next) => {
   const password = req.body.password
   const username = req.body.username
   // console.log(sechash.strongHashSync(username, hashopt))
@@ -33,11 +33,6 @@ router.post('/login', (req, res, next) => {
     console.log(err)
     res.status(401).json({ message: 'エラーが発生しました' })
   })
-})
-
-router.post('/logout', (req, res, next) => {
-  delete req.session.authUser
-  res.json({ ok: true })
 })
 
 export default router

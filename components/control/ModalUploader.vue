@@ -205,7 +205,7 @@ export default{
       .then((response)=>{
         formData2.docid = response.data.docid
         formData2.imgsize = response.data.imgsize
-        axios.post('../api/v2/docs',formData2)
+        axios.post('../api/docs',formData2)
         .then((response)=>{
           this.$parent.text=this.submitId
           console.log(response)

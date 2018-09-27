@@ -24,7 +24,8 @@ services:
     working_dir: /src
     #command: [sh, -c, yarn install && yarn run build && yarn run start]
     command: [sh, -c, yarn install && yarn run dev]
-    #expose: "3000"
+    #expose: 
+    #   - "3000"
     ports: 
       - "3000:3000"
   postgres:
@@ -39,5 +40,5 @@ services:
       POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
     volumes:
       - "./db/data:/var/lib/pgsql/data"
-    ports:
-      - "5432:5432"
+    expose:
+      - "5432"

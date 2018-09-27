@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -63,7 +63,7 @@ module.exports = {
         course: 'C',
         randomSort: true
       },
-       {
+      {
         classid: 11,
         year: 3,
         course: 'J',
@@ -153,9 +153,9 @@ module.exports = {
         course: 'C',
         randomSort: true
       }
-    ], {});
+    ], {})
   },
   down: (queryInterface, Sequelize) => {
     return queryInterface.bulkDelete('classes', null, {})
   }
- };
+}

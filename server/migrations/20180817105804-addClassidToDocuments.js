@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -6,7 +6,7 @@ module.exports = {
       queryInterface.addColumn(
         'documents',
         'classid',
-         Sequelize.INTEGER
+        Sequelize.INTEGER
       ),
       queryInterface.removeColumn(
         'classes',
@@ -20,10 +20,11 @@ module.exports = {
   },
   down: (queryInterface, Sequelize) => {
     return Promise.all([
-      queryInterface.removeColumn(
+      /* queryInterface.removeColumn(
         'documents',
         'classid',
       ),
+
       queryInterface.addColumn(
         'classes',
         'docids',
@@ -34,6 +35,7 @@ module.exports = {
         'id',
         Sequelize.INTEGER
       )
+      */
     ])
   }
-};
+}

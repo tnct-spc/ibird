@@ -17,7 +17,7 @@ export default {
     }
   },
   asyncData ({ params, error }) {
-    return axios.get('http://localhost:3000/api/v2/classes').then(res =>{
+    return axios.get('http://localhost:3000/api/classes').then(res =>{
       const classlist = res.data
       //ここでurlの確認
       var eflag = true
@@ -39,7 +39,7 @@ export default {
     ControlUploader,
     ControlHeader
   },
-  // middleware: 'auth',
+  middleware: 'auth',
 }
 </script>
 <style>

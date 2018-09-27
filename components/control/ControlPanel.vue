@@ -62,7 +62,7 @@ export default{
   },
   methods:{
     sortDocs(){
-      axios.put(process.env.httpUrl + '/api/sort-docs',{
+      axios.put(process.env.httpUrl + '/api/sort',{
         classid:this.classid
       })
     },

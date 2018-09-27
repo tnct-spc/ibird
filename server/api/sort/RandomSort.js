@@ -1,20 +1,13 @@
 import { Router } from 'express'
 import parser from 'body-parser'
-import models from '../models'
-import sortDocs from '../lib/sortdocs'
+import models from '../../models'
 
 const classes = models.classes
 const router = Router()
 router.use(parser.urlencoded({ extended: false }))
 router.use(parser.json())
 
-router.put('/sort-docs', (req, res, next) => {
-  const classid = req.body.classid
-  sortDocs(classid)
-  res.sendStatus(200)
-})
-
-router.get('/RandomSort', (req, res, next) => {
+router.get('/', (req, res, next) => {
   const classid = req.query.classid
   classes.findOne({where: {classid: classid}})
     .then(result => {
@@ -25,7 +18,7 @@ router.get('/RandomSort', (req, res, next) => {
     })
 })
 
-router.put('/RandomSort', (req, res, next) => {
+router.put('/', (req, res, next) => {
   const classid = req.body.classid
   const isRandom = req.body.isRandom
   classes.findById(classid)
