@@ -3,7 +3,7 @@
   <div id="overlay" @dragleave.prevent="onDragLeave($event)" @dragover.prevent="onDragOver($event)" @drop.prevent="onDrop($event)">
    <BulletinBoard :classid="classid"/>
   </div>
-  <ModalUploader v-if="showModal" @close="showModal=false" :classes="classes" :files="files"/>
+  <ModalUploader v-if="showModal" @close="showModal=false" :classes="classes" :filename="filename" :docid="docid"/>
  </section>
 </template>
 <script>
@@ -19,31 +19,34 @@ export default{
   },
   data:function(){
     return{
-      text:"管理者ページ",
       showModal: false,
-      files:{}
+      filename:null,
+      docid:null
     }
   },
   methods: {
   onDragOver(event){
     event.preventDefault()
     event.dataTransfer.dropEffect = "copy"
-    const overlay = document.getElementById("overlay")
-    overlay.classList.add("dropover")
   },
   onDragLeave(event){
   },
   onDrop(event){
     event.preventDefault()
     event.dataTransfer.dropEffect = "copy"
-    overlay.classList.remove("dropover")
     const files = event.dataTransfer.files[0]
-    Vue.set(this.files,"files",files)
     if(!files.type.match('application/pdf')&&!files.type.match('application/vnd.*'))
     {
-      this.text="ファイル形式に対応してません"
+      alert("ファイル形式に対応してません")
       return
     }
+    const formData = new FormData()
+    formData.append('file',files)
+    this.filename = files.name
+    axios.post('../api/upload-file',formData)
+    .then((response)=>{
+      this.docid = response.data.docid
+    })
     this.showModal = true
   }
  },
@@ -58,8 +61,5 @@ export default{
   width: 100%;
   height: 100%;
   text-align: center;
-}
-.dropover {
-  background-color: #46fb43;
 }
 </style>
