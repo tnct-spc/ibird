@@ -34,9 +34,21 @@ export default{
   onDrop(event){
     event.preventDefault()
     event.dataTransfer.dropEffect = "copy"
+    let count = 0
     const files = event.dataTransfer.files[0]
-    if(!files.type.match('application/pdf')&&!files.type.match('application/vnd.*'))
-    {
+    console.log(event.dataTransfer.files)
+    Object.keys(event.dataTransfer.files).forEach((e)=>{
+      count++
+    })
+    if(count === 0){
+      alert("ファイルをドラッグ＆ドロップしてください")
+      return
+    }
+    else if(count != 1){
+      alert("ファイルは１つしかアップロードできません")
+      return
+    }
+    if(!files.type.match('application/pdf')&&!files.type.match('application/vnd.*')){
       alert("ファイル形式に対応してません")
       return
     }
