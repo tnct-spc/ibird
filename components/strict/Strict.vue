@@ -26,13 +26,23 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
     data() {
         return {
             yearsNumber: 5,
-            courses: ['J','M','C','D','E'],
+            courses: [],
             newCourseName: ''
         }
+    },
+    mounted(){
+      axios.get(process.env.httpUrl + '/api/Courses').then(res =>{
+        this.courses = res.data.courses
+        console.log(this.courses)
+      }).catch(e =>{
+        console.log(e)
+      })
     },
     methods: {
         addCourse(){
@@ -51,6 +61,6 @@ export default {
     padding-bottom: 2rem;
 }
 span.cource-symbol {
-    
+
 }
 </style>

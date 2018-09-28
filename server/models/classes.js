@@ -8,7 +8,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     year: DataTypes.TEXT,
     course: DataTypes.TEXT,
-    randomSort: DataTypes.BOOLEAN
+    randomSort: DataTypes.BOOLEAN,
+    index: DataTypes.INTEGER
   }, {
     timestamps: false
   })
