@@ -19,6 +19,6 @@ export default function ({ route, store, redirect }) {
     }
   }
   if (isRedirect) {
-    return redirect('/login?got=' + path)
+    return redirect('/login?goto=' + path)
   }
 }
