@@ -12,16 +12,19 @@ router.get('/', (req, res, next) => {
   classes.findAll()
     .then(results => {
       results.sort((a, b) => {
-        if (a.index > b.index) return -1
-        if (a.index < b.index) return 1
+        if (a.index > b.index) return 1
+        if (a.index < b.index) return -1
         return 0
       })
-      results.each(result => {
+      results.forEach(result => {
         if (courses.indexOf(result.course) === -1) {
-          courses.add(result.course)
+          courses.push(result.course)
         }
       })
       res.json({courses: courses})
+    }).catch(err => {
+      console.log(err)
+      res.status(400).send('faild')
     })
 })
 
