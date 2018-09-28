@@ -3,7 +3,7 @@
   <div id="overlay" @dragleave.prevent="onDragLeave($event)" @dragover.prevent="onDragOver($event)" @drop.prevent="onDrop($event)">
    <BulletinBoard :classid="classid"/>
   </div>
-  <ModalUploader v-if="showModal" @close="showModal=false" :classes="classes" :filename="filename" :docid="docid"/>
+  <ModalUploader v-if="showModal" @close="showModal=false" :classes="classes" :filename="filename" :docid="docid" :imgsize="imgsize"/>
  </section>
 </template>
 <script>
@@ -21,7 +21,8 @@ export default{
     return{
       showModal: false,
       filename:null,
-      docid:null
+      docid:null,
+      imgsize:null
     }
   },
   methods: {
@@ -58,6 +59,7 @@ export default{
     axios.post('../api/upload-file',formData)
     .then((response)=>{
       this.docid = response.data.docid
+      this.imgsize = response.data.imgsize
     })
     this.showModal = true
   }

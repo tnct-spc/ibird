@@ -5,6 +5,7 @@ import Converter from 'office-convert'
 import child_process from 'child_process'
 import axios from 'axios'
 import { w3cwebsocket } from 'websocket'
+import sizeOf from "image-size";
 const W3cwebsocket = w3cwebsocket
 
 const router = Router()
@@ -31,7 +32,7 @@ const officeToPDF = (filepath) => {
 const pdfToJpg = (pdfPath) => {
   var jpgPath = pdfPath.slice(0,-4) + ".jpg"
   jpgPath = 'static/jpg/' + filename(jpgPath)
-  child_process.execSync('convert -density 300  ' + pdfPath.slice(0,-4) + ".pdf " + jpgPath)
+  child_process.execSync('convert -density 300  ' + pdfPath.slice(0,-4) + ".pdf[0] " + jpgPath)
   return filename(jpgPath)
 }
 
@@ -52,13 +53,14 @@ async function run(path){
   }
   var docid = pdfToJpg(path)
   docid = docid.slice(0, -4)
-  return docid
+  const imgsize = sizeOf(`static/jpg/${docid}.jpg`);
+  return {docid: docid, imgsize: imgsize}
 }
 
 router.post('/upload-file', upload.single('file'), (req, res, next) => {
-  run(req.file.path).then((docid) =>{
-    console.log(docid)
-    res.status(200).json({docid: docid})
+  run(req.file.path).then((doc) =>{
+    console.log(doc.docid)
+    res.status(200).json(doc)
   }).catch(e =>{
     console.log(e)
     res.sendStatus(400)

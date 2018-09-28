@@ -40,31 +40,19 @@ export default {
       yearIndex: 0,
       courseIndex: 0,
       years: [],
-      courses: new Array(5),
+      courses: [],
       }
   },
   mounted(){
     axios.get(process.env.httpUrl + '/api/years-and-courses').then(res =>{
       this.years = res.data.years
-      res.data.courses.forEach((e,i)=>{
-        switch (e) {
-          case "M":
-            this.courses.splice(0,1,e)
-            break
-          case "E":
-            this.courses.splice(1,1,e)
-            break
-          case "D":
-            this.courses.splice(2,1,e)
-            break
-          case "J":
-            this.courses.splice(3,1,e)
-            break
-          case "C":
-            this.courses.splice(4,1,e)
-            break
-        }
-      })
+      console.log(this.courses)
+    }).catch(e =>{
+      console.log(e)
+    })
+    axios.get(process.env.httpUrl + '/api/Courses').then(res =>{
+      this.courses = res.data.courses
+      console.log(this.courses)
     }).catch(e =>{
       console.log(e)
     })

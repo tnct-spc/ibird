@@ -110,6 +110,7 @@ export default{
   props:{
    "classes":Array,
    "docid":String,
+   "imgsize":String,
    "filename":String
   },
   data:()=>{
@@ -201,6 +202,7 @@ export default{
                         'openMobile': this.openMobile
                         }
       formData2.docid = this.docid
+      formData2.imgsize = this.imgsize
       console.log(this.docid)
       this.$emit('close')
       axios.post('../api/docs',formData2)
