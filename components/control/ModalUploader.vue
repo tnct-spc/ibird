@@ -208,6 +208,7 @@ export default{
       axios.post('../api/upload-file',formData)
       .then((response)=>{
         formData2.docid = response.data.docid
+        formData2.imgsize = response.data.imgsize
         axios.post('../api/docs',formData2)
         .then((response)=>{
           this.$parent.text=this.submitId
