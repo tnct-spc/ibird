@@ -29,8 +29,8 @@ router.post('/', (req, res, next) => {
         bb: user.openBB,
         mobile: user.openMobile,
         control: user.openControl,
-        allclass: user.allclass,
-        Classes: user.authorityClasses
+        allClass: user.allClass,
+        classes: user.authorityClasses
       }
       return res.json({ username: username })
     } else {

@@ -2,6 +2,7 @@ export default function ({ route, store, redirect }) {
   const path = route.path
   console.log(path)
   const user = store.state.authUser
+  const curentClass = Number(path.replace(/[^0-9]/g, ''))
   let isRedirect = true
   if (user) {
     if (path.match(/control/)) {
@@ -10,11 +11,18 @@ export default function ({ route, store, redirect }) {
       }
     } else if (path.match(/bb/)) {
       if (user.bb) {
-        isRedirect = false
+        console.log(user.classes)
+        console.log(user.allClass)
+        if (user.allClass || user.classes.indexOf(curentClass) !== -1) {
+          isRedirect = false
+        }
       }
     } else if (path.match(/mobilepage/)) {
       if (user.mobile) {
-        isRedirect = false
+        console.log(user.classes)
+        if (user.allClass || user.classes.indexOf(curentClass) !== -1) {
+          isRedirect = false
+        }
       }
     }
   }
