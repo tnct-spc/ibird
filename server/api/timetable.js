@@ -224,18 +224,16 @@ var fetchAnother = async (url) => {
 
 // ファイルを作成する関数
 var createJsonFile = (jsonData, URL) => {
-  // ファイル名を作成
   var urlObject = parse(URL, true)
   var stationID = urlObject.pathname.split('/')
-  var filename = stationID[3] + '_' + urlObject.query.gid + '.json'
-  // 最終的なファイルを作成
-  writeJson(dirPath + '/' + filename, jsonData, {spaces: 2},
+  var filename = stationID[3] + '_' + urlObject.query.gid + '.json' // ファイル名を作成
+  writeJson(dirPath + '/' + filename, jsonData, {spaces: 2}, // ファイル作成
     function (error) {
       if (error) console.log('writeJson ' + error)
     }
   )
 
-  // 上で作ったファイルのデータをまとめる
+  // filename.jsonに作成したファイルの情報を書き込む
   var jsonInfo = JSON.parse('{}')
   jsonInfo['name'] = filename
   jsonInfo['station'] = jsonData.station
