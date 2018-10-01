@@ -1,0 +1,16 @@
+iachine:
+  node:
+    version: 10.7.0
+  post:
+    - curl -o- -L https://yarnpkg.com/install.sh | bash
+dependencies:
+  cache_directories:
+    - ~/.yarn-cache
+  pre:
+    - yarn --version
+  override:
+    - yarn install
+test:
+  override:
+    - ./node_modules/.bin/eslint --ext .js,.vue --ignore-path .gitignore --format=junit -o $CIRCLE_TEST_REPORTS/eslint/eslint.xml .
+
