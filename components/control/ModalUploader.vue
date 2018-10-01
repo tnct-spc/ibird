@@ -120,6 +120,7 @@ export default{
     checkYear:{},
     checkCourse:{},
     submitId:[],
+    today:0,
     month:"",
     day:"",
     date:{},
@@ -135,7 +136,7 @@ export default{
     this.day = this.date.getDate()
     if(this.month<10) this.month = "0" + this.month
     if(this.day<10) this.day = "0" + this.day
-    const today = [this.date.getFullYear(),this.month,this.day]
+    this.today = [this.date.getFullYear(),this.month,this.day]
     this.startDate = this.date.getFullYear()+"-"+this.month+"-"+this.day
     this.date.setDate((Number(this.day)+7))
     if(this.date.getDate()<this.day)this.month++
@@ -175,15 +176,14 @@ export default{
       this.day = this.date.getDate()
       if(this.month<10) this.month = "0" + this.month
       if(this.day<10) this.day = "0" + this.day
-      const today = [this.date.getFullYear(),this.month,this.day]
-      const checker = today.join('-')
+      const checker = this.today.join('-')
       Object.keys(this.classIdList).forEach((e)=>{
         this.classIdList[e].forEach((i)=>{
             if(i.submit === true) this.submitId.push(i.classid)
         })
       })
       if(this.submitId.length === 0||this.endDate === null
-        ||this.startDate >= this.endDate){
+        ||this.startDate >= this.endDate||checker > this.startDate){
         if(this.submitId.length === 0){
           alert("クラスを選択してください")
         }
@@ -192,6 +192,9 @@ export default{
         }
         if(this.startDate >= this.endDate){
           alert("掲載開始日より前に終了日を設定することはできません")
+        }
+        if(checker > this.startDate){
+          alert("掲載開始日を"+this.date.getFullYear()+"年"+this.month+"月"+this.date.getDate()+"日より前には設定できません")
         }
         this.submitId.length = 0
         return
