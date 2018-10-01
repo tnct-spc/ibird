@@ -34,11 +34,17 @@ export default {
     return {
       formError: null,
       formUsername: '',
-      formPassword: ''
+      formPassword: '',
+      redirectUrl: ''
+    }
+  },
+  asyncData(context) {
+    return {
+      redirectUrl: context.query['goto']
     }
   },
   methods: {
-    async login() {
+    async login({redirect}) {
       try {
         await this.$store.dispatch('login', {
           username: this.formUsername,
@@ -47,6 +53,7 @@ export default {
         this.formUsername = ''
         this.formPassword = ''
         this.formError = null
+        location.href= this.redirectUrl;
       } catch (e) {
         this.formError = e.message
       }
