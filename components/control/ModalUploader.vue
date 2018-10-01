@@ -32,7 +32,7 @@
             v-for="(item,key) in checkCourse"
             :key = "key">
                 <b-form-checkbox
-                @input="selectCource(key)"
+                @input="selectCourse(key)"
                 v-model="checkCourse[key]">
                 {{key}}科
                 </b-form-checkbox>
@@ -126,16 +126,10 @@ export default{
     title: '',
     openMobile: true,
     priority:[{text:"しない",value:0},{text:"する",value:1}],
-    course:[],
     all:false
    }
   },
   mounted(){
-    this.classes.forEach((c)=> {
-      if(!this.course[c.course]){
-        this.course.push(c.course)
-      }
-    })
     this.date = new Date()
     this.month = this.date.getMonth()+1
     this.day = this.date.getDate()
@@ -151,17 +145,26 @@ export default{
     this.classes.sort((a,b)=>{
     return a.classid - b.classid
     })
-    this.classes.forEach((c)=> {
-      if(!this.classIdList[c.year]){
-        Vue.set(this.classIdList, c.year, [])
-      }
-      this.classIdList[c.year].push({classid: c.classid, course: c.course, submit:false})
-    })
-    Object.keys(this.classIdList).forEach((e)=>{
-      Vue.set(this.checkYear,e,false)
-    })
-    this.course.forEach((e)=>{
-      Vue.set(this.checkCourse,e,false)
+    axios.get(process.env.httpUrl + '/api/courses').then(res =>{
+      res.data.courses.forEach((e)=>{
+        Vue.set(this.checkCourse,e,false)
+      })
+      Object.keys(this.checkCourse).forEach((e,i)=>{
+        console.log(e)
+        this.classes.forEach((c)=> {
+          if(!this.classIdList[c.year]){
+            Vue.set(this.classIdList, c.year, [])
+          }
+          if(e === c.course){
+            this.classIdList[c.year].push({classid: c.classid, course: e, submit:false})
+          }
+        })
+      })
+      Object.keys(this.classIdList).forEach((e)=>{
+        Vue.set(this.checkYear,e,false)
+      })
+    }).catch(e =>{
+      console.log(e)
     })
     this.title = this.files.files.name
   },
@@ -238,7 +241,7 @@ export default{
         })
       }
     },
-    selectCource(key){
+    selectCourse(key){
       if(this.checkCourse[key] === true){
         Object.keys(this.classIdList).forEach((e)=>{
           this.classIdList[e].forEach((i)=>{

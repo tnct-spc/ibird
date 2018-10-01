@@ -46,13 +46,11 @@ export default {
   mounted(){
     axios.get(process.env.httpUrl + '/api/years-and-courses').then(res =>{
       this.years = res.data.years
-      console.log(this.courses)
     }).catch(e =>{
       console.log(e)
     })
-    axios.get(process.env.httpUrl + '/api/Courses').then(res =>{
+    axios.get(process.env.httpUrl + '/api/courses').then(res =>{
       this.courses = res.data.courses
-      console.log(this.courses)
     }).catch(e =>{
       console.log(e)
     })
