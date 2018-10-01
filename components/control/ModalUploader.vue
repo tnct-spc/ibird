@@ -109,7 +109,9 @@ import { w3cwebsocket } from 'websocket'
 export default{
   props:{
    "classes":Array,
-   "files":Object
+   "docid":String,
+   "imgsize":String,
+   "filename":String
   },
   data:()=>{
    return{
@@ -159,7 +161,7 @@ export default{
     this.course.forEach((e)=>{
       Vue.set(this.checkCourse,e,false)
     })
-    this.title = this.files.files.name
+    this.title = this.filename
   },
   methods:{
     submit(){
@@ -189,8 +191,6 @@ export default{
         this.submitId.length = 0
         return
       }
-      const formData = new FormData()
-      formData.append( 'file', this.files.files)
       const formData2 = {
                         'x': 0,
                         'y': 0,
@@ -201,26 +201,16 @@ export default{
                         'title': this.title,
                         'openMobile': this.openMobile
                         }
-      axios.post('../api/upload-file',formData)
-      .then((response)=>{
-        formData2.docid = response.data.docid
-        formData2.imgsize = response.data.imgsize
-        axios.post('../api/docs',formData2)
-        .then((response)=>{
-          this.$parent.text=this.submitId
-          console.log(response)
-          const refresh = new w3cwebsocket(process.env.wsUrl + '/ws/refresh')
-          refresh.onopen = () => refresh.send('')
-        })
-        .catch((error) => {
-          this.$parent.text=this.submitId
-          console.log(error)
-        })
-      })
-      .catch((error) => {
-        this.$parent.text=error
-      })
+      formData2.docid = this.docid
+      formData2.imgsize = this.imgsize
+      console.log(this.docid)
       this.$emit('close')
+      axios.post('../api/docs',formData2)
+      .then((response)=>{
+        console.log(response)
+        const refresh = new w3cwebsocket(process.env.wsUrl + '/ws/refresh')
+        refresh.onopen = () => refresh.send('')
+      })
     },
     selectYear(index){
       if(this.checkYear[index] === false){
