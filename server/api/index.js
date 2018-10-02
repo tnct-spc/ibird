@@ -7,6 +7,7 @@ import auth from './auth'
 import sort from './sort'
 import doc from './doc'
 import classes from './classes'
+import background from './background'
 
 const router = Router()
 
@@ -17,5 +18,6 @@ router.use(auth)
 router.use(sort)
 router.use(doc)
 router.use(classes)
+router.use(background)
 
 export default router
