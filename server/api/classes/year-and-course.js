@@ -12,7 +12,7 @@ router.get('/', (req, res, next) => {
     {where: {
       classid: req.query.classid
     }}).then(c => {
-    res.json({year: c.year, courses: c.course})
+    res.json({year: c.year, course: c.course})
   })
 })
 
