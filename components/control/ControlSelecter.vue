@@ -50,14 +50,12 @@ export default {
   mounted(){
     if(!this.classid)this.unSelected1 = true
     if(!this.classid)this.unSelected2 = true
-    axios.get(process.env.httpUrl + '/api/years-and-courses').then(res =>{
+    axios.get(process.env.httpUrl + '/api/years-and-courses')
+    .then(res =>{
       this.years = res.data.years
-    }).catch(e =>{
-      console.log(e)
-    })
-    axios.get(process.env.httpUrl + '/api/courses').then(res =>{
       this.courses = res.data.courses
-    }).catch(e =>{
+    })
+    .catch(e =>{
       console.log(e)
     })
   },

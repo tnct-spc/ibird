@@ -112,7 +112,8 @@ export default{
    "docid":String,
    "imgsize":String,
    "filename":String,
-   "checkCourse":Object
+   "checkCourse":Object,
+   "checkYear":Object
   },
   data:()=>{
    return{
@@ -120,7 +121,6 @@ export default{
     startDate:null,
     endDate:null,
     classIdList:{},
-    checkYear:{},
     submitId:[],
     today:0,
     month:"",
@@ -158,9 +158,6 @@ export default{
           this.classIdList[c.year].push({classid: c.classid, course: e, submit:false})
         }
       })
-    })
-    Object.keys(this.classIdList).forEach((e)=>{
-      Vue.set(this.checkYear,e,false)
     })
     this.title = this.filename
   },

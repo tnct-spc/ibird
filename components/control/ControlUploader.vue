@@ -3,7 +3,7 @@
   <div id="overlay" @dragleave.prevent="onDragLeave($event)" @dragover.prevent="onDragOver($event)" @drop.prevent="onDrop($event)">
    <BulletinBoard :classid="classid"/>
   </div>
-  <ModalUploader v-if="showModal" @close="showModal=false" :classes="classes" :filename="filename" :docid="docid" :imgsize="imgsize" :checkCourse="checkCourse"/>
+  <ModalUploader v-if="showModal" @close="showModal=false" :classes="classes" :filename="filename" :docid="docid" :imgsize="imgsize" :checkCourse="checkCourse" :checkYear="checkYear"/>
  </section>
 </template>
 <script>
@@ -23,13 +23,17 @@ export default{
       filename:null,
       docid:null,
       imgsize:null,
-      checkCourse:{}
+      checkCourse:{},
+      checkYear:{}
     }
   },
   mounted(){
-      axios.get(process.env.httpUrl + '/api/courses').then(res =>{
+      axios.get(process.env.httpUrl + '/api/years-and-courses').then(res =>{
         res.data.courses.forEach((e)=>{
           Vue.set(this.checkCourse,e,false)
+        })
+        res.data.years.forEach((e)=>{
+          Vue.set(this.checkYear,e,false)
         })
       }).catch(e =>{
         console.log(e)
