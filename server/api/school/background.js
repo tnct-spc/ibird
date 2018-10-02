@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import parser from 'body-parser'
-import models from '../models'
+import models from '../../models'
 
 const schools = models.schools
 const router = Router()
@@ -10,7 +10,7 @@ router.use(parser.json())
 const schoolId = 1
 // まだ複数学校に対応していないのでハードコーディング
 
-router.get('/background', (req, res, next) => {
+router.get('/', (req, res, next) => {
   schools.findById(schoolId).then(school => {
     res.status(200).send(school.background_image)
   }).catch(err => {
@@ -19,7 +19,7 @@ router.get('/background', (req, res, next) => {
   })
 })
 
-router.post('/background', (req, res, next) => {
+router.post('/', (req, res, next) => {
   const imageName = req.body.filename
   schools.findById(schoolId).then(school => {
     school.background_image = imageName
