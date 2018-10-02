@@ -10,10 +10,9 @@ router.use(parser.json())
 router.get('/', (req, res, next) => {
   classes.findOne(
     {where: {
-      year: req.query.year,
-      course: req.query.course
+      classid: req.query.classid
     }}).then(c => {
-    res.json(c.classid)
+    res.json({year: c.year, course: c.course})
   })
 })
 
