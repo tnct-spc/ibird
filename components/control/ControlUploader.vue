@@ -3,7 +3,7 @@
   <div id="overlay" @dragleave.prevent="onDragLeave($event)" @dragover.prevent="onDragOver($event)" @drop.prevent="onDrop($event)">
    <BulletinBoard :classid="classid"/>
   </div>
-  <ModalUploader v-if="showModal" @close="showModal=false" :classes="classes" :files="files"/>
+  <ModalUploader v-if="showModal" @close="showModal=false" :classes="classes" :filename="filename" :docid="docid" :imgsize="imgsize" :checkCourse="checkCourse" :checkYear="checkYear"/>
  </section>
 </template>
 <script>
@@ -19,31 +19,62 @@ export default{
   },
   data:function(){
     return{
-      text:"管理者ページ",
       showModal: false,
-      files:{}
+      filename:null,
+      docid:null,
+      imgsize:null,
+      checkCourse:{},
+      checkYear:{}
     }
+  },
+  mounted(){
+      axios.get(process.env.httpUrl + '/api/years-and-courses').then(res =>{
+        res.data.courses.forEach((e)=>{
+          Vue.set(this.checkCourse,e,false)
+        })
+        res.data.years.forEach((e)=>{
+          Vue.set(this.checkYear,e,false)
+        })
+      }).catch(e =>{
+        console.log(e)
+      })
   },
   methods: {
   onDragOver(event){
     event.preventDefault()
     event.dataTransfer.dropEffect = "copy"
-    const overlay = document.getElementById("overlay")
-    overlay.classList.add("dropover")
   },
   onDragLeave(event){
   },
   onDrop(event){
     event.preventDefault()
     event.dataTransfer.dropEffect = "copy"
-    overlay.classList.remove("dropover")
+    let count = 0
     const files = event.dataTransfer.files[0]
-    Vue.set(this.files,"files",files)
-    if(!files.type.match('application/pdf')&&!files.type.match('application/vnd.*'))
-    {
-      this.text="ファイル形式に対応してません"
+    console.log(event.dataTransfer.files)
+    Object.keys(event.dataTransfer.files).forEach((e)=>{
+      count++
+    })
+    if(count === 0){
+      alert("ファイルをドラッグ＆ドロップしてください")
       return
     }
+    else if(count != 1){
+      alert("ファイルは１つしかアップロードできません")
+      return
+    }
+    if(!files.type.match('application/pdf')&&!files.type.match('application/vnd.*')){
+      alert("ファイル形式に対応してません")
+      return
+    }
+    const formData = new FormData()
+    formData.append('file',files)
+    this.filename = files.name
+    axios.post('../api/upload-file',formData)
+    .then((response)=>{
+      this.docid = response.data.docid
+      this.imgsize = response.data.imgsize
+    })
     this.showModal = true
   }
  },
@@ -58,8 +89,5 @@ export default{
   width: 100%;
   height: 100%;
   text-align: center;
-}
-.dropover {
-  background-color: #46fb43;
 }
 </style>

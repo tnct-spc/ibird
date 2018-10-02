@@ -32,7 +32,7 @@
             v-for="(item,key) in checkCourse"
             :key = "key">
                 <b-form-checkbox
-                @input="selectCource(key)"
+                @input="selectCourse(key)"
                 v-model="checkCourse[key]">
                 {{key}}科
                 </b-form-checkbox>
@@ -83,8 +83,8 @@
          </b-form-group>
          </div>
          <div id="style">
-          <span>ファイル名 </span>
-          <input v-model="title" placeholder="掲示物のファイル名を入力">
+          <span>モバイル向けサイトでの表示名 </span>
+          <input v-model="title" placeholder="掲示物の表示名を入力">
           <b-form-checkbox style="display:block;margin-top:2%" v-model="openMobile">モバイル向けサイトでも公開</b-form-checkbox>
          </div>
          </div>
@@ -109,7 +109,11 @@ import { w3cwebsocket } from 'websocket'
 export default{
   props:{
    "classes":Array,
-   "files":Object
+   "docid":String,
+   "imgsize":String,
+   "filename":String,
+   "checkCourse":Object,
+   "checkYear":Object
   },
   data:()=>{
    return{
@@ -117,49 +121,45 @@ export default{
     startDate:null,
     endDate:null,
     classIdList:{},
-    checkYear:{},
-    checkCourse:{},
     submitId:[],
+    today:0,
     month:"",
     day:"",
     date:{},
     title: '',
     openMobile: true,
     priority:[{text:"しない",value:0},{text:"する",value:1}],
-    course:[],
     all:false
    }
   },
   mounted(){
-    this.classes.forEach((c)=> {
-      if(!this.course[c.course]){
-        this.course.push(c.course)
-      }
-    })
     this.date = new Date()
     this.month = this.date.getMonth()+1
     this.day = this.date.getDate()
     if(this.month<10) this.month = "0" + this.month
     if(this.day<10) this.day = "0" + this.day
-    const today = [this.date.getFullYear(),this.month,this.day]
+    this.today = [this.date.getFullYear(),this.month,this.day]
     this.startDate = this.date.getFullYear()+"-"+this.month+"-"+this.day
-    this.endDate = this.date.getFullYear()+"-"+this.month+"-"+String(Number(this.day)+7)
+    this.date.setDate((Number(this.day)+7))
+    if(this.date.getDate()<this.day)this.month++
+    this.day = this.date.getDate()
+    if(this.day<10) this.day = "0" + this.day
+    this.endDate = this.date.getFullYear()+"-"+this.month+"-"+this.day
     this.classes.sort((a,b)=>{
     return a.classid - b.classid
     })
-    this.classes.forEach((c)=> {
-      if(!this.classIdList[c.year]){
-        Vue.set(this.classIdList, c.year, [])
-      }
-      this.classIdList[c.year].push({classid: c.classid, course: c.course, submit:false})
+    Object.keys(this.checkCourse).forEach((e,i)=>{
+      console.log(e)
+      this.classes.forEach((c)=> {
+        if(!this.classIdList[c.year]){
+          Vue.set(this.classIdList, c.year, [])
+        }
+        if(e === c.course){
+          this.classIdList[c.year].push({classid: c.classid, course: e, submit:false})
+        }
+      })
     })
-    Object.keys(this.classIdList).forEach((e)=>{
-      Vue.set(this.checkYear,e,false)
-    })
-    this.course.forEach((e)=>{
-      Vue.set(this.checkCourse,e,false)
-    })
-    this.title = this.files.files.name
+    this.title = this.filename
   },
   methods:{
     submit(){
@@ -168,15 +168,14 @@ export default{
       this.day = this.date.getDate()
       if(this.month<10) this.month = "0" + this.month
       if(this.day<10) this.day = "0" + this.day
-      const today = [this.date.getFullYear(),this.month,this.day]
-      const checker = today.join('-')
+      const checker = this.today.join('-')
       Object.keys(this.classIdList).forEach((e)=>{
         this.classIdList[e].forEach((i)=>{
             if(i.submit === true) this.submitId.push(i.classid)
         })
       })
       if(this.submitId.length === 0||this.endDate === null
-        ||this.startDate >= this.endDate){
+        ||this.startDate >= this.endDate||checker > this.startDate){
         if(this.submitId.length === 0){
           alert("クラスを選択してください")
         }
@@ -186,11 +185,12 @@ export default{
         if(this.startDate >= this.endDate){
           alert("掲載開始日より前に終了日を設定することはできません")
         }
+        if(checker > this.startDate){
+          alert("掲載開始日を"+this.date.getFullYear()+"年"+this.month+"月"+this.date.getDate()+"日より前には設定できません")
+        }
         this.submitId.length = 0
         return
       }
-      const formData = new FormData()
-      formData.append( 'file', this.files.files)
       const formData2 = {
                         'x': 0,
                         'y': 0,
@@ -201,25 +201,16 @@ export default{
                         'title': this.title,
                         'openMobile': this.openMobile
                         }
-      axios.post('../api/upload-file',formData)
-      .then((response)=>{
-        formData2.docid = response.data.docid
-        axios.post('../api/docs',formData2)
-        .then((response)=>{
-          this.$parent.text=this.submitId
-          console.log(response)
-          const refresh = new w3cwebsocket(process.env.wsUrl + '/ws/refresh')
-          refresh.onopen = () => refresh.send('')
-        })
-        .catch((error) => {
-          this.$parent.text=this.submitId
-          console.log(error)
-        })
-      })
-      .catch((error) => {
-        this.$parent.text=error
-      })
+      formData2.docid = this.docid
+      formData2.imgsize = this.imgsize
+      console.log(this.docid)
       this.$emit('close')
+      axios.post('../api/docs',formData2)
+      .then((response)=>{
+        console.log(response)
+        const refresh = new w3cwebsocket(process.env.wsUrl + '/ws/refresh')
+        refresh.onopen = () => refresh.send('')
+      })
     },
     selectYear(index){
       if(this.checkYear[index] === false){
@@ -233,7 +224,7 @@ export default{
         })
       }
     },
-    selectCource(key){
+    selectCourse(key){
       if(this.checkCourse[key] === true){
         Object.keys(this.classIdList).forEach((e)=>{
           this.classIdList[e].forEach((i)=>{
@@ -287,7 +278,7 @@ export default{
 }
 
 .modal-container {
-  width: 800px;
+  width: 650px;
   margin: 10px auto;
   padding: 20px 30px;
   background-color: #fff;

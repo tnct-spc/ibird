@@ -15,7 +15,9 @@ module.exports = (sequelize, DataTypes) => {
     startTime: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
     title: DataTypes.TEXT,
-    openMobile: DataTypes.BOOLEAN
+    openMobile: DataTypes.BOOLEAN,
+    sizeX: DataTypes.INTEGER,
+    sizeY: DataTypes.INTEGER
   }, {
     timestamps: false
   })

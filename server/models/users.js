@@ -8,7 +8,12 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true
     },
     username: DataTypes.TEXT,
-    hashedPassword: DataTypes.TEXT
+    hashedPassword: DataTypes.TEXT,
+    allClass: DataTypes.BOOLEAN,
+    authorityClasses: DataTypes.ARRAY(DataTypes.INTEGER),
+    openControl: DataTypes.BOOLEAN,
+    openMobile: DataTypes.BOOLEAN,
+    openBB: DataTypes.BOOLEAN
   }, {
     timestamps: false
   })

@@ -9,7 +9,8 @@
             @click="switchingYear(index)"
             align="center"
             :variant="selectedStyle(index)"
-            class="class-button my-1">
+            class="class-button my-1"
+            :class="{'btn-outline-dark':unSelected1}">
             {{year}}
           </b-button>
         </b-button-group>
@@ -19,8 +20,9 @@
             :key="index"
             @click="switchingClass(index)"
             align="center"
-            :variant="selectedStyle2(index)">
-          {{course}}
+            :variant="selectedStyle2(index)"
+            :class="{'btn-outline-dark':unSelected2}">
+            {{course}}
           </b-button>
         </b-button-group>
   </div>
@@ -37,35 +39,23 @@ export default {
   },
   data:()=>{
     return{
-      yearIndex: 0,
-      courseIndex: 0,
+      yearIndex: null,
+      courseIndex: null,
       years: [],
-      courses: new Array(5),
+      courses: [],
+      unSelected1:false,
+      unSelected2:false
       }
   },
   mounted(){
-    axios.get(process.env.httpUrl + '/api/years-and-courses').then(res =>{
+    if(!this.classid)this.unSelected1 = true
+    if(!this.classid)this.unSelected2 = true
+    axios.get(process.env.httpUrl + '/api/years-and-courses')
+    .then(res =>{
       this.years = res.data.years
-      res.data.courses.forEach((e,i)=>{
-        switch (e) {
-          case "M":
-            this.courses.splice(0,1,e)
-            break
-          case "E":
-            this.courses.splice(1,1,e)
-            break
-          case "D":
-            this.courses.splice(2,1,e)
-            break
-          case "J":
-            this.courses.splice(3,1,e)
-            break
-          case "C":
-            this.courses.splice(4,1,e)
-            break
-        }
-      })
-    }).catch(e =>{
+      this.courses = res.data.courses
+    })
+    .catch(e =>{
       console.log(e)
     })
   },
@@ -82,10 +72,12 @@ export default {
   },
   methods:{
     selectedStyle: function(index){
+      if(index === this.courseIndex&&this.classid)this.unSelected1 = false
       const backgroundColor = index === this.yearIndex ? 'primary' : 'outline-dark'
       return backgroundColor
     },
     selectedStyle2: function(index){
+      if(index === this.courseIndex&&this.classid)this.unSelected2 = false
       const backgroundColor = index === this.courseIndex ? 'primary' : 'outline-dark'
       return backgroundColor
     },

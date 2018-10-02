@@ -20,14 +20,21 @@ router.post('/', (req, res, next) => {
   // console.log(sechash.strongHashSync(username, hashopt))
   users.findOne({where: {username: username}}).then(user => {
     if (!user) {
-      res.status(401).json({ message: 'ユーザーネームが間違っています' })
+      res.status(401).json({ message: 'ユーザーネーム又はパスワードが間違っています' }).send()
     } else if (user.hashedPassword === sechash.strongHashSync(password, hashopt)) {
       // hash化して確認
       // 認証
-      req.session.authUser = { username: username }
+      req.session.authUser = {
+        username: username,
+        bb: user.openBB,
+        mobile: user.openMobile,
+        control: user.openControl,
+        allClass: user.allClass,
+        classes: user.authorityClasses
+      }
       return res.json({ username: username })
     } else {
-      res.status(401).json({ message: 'パスワードが間違っています' })
+      res.status(401).json({ message: 'ユーザーネーム又はパスワードが間違っています' })
     }
   }).catch(err => {
     console.log(err)

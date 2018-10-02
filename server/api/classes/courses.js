@@ -9,10 +9,8 @@ router.use(parser.json())
 
 router.get('/', (req, res, next) => {
   let courses = []
-  let yearset = new Set()
   classes.findAll()
-    .then(result => {
-      let results = result
+    .then(results => {
       results.sort((a, b) => {
         if (a.index > b.index) return 1
         if (a.index < b.index) return -1
@@ -23,13 +21,7 @@ router.get('/', (req, res, next) => {
           courses.push(result.course)
         }
       })
-      result.forEach(e => {
-        yearset.add(e.year)
-      })
-      res.json({
-        courses: courses,
-        years: Array.from(yearset.values()).sort()
-      })
+      res.json({courses: courses})
     }).catch(err => {
       console.log(err)
       res.status(400).send('faild')

@@ -54,6 +54,7 @@ export default{
       this.display=false
       this.img=document.docid
     },
+  middleware: 'auth',
   },
 }
 </script>
