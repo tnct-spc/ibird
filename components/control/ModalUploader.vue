@@ -83,8 +83,8 @@
          </b-form-group>
          </div>
          <div id="style">
-          <span>ファイル名 </span>
-          <input v-model="title" placeholder="掲示物のファイル名を入力">
+          <span>モバイル向けサイトでの表示名 </span>
+          <input v-model="title" placeholder="掲示物の表示名を入力">
           <b-form-checkbox style="display:block;margin-top:2%" v-model="openMobile">モバイル向けサイトでも公開</b-form-checkbox>
          </div>
          </div>
@@ -111,7 +111,9 @@ export default{
    "classes":Array,
    "docid":String,
    "imgsize":String,
-   "filename":String
+   "filename":String,
+   "checkCourse":Object,
+   "checkYear":Object
   },
   data:()=>{
    return{
@@ -119,8 +121,6 @@ export default{
     startDate:null,
     endDate:null,
     classIdList:{},
-    checkYear:{},
-    checkCourse:{},
     submitId:[],
     today:0,
     month:"",
@@ -148,26 +148,16 @@ export default{
     this.classes.sort((a,b)=>{
     return a.classid - b.classid
     })
-    axios.get(process.env.httpUrl + '/api/courses').then(res =>{
-      res.data.courses.forEach((e)=>{
-        Vue.set(this.checkCourse,e,false)
-      })
-      Object.keys(this.checkCourse).forEach((e,i)=>{
-        console.log(e)
-        this.classes.forEach((c)=> {
-          if(!this.classIdList[c.year]){
-            Vue.set(this.classIdList, c.year, [])
-          }
-          if(e === c.course){
-            this.classIdList[c.year].push({classid: c.classid, course: e, submit:false})
-          }
-        })
-      })
-      Object.keys(this.classIdList).forEach((e)=>{
-        Vue.set(this.checkYear,e,false)
-      })
-    }).catch(e =>{
+    Object.keys(this.checkCourse).forEach((e,i)=>{
       console.log(e)
+      this.classes.forEach((c)=> {
+        if(!this.classIdList[c.year]){
+          Vue.set(this.classIdList, c.year, [])
+        }
+        if(e === c.course){
+          this.classIdList[c.year].push({classid: c.classid, course: e, submit:false})
+        }
+      })
     })
     this.title = this.filename
   },
