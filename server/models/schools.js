@@ -7,7 +7,8 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true
     },
     name: DataTypes.STRING,
-    background_image: DataTypes.STRING
+    background_image: DataTypes.STRING,
+    background_images: DataTypes.ARRAY(DataTypes.STRING)
   }, {
     timestamps: false
   })
