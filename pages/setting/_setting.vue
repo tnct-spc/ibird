@@ -9,6 +9,9 @@
             </b-tab>
             <b-tab title="壁紙の設定" active>
             </b-tab>
+            <b-tab title="天気情報" active>
+              <WeatherManager/>
+            </b-tab>
             <b-tab title="電車の時刻表の設定" active>
             </b-tab>
           </b-tabs>
@@ -20,9 +23,11 @@
 
 <script>
 import Strict from '~/components/strict/Strict.vue'
+import WeatherManager from '~/components/strict/WeatherManager.vue'
 export default {
   components: {
-    Strict
+    Strict,
+    WeatherManager
   },
 }
 </script>
