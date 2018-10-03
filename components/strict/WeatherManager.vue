@@ -3,17 +3,19 @@
     <h1>天気情報</h1>
     <form>
         <div class="form-group">
-            <div style="float: left;">
-                <label>緯度</label>
-                <input class="form-control" pattern="\d" required>
-                <br>
-                <label>経度</label>
-                <input class="form-control" pattern="\d" required>
-            </div>
-            <div style="float: right;">
-                <button style="width: 21em; margin: 1em;">レビュー</button>
-                <br>
-                <img width="360px" height="360px" style="margin-bottom: 1em;">
+            <div class="row">
+                <div class="col">
+                    <label>緯度</label>
+                    <input class="form-control" pattern="\d" required>
+                    <br>
+                    <label>経度</label>
+                    <input class="form-control" pattern="\d" required>
+                </div>
+                <div style="col">
+                    <button style="width: 360px; margin: 9px;">レビュー</button>
+                    <br>
+                    <img width="360px" height="360px" style="margin: 9px; margin-right: 18px;">
+                </div>
             </div>
         </div>
     </form>
