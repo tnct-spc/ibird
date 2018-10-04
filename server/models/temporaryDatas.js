@@ -7,8 +7,8 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true
     },
     NoCollisonKey: {
-     type: DataTypes.STRING,
-     primaryKey: true,
+      type: DataTypes.STRING,
+      primaryKey: true
     },
     data: DataTypes.JSON,
     isActive: DataTypes.BOOLEAN
