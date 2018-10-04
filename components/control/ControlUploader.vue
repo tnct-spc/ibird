@@ -68,6 +68,8 @@ export default{
       return
     }
     const formData = new FormData()
+    // formData.append('docid', new Date().getTime().toString(16))
+    // ユニークな値で, append('file',files')の前になければならない
     formData.append('file',files)
     this.filename = files.name
     axios.post('../api/upload-file',formData)

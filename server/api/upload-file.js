@@ -4,10 +4,15 @@ import multer from 'multer'
 import Converter from 'office-convert'
 import childProcess from 'child_process'
 import sizeOf from 'image-size'
+import models from '../models'
+import sortDocs from '../lib/sortdocs'
 
 const router = Router()
 const converter = Converter.createConverter()
 const officeExtensions = ['docx', 'doc', 'xls', 'xlsx', 'ppt', 'pptx']
+const temporaryDatas = models.temporaryDatas
+const documents = models.documents
+
 
 // 拡張子(.で切って一番最後の要素)を返す関数
 const extension = (filename) => {
@@ -45,7 +50,7 @@ const upload = multer({ storage: multer.diskStorage({
     cb(null, '.document/')
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + '.' + extension(file.originalname))
+    cb(null, req.body.docid + '.' + extension(file.originalname))
   }
 })})
 
@@ -58,16 +63,61 @@ async function run (path) {
   var docid = pdfToJpg(path)
   docid = docid.slice(0, -4)
   const imgsize = sizeOf(`static/jpg/${docid}.jpg`)
-  return {docid: docid, imgsize: imgsize}
+  return imgsize
 }
 
 router.post('/upload-file', upload.single('file'), (req, res, next) => {
-  run(req.file.path).then((doc) => {
-    console.log(doc.docid)
-    res.status(200).json(doc)
-  }).catch(e => {
-    console.log(e)
-    res.sendStatus(400)
+  const docid = req.body.docid
+  run(req.file.path).then(imgsize => {
+    temporaryDatas.find({where: {
+      isActive: true,
+      NoCollisonKey: docid
+    }}).then(temporary => {
+      if (temporary === null) {
+        temporaryDatas.create({
+          NoCollisonKey: docid,
+          data: imgsize,
+          isActive: true
+        })
+      } else {
+        temporary.isActive = false
+        temporary.save()
+        const doc = temporary.data
+        const sizeX = imgsize.width
+        const sizeY = imgsize.height
+        const classids = doc.classids
+        const startTime = new Date(doc.startTime)
+        const endTime = new Date(doc.endTime)
+        let insertData = []
+        classids.forEach(id => {
+          insertData.push(
+            {
+              classid: id,
+              docid: docid,
+              x: doc.x,
+              y: doc.y,
+              priority: doc.priority,
+              openMobile: doc.openMobile,
+              title: doc.title,
+              startTime: startTime,
+              endTime: endTime,
+              sizeX: sizeX,
+              sizeY: sizeY
+            })
+        })
+        documents.bulkCreate(insertData)
+          .then(result => {
+            res.sendStatus(200)
+            classids.forEach(e => { sortDocs(e) })
+          }).catch(err => {
+            console.log(err)
+            res.sendStatus(400)
+          })
+        }
+    }).catch(e => {
+      console.log(e)
+      res.sendStatus(400)
+    })
   })
 })
 
