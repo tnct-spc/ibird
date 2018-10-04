@@ -19,6 +19,7 @@ router.get('/', (req, res, next) => {
 router.post('/', (req, res, next) => {
   const classids = req.body.classids
   const doc = req.body
+  console.log(doc)
   const startTime = new Date(doc.startTime)
   const endTime = new Date(doc.endTime)
   let insertData = []
