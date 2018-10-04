@@ -5,20 +5,20 @@ const router = Router()
 expressWs(router)
 
 var receivers = []
-router.ws('/move',function(ws, req){
-  const idx = receivers.push(ws)-1
+router.ws('/move', function (ws, req) {
+  receivers.push(ws)
   ws.on('message', msg => {
-    receivers.forEach((receiver,receiverId)=>{
-      try{
+    receivers.forEach((receiver, receiverId) => {
+      try {
         receiver.send(msg)
-      }catch(e){
+      } catch (e) {
         console.log(e)
-        receivers.splice(receiverId,1)
+        receivers.splice(receiverId, 1)
       }
     })
   })
-  ws.on('close', ()=>{
-    receivers = receivers.filter( v => v!==ws )
+  ws.on('close', () => {
+    receivers = receivers.filter(v => v !== ws)
   })
 })
 

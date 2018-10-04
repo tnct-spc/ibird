@@ -1,8 +1,8 @@
-'use strict';
+'use strict'
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('classes', { 
+    return queryInterface.createTable('classes', {
       classid: {
         allowNull: false,
         primaryKey: true,
@@ -13,11 +13,11 @@ module.exports = {
       },
       documents: {
         type: Sequelize.JSON
-      },
-    });
+      }
+    })
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('classes');
+    return queryInterface.dropTable('classes')
   }
-};
+}

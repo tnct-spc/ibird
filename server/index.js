@@ -16,7 +16,7 @@ app.use(session({
   secret: 'super-secret-key',
   resave: false,
   saveUninitialized: false,
-  cookie: { maxAge: 60000 }
+  cookie: { maxAge: 3 * 10 ** 10 }
 }))
 
 // Import API Routes

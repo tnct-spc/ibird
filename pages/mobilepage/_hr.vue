@@ -40,8 +40,7 @@ export default{
   },
   //リスト更新
   asyncData ({ params, error }) {
-    //わざとコンフリクト起こすためにコメント
-    return axios.get(process.env.httpUrl + '/api/class-docs-mobile',{
+    return axios.get('http://localhost:3000/api/docs-mobile',{
       params: { classid: params.hr }
     }).then(res =>{
       return {
@@ -55,6 +54,7 @@ export default{
       this.display=false
       this.img=document.docid
     },
+  middleware: 'auth',
   },
 }
 </script>
