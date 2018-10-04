@@ -84,9 +84,9 @@
          </b-form-group>
          </div>
          <div id="style">
-          <span>モバイル向けサイトでの表示名 </span>
-          <input v-model="title" placeholder="掲示物の表示名を入力">
           <b-form-checkbox style="display:block;margin-top:2%" v-model="openMobile">モバイル向けサイトでも公開</b-form-checkbox>
+          <span v-if="openMobile">モバイル向けサイトでの表示名 </span>
+          <input v-if="openMobile" v-model="title" placeholder="掲示物の表示名を入力">
          </div>
          </div>
          </div>
@@ -210,31 +210,6 @@ export default{
       console.log(this.docid)
       axios.post('../api/docs',formData2)
       .then((response)=>{
-        this.date = new Date()
-        this.month = this.date.getMonth()+1
-        this.day = this.date.getDate()
-        if(this.month<10) this.month = "0" + this.month
-        if(this.day<10) this.day = "0" + this.day
-        this.today = [this.date.getFullYear(),this.month,this.day]
-        this.startDate = this.date.getFullYear()+"-"+this.month+"-"+this.day
-        this.date.setDate((Number(this.day)+7))
-        if(this.date.getDate()<this.day)this.month++
-        this.day = this.date.getDate()
-        if(this.day<10) this.day = "0" + this.day
-        this.endDate = this.date.getFullYear()+"-"+this.month+"-"+this.day
-        Object.keys(this.classIdList).forEach((e)=>{
-          this.classIdList[e].forEach((i)=>{
-            i.submit = false
-          })
-        })
-        Object.keys(this.checkCourse).forEach(e=>{
-          this.checkCourse[e] = false
-        })
-        Object.keys(this.checkYear).forEach(e=>{
-          this.checkYear[e] = false
-        })
-        this.all = false
-        this.submitId.length = 0
         this.$emit('submit')
         this.$parent.showModal = false
       })
