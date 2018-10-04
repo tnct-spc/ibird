@@ -10,7 +10,7 @@ module.exports = {
       },
       NoCollisonKey: {
         type: Sequelize.STRING,
-        primaryKey: true,
+        primaryKey: true
       },
       data: Sequelize.JSON,
       isActive: Sequelize.BOOLEAN

@@ -68,7 +68,7 @@ async function run (path) {
 
 router.post('/upload-file', upload.single('file'), (req, res, next) => {
   const docid = req.body.docid
-  run(req.file.path).then(imgsize =>{
+  run(req.file.path).then(imgsize => {
     temporaryDatas.find({where: {
       isActive: true,
       NoCollisonKey: docid
@@ -114,7 +114,7 @@ router.post('/upload-file', upload.single('file'), (req, res, next) => {
             res.sendStatus(400)
           })
         }
-    }).catch(e =>{
+    }).catch(e => {
       console.log(e)
       res.sendStatus(400)
     })
