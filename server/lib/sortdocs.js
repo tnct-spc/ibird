@@ -57,6 +57,7 @@ export default classid => {
     let startXS = [paperCloseX]
     let overflowDisp = 0
     let randFlag
+    let incrementIndex
     // ソートされたものを配置するfor
     for (var i = 0; i < sortedList.length; i++) {
       const sizeX = sortedList[i].sizeX * 0.60 // 紙の解像度と謎な座標系を合わせるための定数
@@ -67,6 +68,7 @@ export default classid => {
         if (startXS[i2] + sizeX + paperCloseX < 10000) {
           cleanX = startXS[i2]
           startXS[i2] += sizeX + paperCloseX
+          incrementIndex = i2
           break
         }
       }
@@ -76,12 +78,13 @@ export default classid => {
       }
       // Y座標の計算
       cleanY = laiderSearch(cleanX, sizeX, paperMatrix) + paperCloseY
-      if (cleanY + sizeY > 8500) {
-        if (cleanX > 6000 || cleanY + sizeY > 10000) {
+      if (cleanY + sizeY > 8200) {
+        if (cleanX + sizeX > 6000 || cleanY + sizeY > 10000) {
           cleanX = 10000 - sizeX - overflowDisp
-          cleanY = 8500 - sizeY
+          cleanY = 8200 - sizeY
           overflowDisp += 100
           randFlag = false
+          startXS[incrementIndex] -= sizeX + paperCloseX
         }
       }
       // あとからx軸がかぶってる紙の高さを得るためにストック
