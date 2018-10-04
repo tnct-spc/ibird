@@ -6,13 +6,13 @@
             <div class="row">
                 <div class="col">
                     <label>緯度</label>
-                    <input class="form-control" pattern="\d" required>
+                    <input class="form-control" pattern="\d+" required>
                     <br>
                     <label>経度</label>
-                    <input class="form-control" pattern="\d" required>
+                    <input class="form-control" pattern="\d+" required>
                 </div>
                 <div style="col">
-                    <button style="width: 360px; margin: 9px;">レビュー</button>
+                    <input type="submit" value="レビュー" style="width: 360px; margin: 9px;">
                     <br>
                     <img width="360px" height="360px" style="margin: 9px; margin-right: 18px;">
                 </div>
