@@ -206,13 +206,17 @@ export default{
                         'openMobile': this.openMobile
                         }
       formData2.docid = this.docid
-      formData2.imgsize = this.imgsize
       console.log(this.docid)
       axios.post('../api/docs',formData2)
       .then((response)=>{
-        this.$emit('submit')
-        this.$parent.showModal = false
+        console.log(response)
+        console.log("add-doc")
       })
+      .catch(e=>{
+        console.log(e)
+      })
+      this.$parent.showModal = false
+      this.$emit('submit')
     },
     selectYear(index){
       if(this.checkYear[index] === false){

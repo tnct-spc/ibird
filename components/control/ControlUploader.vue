@@ -47,15 +47,19 @@ export default{
     console.log(this.modal)
     this.file = this.files[this.modal]
     const formData = new FormData()
+    this.docid = new Date().getTime().toString(16)
+    formData.append('docid',this.docid)
     formData.append('file',this.file)
     this.filename = this.file.name
     axios.post('../api/upload-file',formData)
     .then((response)=>{
       console.log(response)
-      this.docid = response.data.docid
-      this.imgsize = response.data.imgsize
-      this.showModal=true
+      console.log("upload")
     })
+    .catch(e=>{
+      console.log(e)
+    })
+    this.showModal=true
   },
   onDragOver(event){
     event.preventDefault()
@@ -90,14 +94,20 @@ export default{
       return
     }
     const formData = new FormData()
+    this.docid = new Date().getTime().toString(16)
+    console.log(this.docid)
     formData.append('file',this.file)
+    formData.append('docid', this.docid)
     this.filename = this.file.name
     axios.post('../api/upload-file',formData)
     .then((response)=>{
-      this.docid = response.data.docid
-      this.imgsize = response.data.imgsize
-      this.showModal=true
+      console.log(response)
+      console.log("upload")
     })
+    .catch(e=>{
+      console.log(e)
+    })
+    this.showModal=true
   }
  },
  components:{
