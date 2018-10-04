@@ -79,7 +79,7 @@ export default classid => {
       // Y座標の計算
       cleanY = laiderSearch(cleanX, sizeX, paperMatrix) + paperCloseY
       if (cleanY + sizeY > 8200) {
-        if (cleanX + sizeX > 6000 || cleanY + sizeY > 10000) {
+        if (cleanX + sizeX > 6500 || cleanY + sizeY > 10000) {
           cleanX = 10000 - sizeX - overflowDisp
           cleanY = 8200 - sizeY
           overflowDisp += 100
