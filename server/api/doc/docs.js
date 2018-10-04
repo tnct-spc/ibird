@@ -3,8 +3,6 @@ import parser from 'body-parser'
 import models from '../../models'
 import sortDocs from '../../lib/sortdocs'
 import docList from '../../lib/doclist'
-import { w3cwebsocket } from 'websocket'
-const W3cwebsocket = w3cwebsocket
 
 const documents = models.documents
 const temporaryDatas = models.temporaryDatas
@@ -68,7 +66,5 @@ router.post('/', (req, res, next) => {
         })
     }
   })
-
 })
-
 export default router

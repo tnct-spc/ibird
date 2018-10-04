@@ -13,7 +13,6 @@ const officeExtensions = ['docx', 'doc', 'xls', 'xlsx', 'ppt', 'pptx']
 const temporaryDatas = models.temporaryDatas
 const documents = models.documents
 
-
 // 拡張子(.で切って一番最後の要素)を返す関数
 const extension = (filename) => {
   return filename.split('.').pop()
@@ -113,7 +112,7 @@ router.post('/upload-file', upload.single('file'), (req, res, next) => {
             console.log(err)
             res.sendStatus(400)
           })
-        }
+      }
     }).catch(e => {
       console.log(e)
       res.sendStatus(400)
