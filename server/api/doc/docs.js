@@ -32,6 +32,7 @@ router.post('/', (req, res, next) => {
         data: doc,
         isActive: true
       })
+      res.sendStatus(200)
     } else {
       temporary.isActive = false
       temporary.save()
