@@ -3,7 +3,7 @@
   <div id="overlay" @dragleave.prevent="onDragLeave($event)" @dragover.prevent="onDragOver($event)" @drop.prevent="onDrop($event)">
    <BulletinBoard :classid="classid"/>
   </div>
-  <ModalUploader v-if="showModal" @close="showModal=false" :classes="classes" :filename="filename" :docid="docid" :imgsize="imgsize" :checkCourse="checkCourse" :checkYear="checkYear"/>
+  <ModalUploader v-if="showModal" @submit="upload()" :classes="classes" :filename="filename" :docid="docid" :imgsize="imgsize" :checkCourse="checkCourse" :checkYear="checkYear"/>
  </section>
 </template>
 <script>
@@ -24,7 +24,10 @@ export default{
       docid:null,
       imgsize:null,
       checkCourse:{},
-      checkYear:{}
+      checkYear:{},
+      fileList:[],
+      modal:0,
+      files:null
     }
   },
   mounted(){
@@ -35,11 +38,25 @@ export default{
         res.data.years.forEach((e)=>{
           Vue.set(this.checkYear,e,false)
         })
-      }).catch(e =>{
-        console.log(e)
       })
   },
-  methods: {
+  methods:{
+  upload(){
+    this.modal--
+    if(this.modal<0)return
+    console.log(this.modal)
+    this.file = this.files[this.modal]
+    const formData = new FormData()
+    formData.append('file',this.file)
+    this.filename = this.file.name
+    axios.post('../api/upload-file',formData)
+    .then((response)=>{
+      console.log(response)
+      this.docid = response.data.docid
+      this.imgsize = response.data.imgsize
+      this.showModal=true
+    })
+  },
   onDragOver(event){
     event.preventDefault()
     event.dataTransfer.dropEffect = "copy"
@@ -49,33 +66,38 @@ export default{
   onDrop(event){
     event.preventDefault()
     event.dataTransfer.dropEffect = "copy"
-    let count = 0
-    const files = event.dataTransfer.files[0]
-    console.log(event.dataTransfer.files)
-    Object.keys(event.dataTransfer.files).forEach((e)=>{
-      count++
-    })
-    if(count === 0){
+    this.modal=0
+    this.fileList.length=0
+    this.files = event.dataTransfer.files
+    Object.values(this.files).forEach(((e,i)=>{
+      this.fileList.push(this.files[i].name)
+      console.log(this.files[i].name)
+    }))
+    this.modal = this.fileList.length
+    this.modal--
+    this.file = this.files[this.modal]
+    console.log(this.modal)
+    if(!this.classid){
+      alert("表示するクラスを選択してください")
+      return
+    }
+    if(!this.files.length){
       alert("ファイルをドラッグ＆ドロップしてください")
       return
     }
-    else if(count != 1){
-      alert("ファイルは１つしかアップロードできません")
-      return
-    }
-    if(!files.type.match('application/pdf')&&!files.type.match('application/vnd.*')){
+    if(!this.file.type.match('application/pdf')&&!this.file.type.match('application/vnd.*')){
       alert("ファイル形式に対応してません")
       return
     }
     const formData = new FormData()
-    formData.append('file',files)
-    this.filename = files.name
+    formData.append('file',this.file)
+    this.filename = this.file.name
     axios.post('../api/upload-file',formData)
     .then((response)=>{
       this.docid = response.data.docid
       this.imgsize = response.data.imgsize
+      this.showModal=true
     })
-    this.showModal = true
   }
  },
  components:{

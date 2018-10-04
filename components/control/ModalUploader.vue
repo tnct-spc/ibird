@@ -5,6 +5,7 @@
        <div class="modal-header"/>
         <div class="modal-body">
           <div id="style">
+           <div class="my-2"><mark>ファイル名 : {{title}}</mark></div>
            <table style="width:500px;margin:0 auto;">
             <tbody>
             <tr>
@@ -90,7 +91,7 @@
          </div>
          </div>
           <div class="modal-footer">
-            <button class="btn btn-secondar mr-auto btn-primary" @click="$emit('close')">
+            <button class="btn btn-secondar mr-auto btn-primary" @click="cancel()">
               キャンセル
             </button>
             <button class="btn btn-primary" @click="submit()">
@@ -110,7 +111,7 @@ export default{
   props:{
    "classes":Array,
    "docid":String,
-   "imgsize":String,
+   "imgsize":Object,
    "filename":String,
    "checkCourse":Object,
    "checkYear":Object
@@ -162,6 +163,9 @@ export default{
     this.title = this.filename
   },
   methods:{
+    cancel(){
+      this.$parent.showModal=false
+    },
     submit(){
       this.date = new Date()
       this.month = this.date.getMonth()+1
@@ -204,12 +208,35 @@ export default{
       formData2.docid = this.docid
       formData2.imgsize = this.imgsize
       console.log(this.docid)
-      this.$emit('close')
       axios.post('../api/docs',formData2)
       .then((response)=>{
-        console.log(response)
-        const refresh = new w3cwebsocket(process.env.wsUrl + '/ws/refresh')
-        refresh.onopen = () => refresh.send('')
+        this.date = new Date()
+        this.month = this.date.getMonth()+1
+        this.day = this.date.getDate()
+        if(this.month<10) this.month = "0" + this.month
+        if(this.day<10) this.day = "0" + this.day
+        this.today = [this.date.getFullYear(),this.month,this.day]
+        this.startDate = this.date.getFullYear()+"-"+this.month+"-"+this.day
+        this.date.setDate((Number(this.day)+7))
+        if(this.date.getDate()<this.day)this.month++
+        this.day = this.date.getDate()
+        if(this.day<10) this.day = "0" + this.day
+        this.endDate = this.date.getFullYear()+"-"+this.month+"-"+this.day
+        Object.keys(this.classIdList).forEach((e)=>{
+          this.classIdList[e].forEach((i)=>{
+            i.submit = false
+          })
+        })
+        Object.keys(this.checkCourse).forEach(e=>{
+          this.checkCourse[e] = false
+        })
+        Object.keys(this.checkYear).forEach(e=>{
+          this.checkYear[e] = false
+        })
+        this.all = false
+        this.submitId.length = 0
+        this.$emit('submit')
+        this.$parent.showModal = false
       })
     },
     selectYear(index){
