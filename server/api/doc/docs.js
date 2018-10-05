@@ -34,7 +34,9 @@ router.post('/', (req, res, next) => {
     } else {
       temporary.isActive = false
       temporary.save()
-      const classids = req.body.classids
+      const classids = req.body.classids.filter(function (x, i, self) {
+        return self.indexOf(x) === i
+      })
       const sizeX = temporary.data.width
       const sizeY = temporary.data.height
       const startTime = new Date(doc.startTime)
