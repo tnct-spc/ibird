@@ -75,17 +75,16 @@ export default classid => {
       if (!cleanX) {
         cleanX = paperCloseX
         startXS.push(paperCloseX * 2 + sizeX)
+        incrementIndex = i2
       }
       // Y座標の計算
       cleanY = laiderSearch(cleanX, sizeX, paperMatrix) + paperCloseY
-      if (cleanY + sizeY > 8200) {
-        if (cleanX + sizeX > 6500 || cleanY + sizeY > 10000) {
-          cleanX = 10000 - sizeX - overflowDisp
-          cleanY = 8200 - sizeY
-          overflowDisp += 100
-          randFlag = false
-          startXS[incrementIndex] -= sizeX + paperCloseX
-        }
+      if (cleanY + sizeY > 8200 && (cleanX + sizeX > 6500 || cleanY + sizeY > 10000)) {
+        cleanX = 10000 - sizeX - overflowDisp
+        cleanY = 8200 - sizeY
+        overflowDisp += 100
+        randFlag = false
+        startXS[incrementIndex] -= sizeX + paperCloseX
       }
       // あとからx軸がかぶってる紙の高さを得るためにストック
       paperMatrix.push({
