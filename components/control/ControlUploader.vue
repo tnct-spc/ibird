@@ -53,13 +53,14 @@ export default{
     this.filename = this.file.name
     axios.post('../api/upload-file',formData)
     .then((response)=>{
-      console.log(response)
       console.log("upload")
     })
     .catch(e=>{
       console.log(e)
     })
-    this.showModal=true
+    this.$nextTick(() => {
+      this.showModal=true
+    })
   },
   onDragOver(event){
     event.preventDefault()

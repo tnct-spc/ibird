@@ -209,7 +209,6 @@ export default{
       console.log(this.docid)
       axios.post('../api/docs',formData2)
       .then((response)=>{
-        console.log(response)
         console.log("add-doc")
       })
       .catch(e=>{
