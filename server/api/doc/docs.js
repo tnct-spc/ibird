@@ -34,7 +34,6 @@ router.post('/', (req, res, next) => {
         const classids = req.body.classids.filter(function (x, i, self) {
           return self.indexOf(x) === i
         })
-        console.log(classids)
         const sizeX = temporary.data.width
         const sizeY = temporary.data.height
         const startTime = new Date(doc.startTime)

@@ -82,7 +82,9 @@ router.post('/upload-file', upload.single('file'), (req, res, next) => {
           const doc = temporary.data
           const sizeX = imgsize.width
           const sizeY = imgsize.height
-          const classids = doc.classids
+          const classids = doc.classids.filter(function (x, i, self) {
+            return self.indexOf(x) === i
+          })
           const startTime = new Date(doc.startTime)
           const endTime = new Date(doc.endTime)
           let insertData = []
