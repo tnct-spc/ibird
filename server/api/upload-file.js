@@ -70,11 +70,11 @@ router.post('/upload-file', upload.single('file'), (req, res, next) => {
   run(req.file.path).then(imgsize => {
     temporaryDatas.find({where: {
       isActive: true,
-      NoCollisonKey: docid
+      uniqueId: docid
     }}).then(temporary => {
       if (temporary === null) {
         temporaryDatas.create({
-          NoCollisonKey: docid,
+          uniqueId: docid,
           data: imgsize,
           isActive: true
         })

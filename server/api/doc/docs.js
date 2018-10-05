@@ -22,11 +22,11 @@ router.post('/', (req, res, next) => {
   const docid = req.body.docid
   temporaryDatas.find({where: {
     isActive: true,
-    NoCollisonKey: docid
+    uniqueId: docid
   }}).then(temporary => {
     if (temporary === null) {
       temporaryDatas.create({
-        NoCollisonKey: docid,
+        uniqueId: docid,
         data: doc,
         isActive: true
       })

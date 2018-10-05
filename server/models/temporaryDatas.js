@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true
     },
-    NoCollisonKey: {
+    uniqueId: {
       type: DataTypes.STRING,
       primaryKey: true
     },
