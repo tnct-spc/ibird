@@ -111,7 +111,6 @@ export default{
   props:{
    "classes":Array,
    "docid":String,
-   "imgsize":Object,
    "filename":String,
    "checkCourse":Object,
    "checkYear":Object

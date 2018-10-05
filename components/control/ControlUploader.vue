@@ -3,7 +3,7 @@
   <div id="overlay" @dragleave.prevent="onDragLeave($event)" @dragover.prevent="onDragOver($event)" @drop.prevent="onDrop($event)">
    <BulletinBoard :classid="classid"/>
   </div>
-  <ModalUploader v-if="showModal" @submit="upload()" :classes="classes" :filename="filename" :docid="docid" :imgsize="imgsize" :checkCourse="checkCourse" :checkYear="checkYear"/>
+  <ModalUploader v-if="showModal" @submit="upload()" :classes="classes" :filename="filename" :docid="docid" :checkCourse="checkCourse" :checkYear="checkYear"/>
  </section>
 </template>
 <script>
@@ -22,7 +22,6 @@ export default{
       showModal: false,
       filename:null,
       docid:null,
-      imgsize:null,
       checkCourse:{},
       checkYear:{},
       fileList:[],
@@ -82,16 +81,17 @@ export default{
     this.modal--
     this.file = this.files[this.modal]
     console.log(this.modal)
-    if(!this.classid){
-      alert("表示するクラスを選択してください")
-      return
-    }
-    if(!this.files.length){
-      alert("ファイルをドラッグ＆ドロップしてください")
-      return
-    }
-    if(!this.file.type.match('application/pdf')&&!this.file.type.match('application/vnd.*')){
-      alert("ファイル形式に対応してません")
+    if(!this.classid||!this.files.length
+    ||!this.file.type.match('application/pdf')&&!this.file.type.match('application/vnd.*')){
+      if(!this.classid){
+        alert("表示するクラスを選択してください")
+      }
+      if(!this.files.length){
+        alert("ファイルをドラッグ＆ドロップしてください")
+      }
+      if(!this.file.type.match('application/pdf')&&!this.file.type.match('application/vnd.*')){
+        alert("ファイル形式に対応してません")
+      }
       return
     }
     const formData = new FormData()
