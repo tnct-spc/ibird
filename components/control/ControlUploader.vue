@@ -96,8 +96,8 @@ export default{
     const formData = new FormData()
     this.docid = new Date().getTime().toString(16)
     console.log(this.docid)
-    formData.append('file',this.file)
     formData.append('docid', this.docid)
+    formData.append('file',this.file)
     this.filename = this.file.name
     axios.post('../api/upload-file',formData)
     .then((response)=>{
