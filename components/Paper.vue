@@ -8,7 +8,7 @@
         left: (this.paper.x*this.bbFieldSize.x/10000)+'px',
         top: (this.paper.y*this.bbFieldSize.y/10000)+'px',
         'max-width': 15 * paper.sizeX / 2483 + '%',
-        'z-index': 15 * paper.overlapPriority,
+        'z-index': paper.overlapPriority,
         //left: '0px',
         //top: '0px'
         }" ondragstart="return false;" >
