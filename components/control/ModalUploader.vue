@@ -149,7 +149,6 @@ export default{
     return a.classid - b.classid
     })
     Object.keys(this.checkCourse).forEach((e,i)=>{
-      console.log(e)
       this.classes.forEach((c)=> {
         if(!this.classIdList[c.year]){
           Vue.set(this.classIdList, c.year, [])
@@ -205,10 +204,9 @@ export default{
                         'openMobile': this.openMobile
                         }
       formData2.docid = this.docid
-      console.log(this.docid)
+      //add doc
       axios.post('../api/docs',formData2)
       .then((response)=>{
-        console.log("add-doc")
       })
       .catch(e=>{
         console.log(e)

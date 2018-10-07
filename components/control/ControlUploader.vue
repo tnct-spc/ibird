@@ -43,16 +43,15 @@ export default{
   upload(){
     this.modal--
     if(this.modal<0)return
-    console.log(this.modal)
     this.file = this.files[this.modal]
     const formData = new FormData()
     this.docid = new Date().getTime().toString(16)
     formData.append('docid',this.docid)
     formData.append('file',this.file)
     this.filename = this.file.name
+    //upload file
     axios.post('../api/upload-file',formData)
     .then((response)=>{
-      console.log("upload")
     })
     .catch(e=>{
       console.log(e)
@@ -75,12 +74,10 @@ export default{
     this.files = event.dataTransfer.files
     Object.values(this.files).forEach(((e,i)=>{
       this.fileList.push(this.files[i].name)
-      console.log(this.files[i].name)
     }))
     this.modal = this.fileList.length
     this.modal--
     this.file = this.files[this.modal]
-    console.log(this.modal)
     if(!this.classid||!this.files.length
     ||!this.file.type.match('application/pdf')&&!this.file.type.match('application/vnd.*')){
       if(!this.classid){
@@ -96,14 +93,12 @@ export default{
     }
     const formData = new FormData()
     this.docid = new Date().getTime().toString(16)
-    console.log(this.docid)
     formData.append('docid', this.docid)
     formData.append('file',this.file)
     this.filename = this.file.name
+    //upload file
     axios.post('../api/upload-file',formData)
     .then((response)=>{
-      console.log(response)
-      console.log("upload")
     })
     .catch(e=>{
       console.log(e)
