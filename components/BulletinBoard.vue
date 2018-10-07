@@ -22,6 +22,7 @@ import ViewPaper from '~/components/ViewPaper.vue'
 import { mapState, mapMutations } from 'vuex'
 import { w3cwebsocket } from 'websocket'
 import axios from 'axios'
+import { setInterval } from 'timers';
 
 const W3cwebsocket = w3cwebsocket
 
@@ -55,6 +56,7 @@ export default {
         console.log('websocket disconnect ws/move')
         setTimeout(() =>{startWebsocketA()},1000)
       }
+      setInterval(this.refresh, 1000*60*60)
     }
     startWebsocketA()
     const startWebsocketB = () => {
