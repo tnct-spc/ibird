@@ -59,6 +59,7 @@ export default classid => {
     let overFlowPapers = []
     // ソートされたものを配置するfor
     for (var i = 0; i < sortedList.length; i++) {
+      sortedList[i].overlapPriority = 100 - i
       const sizeX = sortedList[i].sizeX * 0.60 // 紙の解像度と謎な座標系を合わせるための定数
       const sizeY = sortedList[i].sizeY * 1.06
       cleanX = null
