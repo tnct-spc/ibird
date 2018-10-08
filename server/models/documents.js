@@ -17,7 +17,9 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.TEXT,
     openMobile: DataTypes.BOOLEAN,
     sizeX: DataTypes.INTEGER,
-    sizeY: DataTypes.INTEGER
+    sizeY: DataTypes.INTEGER,
+    overlapPriority: DataTypes.INTEGER
+
   }, {
     timestamps: false
   })
