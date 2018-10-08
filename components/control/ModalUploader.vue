@@ -5,6 +5,7 @@
        <div class="modal-header"/>
         <div class="modal-body">
           <div id="style">
+           <div class="my-2"><mark>ファイル名 : {{title}}</mark></div>
            <table style="width:500px;margin:0 auto;">
             <tbody>
             <tr>
@@ -83,14 +84,14 @@
          </b-form-group>
          </div>
          <div id="style">
-          <span>モバイル向けサイトでの表示名 </span>
-          <input v-model="title" placeholder="掲示物の表示名を入力">
           <b-form-checkbox style="display:block;margin-top:2%" v-model="openMobile">モバイル向けサイトでも公開</b-form-checkbox>
+          <span v-if="openMobile">モバイル向けサイトでの表示名 </span>
+          <input v-if="openMobile" v-model="title" placeholder="掲示物の表示名を入力">
          </div>
          </div>
          </div>
           <div class="modal-footer">
-            <button class="btn btn-secondar mr-auto btn-primary" @click="$emit('close')">
+            <button class="btn btn-secondar mr-auto btn-primary" @click="cancel()">
               キャンセル
             </button>
             <button class="btn btn-primary" @click="submit()">
@@ -110,7 +111,6 @@ export default{
   props:{
    "classes":Array,
    "docid":String,
-   "imgsize":String,
    "filename":String,
    "checkCourse":Object,
    "checkYear":Object
@@ -149,7 +149,6 @@ export default{
     return a.classid - b.classid
     })
     Object.keys(this.checkCourse).forEach((e,i)=>{
-      console.log(e)
       this.classes.forEach((c)=> {
         if(!this.classIdList[c.year]){
           Vue.set(this.classIdList, c.year, [])
@@ -162,6 +161,9 @@ export default{
     this.title = this.filename
   },
   methods:{
+    cancel(){
+      this.$parent.showModal=false
+    },
     submit(){
       this.date = new Date()
       this.month = this.date.getMonth()+1
@@ -202,15 +204,15 @@ export default{
                         'openMobile': this.openMobile
                         }
       formData2.docid = this.docid
-      formData2.imgsize = this.imgsize
-      console.log(this.docid)
-      this.$emit('close')
+      //add doc
       axios.post('../api/docs',formData2)
       .then((response)=>{
-        console.log(response)
-        const refresh = new w3cwebsocket(process.env.wsUrl + '/ws/refresh')
-        refresh.onopen = () => refresh.send('')
       })
+      .catch(e=>{
+        console.log(e)
+      })
+      this.$parent.showModal = false
+      this.$emit('submit')
     },
     selectYear(index){
       if(this.checkYear[index] === false){
