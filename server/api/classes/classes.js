@@ -21,7 +21,7 @@ router.get('/', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
   const yearNum = req.body.yearNum
-  const courses = req.body.courses.split(',')
+  const courses = req.body.courses
   documents.destroy({where: {}})
   let insertData = []
   for (let y = 1; y <= yearNum; y++) {
