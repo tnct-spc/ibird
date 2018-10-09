@@ -22,6 +22,7 @@ import ViewPaper from '~/components/ViewPaper.vue'
 import { mapState, mapMutations } from 'vuex'
 import { w3cwebsocket } from 'websocket'
 import axios from 'axios'
+import { setInterval } from 'timers';
 
 const W3cwebsocket = w3cwebsocket
 
@@ -44,6 +45,7 @@ export default {
     }
   },
   created () {
+    setInterval(this.refresh, 1000*60*60)
     this.refresh()
     const startWebsocketA = () =>{
       this.client = new W3cwebsocket(process.env.wsUrl+'/ws/move')
