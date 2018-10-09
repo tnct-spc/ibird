@@ -60,8 +60,8 @@ export default classid => {
     // ソートされたものを配置するfor
     for (var i = 0; i < sortedList.length; i++) {
       sortedList[i].overlapPriority = 100 - i
-      const sizeX = sortedList[i].sizeX * 0.60 // 紙の解像度と謎な座標系を合わせるための定数
-      const sizeY = sortedList[i].sizeY * 1.06
+      const sizeX = sortedList[i].sizeX * 2.66 // 紙の解像度と謎な座標系を合わせるための定数
+      const sizeY = sortedList[i].sizeY * 4.7
       cleanX = null
       for (var i2 = 0; i2 < startXS.length; i2++) {
         if (startXS[i2] + sizeX + paperCloseX < 10000) {
@@ -99,8 +99,8 @@ export default classid => {
     for (let x = 0; x <= 10000; x += 100) {
       for (let i2 = 0; i2 < overFlowPapers.length; i2++) {
         let i = overFlowPapers[i2]
-        const sizeX = sortedList[i].sizeX * 0.60 // 紙の解像度と謎な座標系を合わせるための定数
-        const sizeY = sortedList[i].sizeY * 1.06
+        const sizeX = sortedList[i].sizeX * 2.66 // 紙の解像度と謎な座標系を合わせるための定数
+        const sizeY = sortedList[i].sizeY * 4.7
         let y = laiderSearch(x, sizeX, paperMatrix)
         if ((y + sizeY < 8200 || (x + sizeX < 6500 && y + sizeY < 10000)) && x + sizeX <= 10000) {
           sortedList[i].x = x + paperCloseX
@@ -122,8 +122,8 @@ export default classid => {
     }
     let overflowDisp = 0
     overFlowPapers.forEach(i => {
-      const sizeX = sortedList[i].sizeX * 0.60 // 紙の解像度と謎な座標系を合わせるための定数
-      const sizeY = sortedList[i].sizeY * 1.06
+      const sizeX = sortedList[i].sizeX * 2.66 // 紙の解像度と謎な座標系を合わせるための定数
+      const sizeY = sortedList[i].sizeY * 4.7
       let x = 10000 - sizeX - overflowDisp
       let y = 8200 - sizeY
       overflowDisp += 100
