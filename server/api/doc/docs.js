@@ -5,6 +5,7 @@ import sortDocs from '../../lib/sortdocs'
 import docList from '../../lib/doclist'
 
 const documents = models.documents
+const temporaryDatas = models.temporaryDatas
 const router = Router()
 router.use(parser.urlencoded({ extended: false }))
 router.use(parser.json())
@@ -17,35 +18,52 @@ router.get('/', (req, res, next) => {
 })
 
 router.post('/', (req, res, next) => {
-  const classids = req.body.classids
   const doc = req.body
-  const startTime = new Date(doc.startTime)
-  const endTime = new Date(doc.endTime)
-  let insertData = []
-  classids.forEach(id => {
-    insertData.push(
-      {
-        classid: id,
-        docid: doc.docid,
-        x: doc.x,
-        y: doc.y,
-        priority: doc.priority,
-        openMobile: doc.openMobile,
-        title: doc.title,
-        startTime: startTime,
-        endTime: endTime,
-        sizeX: doc.imgsize.width,
-        sizeY: doc.imgsize.height
+  const docid = req.body.docid
+  temporaryDatas.create({
+    uniqueId: docid,
+    data: doc,
+    isActive: true
+  }).then(respons => {
+    res.sendStatus(200)
+  }).catch(() => {
+    temporaryDatas.findOne({where: {isActive: true, uniqueId: docid}})
+      .then(temporary => {
+        temporary.isActive = false
+        temporary.save()
+        const classids = req.body.classids.filter(function (x, i, self) {
+          return self.indexOf(x) === i
+        })
+        const sizeX = temporary.data.width
+        const sizeY = temporary.data.height
+        const startTime = new Date(doc.startTime)
+        const endTime = new Date(doc.endTime)
+        let insertData = []
+        classids.forEach(id => {
+          insertData.push(
+            {
+              classid: id,
+              docid: docid,
+              x: doc.x,
+              y: doc.y,
+              priority: doc.priority,
+              openMobile: doc.openMobile,
+              title: doc.title,
+              startTime: startTime,
+              endTime: endTime,
+              sizeX: sizeX,
+              sizeY: sizeY
+            })
+        })
+        documents.bulkCreate(insertData)
+          .then(() => {
+            res.sendStatus(200)
+            classids.forEach(e => { sortDocs(e) })
+          }).catch(err => {
+            console.log(err)
+            res.sendStatus(400)
+          })
       })
   })
-  documents.bulkCreate(insertData)
-    .then(result => {
-      res.sendStatus(200)
-      classids.forEach(e => { sortDocs(e) })
-    }).catch(err => {
-      console.log(err)
-      res.sendStatus(400)
-    })
 })
-
 export default router

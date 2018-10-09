@@ -4,6 +4,7 @@ const Sequelize = require('sequelize')
 const classesModel = require('./classes')
 const documentsModel = require('./documents')
 const usersModel = require('./users')
+const temporaryDatasModel = require('./temporaryDatas')
 const schoolModel = require('./schools')
 
 const sequelize = new Sequelize('ibird', 'postgres', 'password', {
@@ -16,10 +17,12 @@ const sequelize = new Sequelize('ibird', 'postgres', 'password', {
 const classes = classesModel(sequelize, Sequelize)
 const documents = documentsModel(sequelize, Sequelize)
 const users = usersModel(sequelize, Sequelize)
+const temporaryDatas = temporaryDatasModel(sequelize, Sequelize)
 const schools = schoolModel(sequelize, Sequelize)
 module.exports = {
   classes,
   documents,
   users,
+  temporaryDatas,
   schools
 }

@@ -4,10 +4,14 @@ import multer from 'multer'
 import Converter from 'office-convert'
 import childProcess from 'child_process'
 import sizeOf from 'image-size'
+import models from '../models'
+import sortDocs from '../lib/sortdocs'
 
 const router = Router()
 const converter = Converter.createConverter()
 const officeExtensions = ['docx', 'doc', 'xls', 'xlsx', 'ppt', 'pptx']
+const temporaryDatas = models.temporaryDatas
+const documents = models.documents
 
 // 拡張子(.で切って一番最後の要素)を返す関数
 const extension = (filename) => {
@@ -33,7 +37,11 @@ const pdfToJpg = (pdfPath) => {
 
   // pdfの枚数を取得
   const pdfinfo = childProcess.execSync('pdfinfo  ' + pdfPath.slice(0, -4) + '.pdf ').toString()
-  const pages = Number(pdfinfo.split(/\r\n|\r|\n/)[6].slice(-3))
+  const rstr = pdfinfo.split(/\r\n|\r|\n/)
+  let rowi = 0
+  rstr.push('Pages   0')
+  while (rstr[rowi].indexOf('Pages') === -1) rowi++
+  const pages = Number(rstr[rowi].slice(-3))
   if (pages > 1) {
     childProcess.execSync(`convert +append ${jpgPath.slice(0, -4)}-0.jpg ${jpgPath.slice(0, -4)}-1.jpg ${jpgPath}`)
   }
@@ -45,7 +53,7 @@ const upload = multer({ storage: multer.diskStorage({
     cb(null, '.document/')
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + '.' + extension(file.originalname))
+    cb(null, req.body.docid + '.' + extension(file.originalname))
   }
 })})
 
@@ -58,16 +66,58 @@ async function run (path) {
   var docid = pdfToJpg(path)
   docid = docid.slice(0, -4)
   const imgsize = sizeOf(`static/jpg/${docid}.jpg`)
-  return {docid: docid, imgsize: imgsize}
+  return imgsize
 }
 
 router.post('/upload-file', upload.single('file'), (req, res, next) => {
-  run(req.file.path).then((doc) => {
-    console.log(doc.docid)
-    res.status(200).json(doc)
-  }).catch(e => {
-    console.log(e)
-    res.sendStatus(400)
+  const docid = req.body.docid
+  run(req.file.path).then(imgsize => {
+    temporaryDatas.create({
+      uniqueId: docid,
+      data: imgsize,
+      isActive: true
+    }).then(() => {
+      res.sendStatus(200)
+    }).catch(() => {
+      temporaryDatas.findOne({where: {isActive: true, uniqueId: docid}})
+        .then(temporary => {
+          temporary.isActive = false
+          temporary.save()
+          const doc = temporary.data
+          const sizeX = imgsize.width
+          const sizeY = imgsize.height
+          const classids = doc.classids.filter(function (x, i, self) {
+            return self.indexOf(x) === i
+          })
+          const startTime = new Date(doc.startTime)
+          const endTime = new Date(doc.endTime)
+          let insertData = []
+          classids.forEach(id => {
+            insertData.push(
+              {
+                classid: id,
+                docid: docid,
+                x: doc.x,
+                y: doc.y,
+                priority: doc.priority,
+                openMobile: doc.openMobile,
+                title: doc.title,
+                startTime: startTime,
+                endTime: endTime,
+                sizeX: sizeX,
+                sizeY: sizeY
+              })
+          })
+          documents.bulkCreate(insertData)
+            .then(result => {
+              res.sendStatus(200)
+              classids.forEach(e => { sortDocs(e) })
+            }).catch(err => {
+              console.log(err)
+              res.sendStatus(400)
+            })
+        })
+    })
   })
 })
 
