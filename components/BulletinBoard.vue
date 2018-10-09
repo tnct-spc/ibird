@@ -45,6 +45,7 @@ export default {
     }
   },
   created () {
+    setInterval(this.refresh, 1000*60*60)
     this.refresh()
     const startWebsocketA = () =>{
       this.client = new W3cwebsocket(process.env.wsUrl+'/ws/move')
@@ -56,7 +57,6 @@ export default {
         console.log('websocket disconnect ws/move')
         setTimeout(() =>{startWebsocketA()},1000)
       }
-      setInterval(this.refresh, 1000*60*60)
     }
     startWebsocketA()
     const startWebsocketB = () => {
