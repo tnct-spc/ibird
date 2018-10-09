@@ -37,7 +37,10 @@ const pdfToJpg = (pdfPath) => {
 
   // pdfの枚数を取得
   const pdfinfo = childProcess.execSync('pdfinfo  ' + pdfPath.slice(0, -4) + '.pdf ').toString()
-  const pages = Number(pdfinfo.split(/\r\n|\r|\n/)[6].slice(-3))
+  const rstr = pdfinfo.split(/\r\n|\r|\n/)
+  let rowi = 0
+  while (rstr[rowi].indexOf('Pages') === -1) rowi++
+  const pages = Number(rstr[rowi].slice(-3))
   if (pages > 1) {
     childProcess.execSync(`convert +append ${jpgPath.slice(0, -4)}-0.jpg ${jpgPath.slice(0, -4)}-1.jpg ${jpgPath}`)
   }
