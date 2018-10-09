@@ -39,6 +39,7 @@ const pdfToJpg = (pdfPath) => {
   const pdfinfo = childProcess.execSync('pdfinfo  ' + pdfPath.slice(0, -4) + '.pdf ').toString()
   const rstr = pdfinfo.split(/\r\n|\r|\n/)
   let rowi = 0
+  rstr.push('Pages   0')
   while (rstr[rowi].indexOf('Pages') === -1) rowi++
   const pages = Number(rstr[rowi].slice(-3))
   if (pages > 1) {
