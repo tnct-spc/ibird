@@ -36,7 +36,7 @@ export default {
   props: {
     "classid": String,
     "paper": {},
-    "wsClient": null
+    "wsClient": {}
   },
   computed: {
     ...mapState({
