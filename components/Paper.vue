@@ -28,7 +28,6 @@ const W3cwebsocket = w3cwebsocket
 export default {
   data:function(){
     return{
-      wsClient: null,
       menuTop: 1000,
       menuLeft: 1000,
       showMenu: false,
@@ -36,17 +35,8 @@ export default {
   },
   props: {
     "classid": String,
-    "paper": {}
-  },
-  created (){
-    const startWebsocket = () => {
-      this.wsClient = new W3cwebsocket(process.env.wsUrl+'/ws/move')
-      this.wsClient.onclose=()=>{
-        console.log('websocket disconnect /ws/move')
-        setTimeout(() =>{startWebsocket()},1000)
-      }
-    }
-    startWebsocket()
+    "paper": {},
+    "wsClient": null
   },
   computed: {
     ...mapState({
