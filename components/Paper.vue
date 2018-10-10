@@ -12,11 +12,11 @@
         //left: '0px',
         //top: '0px'
         }" ondragstart="return false;" >
-    <ul id="right-click-menu" tabindex="-1" v-if="showMenu" @blur="closeMenu" :style="{top: menuTop+'px', left: menuLeft+'px'}">
-      <li @click="remove">このクラスでのみ削除</li>
-      <li @click="removeInAllClass">全てのクラスで削除</li>
-      <li @click="closeMenu">キャンセル</li>
-    </ul>
+    <b-list-group id="right-click-menu" tabindex="-1" v-if="showMenu" @blur="closeMenu" :style="{top: menuTop+'px', left: menuLeft+'px'}">
+      <b-list-group-item button @click="remove">このクラスのみで削除</b-list-group-item>
+      <b-list-group-item button @click="removeInAllClass">全てのクラスで削除</b-list-group-item>
+      <b-list-group-item button @click="closeMenu">キャンセル</b-list-group-item>
+    </b-list-group>
   </div>
 </template>
 <script>
@@ -168,31 +168,10 @@ img.paper:hover{
   box-shadow: 0.5rem 0.5rem 0.5rem 0.01rem;
   color: #0000CC;
 }
+
 #right-click-menu{
-    background: #FAFAFA;
-    border: 1px solid #BDBDBD;
-    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
-    display: block;
-    list-style: none;
-    margin: 0;
-    padding: 0;
     position: absolute;
-    width: 250px;
-    z-index: 999999;
-}
-
-#right-click-menu li {
-    border-bottom: 1px solid #E0E0E0;
-    margin: 0;
-    padding: 5px 35px;
-}
-
-#right-click-menu li:last-child {
-    border-bottom: none;
-}
-
-#right-click-menu li:hover {
-    background: #1E88E5;
-    color: #FAFAFA;
+    width: 220px;
+    z-index: 100000;
 }
 </style>
