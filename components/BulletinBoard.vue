@@ -3,7 +3,7 @@
     <div id="wrapper">
       <ViewPaper v-if="showPaper" @close="showPaper=false" :paper="papers[docid]" :docid="docid"/>
       <div id="content" ref="fieldElm">
-       <b-alert show>
+       <b-alert :show="show">
          <span style="font-size:50px;font-family: 'Sawarabi Mincho', sans-serif">{{noClassid}}</span>
        </b-alert>
        <div :id=i v-for="(paper, i) in sortedPapers" @dblclick="viewPaper(paper.docid)">
@@ -42,6 +42,7 @@ export default {
   },
   data () {
     return {
+      show:false,
       showPaper:false,
       client: {},
       refreshClient: {},
@@ -53,7 +54,10 @@ export default {
     classid(){
       this.refreshClient = new w3cwebsocket(process.env.wsUrl + '/ws/refresh')
       this.refreshClient.onopen = () => this.refreshClient.send('')
-      this.noClassid=""
+      if(this.classid){
+        this.noClassid=""
+        this.show=false
+      }
     }
   },
   created () {
@@ -80,9 +84,10 @@ export default {
       }
     }
     startWebsocketB()
-    this.$nextTick(() => {
-      if(!this.classid)this.noClassid="クラスを選択してください"
-    })
+    if(!this.classid){
+      this.noClassid="クラスを選択してください"
+      this.show=true
+    }
   },
   mounted() {
     window.addEventListener('resize', this.handleResize)
