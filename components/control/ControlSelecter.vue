@@ -1,7 +1,6 @@
 <template>
  <section>
   <div class="d-flex flex-column align-items-stretch">
-    <link href="https://fonts.googleapis.com/css?family=Baloo+Tammudu" rel="stylesheet">
         <!--学年 -->
         <b-button-group>
           <b-button v-for="(year, index) in years"
@@ -34,6 +33,13 @@ import Vue from 'vue'
 import { w3cwebsocket } from 'websocket'
 
 export default {
+  head () {
+    return {
+      link: [
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Baloo+Tammudu' }
+      ]
+    }
+  },
   props:{
     "classid":String,
   },
