@@ -8,6 +8,7 @@
               <Strict/>
             </b-tab>
             <b-tab title="壁紙の設定" active>
+              <SetBackground/>
             </b-tab>
             <b-tab title="電車の時刻表の設定" active>
             </b-tab>
@@ -19,10 +20,12 @@
 </template>
 
 <script>
-import Strict from '~/components/strict/Strict.vue'
+import Strict from '~/components/setting/Strict.vue'
+import SetBackground from '~/components/setting/SetBackground.vue'
 export default {
   components: {
-    Strict
+    Strict,
+    SetBackground
   },
 }
 </script>
