@@ -2,7 +2,7 @@
   <section>
     <div id="wrapper">
       <ViewPaper v-if="showPaper" @close="showPaper=false" :paper="papers[docid]" :docid="docid"/>
-      <div id="content" ref="fieldElm">
+      <div id="content" ref="fieldElm" :style="'background-image:url(/img/'+background+')'">
        <div :id=i v-for="(paper, i) in sortedPapers" @dblclick="viewPaper(paper.docid)">
         <Paper
           :key="i"
@@ -31,6 +31,7 @@ export default {
   },
   data () {
     return {
+      background:"minimal_background1.png",
       showPaper:false,
       client: {},
       refreshClient: {},
@@ -127,6 +128,16 @@ export default {
       this.setbbFieldSize({x: x, y: y})
       const {left, top} = this.$refs.fieldElm.getBoundingClientRect();
       this.setBBxy({x: left, y: top})
+    },
+    changeBackground(){
+      axios.get(process.env.httpUrl + '/api/background')
+      .then(res =>{
+        this.background = res.data
+        //console.log(this.selectedSkin)
+      })
+      .catch(e =>{
+        console.log(e)
+      })
     }
   },
   components: {
@@ -159,6 +170,5 @@ export default {
     left: 0;
     bottom: 0;
     right: 0;
-    background-image:url("/assets/img/minimal_background2.png");
   }
 </style>
