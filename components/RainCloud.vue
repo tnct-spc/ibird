@@ -9,8 +9,8 @@ export default {
   data () {
     return{
       weatherMap: null,
-      lat: '35.632789',
-      lon: '139.294293',
+      lat: '34.0534037',
+      lon: '134.5497742',
       zoom: '12',
       width: '500',
       height: '500'
