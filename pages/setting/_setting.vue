@@ -10,6 +10,7 @@
             <b-tab title="壁紙の設定" active>
             </b-tab>
             <b-tab title="電車の時刻表の設定" active>
+              <TimetableSetting/>
             </b-tab>
           </b-tabs>
         </b-card>
@@ -20,9 +21,11 @@
 
 <script>
 import Strict from '~/components/strict/Strict.vue'
+import TimetableSetting from '~/components/timetable/TimetableSetting.vue'
 export default {
   components: {
-    Strict
+    Strict,
+    TimetableSetting
   },
 }
 </script>
