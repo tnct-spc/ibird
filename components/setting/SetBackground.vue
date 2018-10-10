@@ -2,13 +2,13 @@
   <section>
     <div style="text-align:center">
       <span class="my-1">今の背景は{{selectedSkin}}です</span>
-      <table style="margin-left:auto;margin-right:auto" class="my-4 bg-secondary">
+      <table style="margin-left:auto;margin-right:auto" class="my-4">
         <tbody>
          <tr>
           <td v-for="(skin , index) in backgrounds">
           <b-row>
             <b-col>
-              <b-img style="margin-top:20px;margin-bottom:20px;margin-left:20px;margin-right:20px" rounded thumbnail fluid :src="'/img/'+skin" alt="Thumbnail"/>
+              <b-img rounded thumbnail fluid :src="'/img/'+skin" alt="Thumbnail"/>
             </b-col>
           </b-row>
           </td>
