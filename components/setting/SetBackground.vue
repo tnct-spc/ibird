@@ -77,7 +77,7 @@ export default{
     },
     changeSkin(){
       axios.post(process.env.httpUrl + '/api/background',{
-        params: { filename: this.backgrounds[this.num] }
+        filename: this.backgrounds[this.num]
       })
       .then(res=>{
         if(res.data==="OK")this.selectedSkin = this.backgrounds[this.num]
