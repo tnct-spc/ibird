@@ -13,7 +13,8 @@
         //top: '0px'
         }" ondragstart="return false;" >
     <ul id="right-click-menu" tabindex="-1" v-if="showMenu" @blur="closeMenu" :style="{top: menuTop+'px', left: menuLeft+'px'}">
-      <li @click="remove">削除</li>
+      <li @click="remove">このクラスでのみ削除</li>
+      <li @click="removeInAllClass">全てのクラスで削除</li>
       <li @click="closeMenu">キャンセル</li>
     </ul>
   </div>
@@ -102,6 +103,18 @@ export default {
       axios.delete(process.env.httpUrl + '/api/doc', {
         params: {
           classid: this.classid,
+          docid: this.paper.docid
+        }
+      }).then( () => {
+        const c = new W3cwebsocket(process.env.wsUrl + '/ws/refresh')
+        c.onopen = () => c.send('{}')
+      }).catch(e =>{
+        console.log(e)
+      })
+    },
+    removeInAllClass: function(){
+      axios.delete(process.env.httpUrl + '/api/docs', {
+        params: {
           docid: this.paper.docid
         }
       }).then( () => {
