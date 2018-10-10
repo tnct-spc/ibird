@@ -11,6 +11,7 @@
               <SetBackground/>
             </b-tab>
             <b-tab title="電車の時刻表の設定" active>
+              <TimetableSetting/>
             </b-tab>
           </b-tabs>
         </b-card>
@@ -22,10 +23,12 @@
 <script>
 import Strict from '~/components/setting/Strict.vue'
 import SetBackground from '~/components/setting/SetBackground.vue'
+import TimetableSetting from '~/components/timetable/TimetableSetting.vue'
 export default {
   components: {
     Strict,
-    SetBackground
+    SetBackground,
+    TimetableSetting
   },
 }
 </script>

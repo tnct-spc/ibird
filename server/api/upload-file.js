@@ -33,11 +33,15 @@ const officeToPDF = (filepath) => {
 const pdfToJpg = (pdfPath) => {
   var jpgPath = pdfPath.slice(0, -4) + '.jpg'
   jpgPath = 'static/jpg/' + filename(jpgPath)
-  childProcess.execSync('convert -density 300  ' + pdfPath.slice(0, -4) + '.pdf ' + jpgPath)
+  childProcess.execSync('convert -density 68  ' + pdfPath.slice(0, -4) + '.pdf ' + jpgPath)
 
   // pdfの枚数を取得
   const pdfinfo = childProcess.execSync('pdfinfo  ' + pdfPath.slice(0, -4) + '.pdf ').toString()
-  const pages = Number(pdfinfo.split(/\r\n|\r|\n/)[6].slice(-3))
+  const rstr = pdfinfo.split(/\r\n|\r|\n/)
+  let rowi = 0
+  rstr.push('Pages   0')
+  while (rstr[rowi].indexOf('Pages') === -1) rowi++
+  const pages = Number(rstr[rowi].slice(-3))
   if (pages > 1) {
     childProcess.execSync(`convert +append ${jpgPath.slice(0, -4)}-0.jpg ${jpgPath.slice(0, -4)}-1.jpg ${jpgPath}`)
   }
@@ -68,54 +72,51 @@ async function run (path) {
 router.post('/upload-file', upload.single('file'), (req, res, next) => {
   const docid = req.body.docid
   run(req.file.path).then(imgsize => {
-    temporaryDatas.find({where: {
-      isActive: true,
-      NoCollisonKey: docid
-    }}).then(temporary => {
-      if (temporary === null) {
-        temporaryDatas.create({
-          NoCollisonKey: docid,
-          data: imgsize,
-          isActive: true
-        })
-      } else {
-        temporary.isActive = false
-        temporary.save()
-        const doc = temporary.data
-        const sizeX = imgsize.width
-        const sizeY = imgsize.height
-        const classids = doc.classids
-        const startTime = new Date(doc.startTime)
-        const endTime = new Date(doc.endTime)
-        let insertData = []
-        classids.forEach(id => {
-          insertData.push(
-            {
-              classid: id,
-              docid: docid,
-              x: doc.x,
-              y: doc.y,
-              priority: doc.priority,
-              openMobile: doc.openMobile,
-              title: doc.title,
-              startTime: startTime,
-              endTime: endTime,
-              sizeX: sizeX,
-              sizeY: sizeY
+    temporaryDatas.create({
+      uniqueId: docid,
+      data: imgsize,
+      isActive: true
+    }).then(() => {
+      res.sendStatus(200)
+    }).catch(() => {
+      temporaryDatas.findOne({where: {isActive: true, uniqueId: docid}})
+        .then(temporary => {
+          temporary.isActive = false
+          temporary.save()
+          const doc = temporary.data
+          const sizeX = imgsize.width
+          const sizeY = imgsize.height
+          const classids = doc.classids.filter(function (x, i, self) {
+            return self.indexOf(x) === i
+          })
+          const startTime = new Date(doc.startTime)
+          const endTime = new Date(doc.endTime)
+          let insertData = []
+          classids.forEach(id => {
+            insertData.push(
+              {
+                classid: id,
+                docid: docid,
+                x: doc.x,
+                y: doc.y,
+                priority: doc.priority,
+                openMobile: doc.openMobile,
+                title: doc.title,
+                startTime: startTime,
+                endTime: endTime,
+                sizeX: sizeX,
+                sizeY: sizeY
+              })
+          })
+          documents.bulkCreate(insertData)
+            .then(result => {
+              res.sendStatus(200)
+              classids.forEach(e => { sortDocs(e) })
+            }).catch(err => {
+              console.log(err)
+              res.sendStatus(400)
             })
         })
-        documents.bulkCreate(insertData)
-          .then(result => {
-            res.sendStatus(200)
-            classids.forEach(e => { sortDocs(e) })
-          }).catch(err => {
-            console.log(err)
-            res.sendStatus(400)
-          })
-      }
-    }).catch(e => {
-      console.log(e)
-      res.sendStatus(400)
     })
   })
 })

@@ -2,12 +2,15 @@
   <section>
     <div id="wrapper">
       <ViewPaper v-if="showPaper" @close="showPaper=false" :paper="papers[docid]" :docid="docid"/>
-      <div id="content" ref="fieldElm" :style="'background-image:url(/img/'+background+')'">
+      <div id="content" :style="'background-image:url(/img/'+background+')'" ref="fieldElm">
+       <b-alert :show="show">
+         <span style="font-size:50px;font-family: 'Sawarabi Mincho', sans-serif">{{noClassid}}</span>
+       </b-alert>
        <div :id=i v-for="(paper, i) in sortedPapers" @dblclick="viewPaper(paper.docid)">
         <Paper
           :key="i"
           :classid="classid"
-          :ws-client="client"
+          :wsClient="client"
           :paper="paper"
         />
       </div>
@@ -22,29 +25,44 @@ import ViewPaper from '~/components/ViewPaper.vue'
 import { mapState, mapMutations } from 'vuex'
 import { w3cwebsocket } from 'websocket'
 import axios from 'axios'
+import { setInterval } from 'timers';
 
 const W3cwebsocket = w3cwebsocket
 
 export default {
+  head () {
+    return {
+      link: [
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Sawarabi+Mincho&amp;subset=japanese,latin-ext' }
+      ]
+    }
+  },
   props: {
     "classid": String,
   },
   data () {
     return {
       background:"minimal_background1.png",
+      show:false,
       showPaper:false,
       client: {},
       refreshClient: {},
-      docid:""
+      docid:"",
+      noClassid:""
     }
   },
   watch:{
     classid(){
       this.refreshClient = new w3cwebsocket(process.env.wsUrl + '/ws/refresh')
       this.refreshClient.onopen = () => this.refreshClient.send('')
+      if(this.classid){
+        this.noClassid=""
+        this.show=false
+      }
     }
   },
   created () {
+    setInterval(this.refresh, 1000*60*60)
     this.refresh()
     const startWebsocketA = () =>{
       this.client = new W3cwebsocket(process.env.wsUrl+'/ws/move')
@@ -67,6 +85,10 @@ export default {
       }
     }
     startWebsocketB()
+    if(!this.classid){
+      this.noClassid="クラスを選択してください"
+      this.show=true
+    }
   },
   mounted() {
     window.addEventListener('resize', this.handleResize)

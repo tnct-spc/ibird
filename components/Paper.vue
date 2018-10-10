@@ -7,14 +7,16 @@
       alt="" :style="{
         left: (this.paper.x*this.bbFieldSize.x/10000)+'px',
         top: (this.paper.y*this.bbFieldSize.y/10000)+'px',
-        'max-width': 15 * paper.sizeX / 2483 + '%',
+        'max-width': 15 * paper.sizeX / 561 + '%',
+        'z-index': paper.overlapPriority,
         //left: '0px',
         //top: '0px'
         }" ondragstart="return false;" >
-    <ul id="right-click-menu" tabindex="-1" v-if="showMenu" @blur="closeMenu" :style="{top: menuTop+'px', left: menuLeft+'px'}">
-      <li @click="remove">削除</li>
-      <li @click="closeMenu">キャンセル</li>
-    </ul>
+    <b-list-group id="right-click-menu" tabindex="-1" v-if="showMenu" @blur="closeMenu" :style="{top: menuTop+'px', left: menuLeft+'px'}">
+      <b-list-group-item button @click="remove">このクラスのみで削除</b-list-group-item>
+      <b-list-group-item button @click="removeInAllClass">全てのクラスで削除</b-list-group-item>
+      <b-list-group-item button @click="closeMenu">キャンセル</b-list-group-item>
+    </b-list-group>
   </div>
 </template>
 <script>
@@ -27,7 +29,6 @@ const W3cwebsocket = w3cwebsocket
 export default {
   data:function(){
     return{
-      wsClient: null,
       menuTop: 1000,
       menuLeft: 1000,
       showMenu: false,
@@ -35,17 +36,8 @@ export default {
   },
   props: {
     "classid": String,
-    "paper": {}
-  },
-  created (){
-    const startWebsocket = () => {
-      this.wsClient = new W3cwebsocket(process.env.wsUrl+'/ws/move')
-      this.wsClient.onclose=()=>{
-        console.log('websocket disconnect /ws/move')
-        setTimeout(() =>{startWebsocket()},1000)
-      }
-    }
-    startWebsocket()
+    "paper": {},
+    "wsClient": {}
   },
   computed: {
     ...mapState({
@@ -110,6 +102,18 @@ export default {
         console.log(e)
       })
     },
+    removeInAllClass: function(){
+      axios.delete(process.env.httpUrl + '/api/docs', {
+        params: {
+          docid: this.paper.docid
+        }
+      }).then( () => {
+        const c = new W3cwebsocket(process.env.wsUrl + '/ws/refresh')
+        c.onopen = () => c.send('{}')
+      }).catch(e =>{
+        console.log(e)
+      })
+    },
     savePosition: function(){
         axios.put(process.env.httpUrl + '/api/doc', {
           classid: this.classid,
@@ -154,31 +158,10 @@ img.paper:hover{
   box-shadow: 0.5rem 0.5rem 0.5rem 0.01rem;
   color: #0000CC;
 }
+
 #right-click-menu{
-    background: #FAFAFA;
-    border: 1px solid #BDBDBD;
-    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
-    display: block;
-    list-style: none;
-    margin: 0;
-    padding: 0;
     position: absolute;
-    width: 250px;
-    z-index: 999999;
-}
-
-#right-click-menu li {
-    border-bottom: 1px solid #E0E0E0;
-    margin: 0;
-    padding: 5px 35px;
-}
-
-#right-click-menu li:last-child {
-    border-bottom: none;
-}
-
-#right-click-menu li:hover {
-    background: #1E88E5;
-    color: #FAFAFA;
+    width: 220px;
+    z-index: 100000;
 }
 </style>
