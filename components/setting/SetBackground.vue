@@ -8,7 +8,7 @@
           <td v-for="(skin , index) in backgrounds">
           <b-row>
             <b-col>
-              <b-img style="margin-top:20px;margin-bottom:20px;margin-left:20px;margin-right:20px" rounded thumbnail fluid :src="'/assets/'+skin" alt="Thumbnail"/>
+              <b-img style="margin-top:20px;margin-bottom:20px;margin-left:20px;margin-right:20px" rounded thumbnail fluid :src="'/img/'+skin" alt="Thumbnail"/>
             </b-col>
           </b-row>
           </td>
