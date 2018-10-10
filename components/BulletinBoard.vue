@@ -2,7 +2,7 @@
   <section>
     <div id="wrapper">
       <ViewPaper v-if="showPaper" @close="showPaper=false" :paper="papers[docid]" :docid="docid"/>
-      <div id="content" ref="fieldElm">
+      <div id="content" :style="'background-image:url(/img/'+background+')'" ref="fieldElm">
        <b-alert :show="show">
          <span style="font-size:50px;font-family: 'Sawarabi Mincho', sans-serif">{{noClassid}}</span>
        </b-alert>
@@ -42,6 +42,7 @@ export default {
   },
   data () {
     return {
+      background:"minimal_background1.png",
       show:false,
       showPaper:false,
       client: {},
@@ -149,6 +150,16 @@ export default {
       this.setbbFieldSize({x: x, y: y})
       const {left, top} = this.$refs.fieldElm.getBoundingClientRect();
       this.setBBxy({x: left, y: top})
+    },
+    changeBackground(){
+      axios.get(process.env.httpUrl + '/api/background')
+      .then(res =>{
+        this.background = res.data
+        //console.log(this.selectedSkin)
+      })
+      .catch(e =>{
+        console.log(e)
+      })
     }
   },
   components: {
@@ -181,6 +192,5 @@ export default {
     left: 0;
     bottom: 0;
     right: 0;
-    background-image:url("../assets/img/minimal_background2.png");
   }
 </style>
