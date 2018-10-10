@@ -7,7 +7,7 @@
         <Paper
           :key="i"
           :classid="classid"
-          :ws-client="client"
+          :wsClient="client"
           :paper="paper"
         />
       </div>
