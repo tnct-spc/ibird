@@ -53,9 +53,7 @@ export default {
       unSelected2:false
       }
   },
-  mounted(){
-    if(!this.changedClassid)this.unSelected1 = true
-    if(!this.changedClassid)this.unSelected2 = true
+  created(){
     axios.get(process.env.httpUrl + '/api/years-and-courses')
     .then(res =>{
       this.years = res.data.years
@@ -64,6 +62,10 @@ export default {
     .catch(e =>{
       console.log(e)
     })
+  },
+  mounted(){
+    if(!this.changedClassid)this.unSelected1 = true
+    if(!this.changedClassid)this.unSelected2 = true
   },
   watch:{
     yearIndex(){

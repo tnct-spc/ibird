@@ -1,7 +1,7 @@
 <template>
   <section>
   <div class="background" style="padding:1%" ref="fieldElm">
-   <ControlPanel :changedClassid="changedClassid"/>
+   <ControlPanel :classid="changedClassid"/>
    <ControlSelecter :changedClassid="changedClassid" :classes="classes"/>
   </div>
   </section>
@@ -25,7 +25,7 @@ export default{
     this.$parent.classid = this.changedClassid
     }
   },
-  created(){
+  mounted(){
     this.changedClassid=this.classid
   },
   components:{

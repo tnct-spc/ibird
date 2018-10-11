@@ -1,6 +1,6 @@
 <template>
  <section>
-  <div id="overlay" @dragleave.prevent="onDragLeave($event)" @dragover.prevent="onDragOver($event)" @drop.prevent="onDrop($event)">
+  <div @dragleave.prevent="onDragLeave($event)" @dragover.prevent="onDragOver($event)" @drop.prevent="onDrop($event)">
    <BulletinBoard :classid="classid"/>
   </div>
   <ModalUploader v-if="showModal" @submit="upload()" :classes="classes" :filename="filename" :docid="docid" :checkCourse="checkCourse" :checkYear="checkYear"/>
@@ -29,7 +29,7 @@ export default{
       files:null
     }
   },
-  mounted(){
+  created(){
       axios.get(process.env.httpUrl + '/api/years-and-courses').then(res =>{
         res.data.courses.forEach((e)=>{
           Vue.set(this.checkCourse,e,false)
@@ -113,9 +113,4 @@ export default{
 }
 </script>
 <style scoped>
-#overlay {
-  width: 100%;
-  height: 100%;
-  text-align: center;
-}
 </style>
