@@ -23,7 +23,7 @@
                        :options="Random"/>
       </b-form-group>
       <button type="button" class="btn btn-outline-primary btn-sm mx-1">
-      <a href="setting">設定ページへ</a>
+      <a href="/setting">設定ページへ</a>
       </button>
     </div>
   </section>
