@@ -41,7 +41,7 @@ export default {
     }
   },
   props:{
-    "classid":String,
+    "changedClassid":String,
   },
   data:()=>{
     return{
@@ -54,8 +54,8 @@ export default {
       }
   },
   mounted(){
-    if(!this.classid)this.unSelected1 = true
-    if(!this.classid)this.unSelected2 = true
+    if(!this.changedClassid)this.unSelected1 = true
+    if(!this.changedClassid)this.unSelected2 = true
     axios.get(process.env.httpUrl + '/api/years-and-courses')
     .then(res =>{
       this.years = res.data.years
@@ -67,23 +67,23 @@ export default {
   },
   watch:{
     yearIndex(){
-      this.getClassid()
+      if(this.courseIndex||this.courseIndex===0)this.getClassid()
     },
     courseIndex(){
-      this.getClassid()
+      if(this.yearIndex||this.yearIndex===0)this.getClassid()
     },
-    classid(){
-      history.replaceState('','',this.classid)
+    changedClassid(){
+      history.replaceState('','',this.changedClassid)
     }
   },
   methods:{
     selectedStyle: function(index){
-      if(index === this.courseIndex&&this.classid)this.unSelected1 = false
+      if(index === this.courseIndex&&this.changedClassid)this.unSelected1 = false
       const backgroundColor = index === this.yearIndex ? 'primary' : 'outline-dark'
       return backgroundColor
     },
     selectedStyle2: function(index){
-      if(index === this.courseIndex&&this.classid)this.unSelected2 = false
+      if(index === this.courseIndex&&this.changedClassid)this.unSelected2 = false
       const backgroundColor = index === this.courseIndex ? 'primary' : 'outline-dark'
       return backgroundColor
     },
@@ -97,7 +97,7 @@ export default {
       axios.get(process.env.httpUrl + '/api/class-id',{
         params: { year: this.years[this.yearIndex], course: this.courses[this.courseIndex] }
       }).then(res =>{
-        this.$parent.classid = String(res.data.classid)
+        this.$parent.changedClassid = String(res.data.classid)
       }).catch(e =>{
         console.log(e)
       })
