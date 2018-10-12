@@ -1,7 +1,5 @@
 <template>
-  <h1>
-    Welcome to iBird
-  </h1>
+  <meta http-equiv="refresh" content="0; URL='/control'" />
 </template>
 
 <script>
