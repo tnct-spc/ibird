@@ -53,7 +53,7 @@ export default{
       })
     }
   },
-  mounted(){
+  created(){
     axios.get(process.env.httpUrl + '/api/RandomSort',{params:{
       classid:this.classid
     }}).then((response)=>{

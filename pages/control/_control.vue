@@ -1,7 +1,7 @@
 <template>
     <section>
       <ControlHeader :classes="classes" :classid="classid"/>
-      <ControlUploader id="upload" :classid="classid" :classes="classes"/>
+      <ControlUploader :classid="classid" :classes="classes"/>
     </section>
 </template>
 <script>
@@ -48,7 +48,4 @@ body{
 }
 </style>
 <style scoped>
- #upload{
-   height: 100%;
- }
 </style>
