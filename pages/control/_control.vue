@@ -39,7 +39,6 @@ export default {
     ControlUploader,
     ControlHeader
   },
-  middleware: 'auth',
 }
 </script>
 <style>
