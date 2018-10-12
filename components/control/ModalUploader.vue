@@ -18,10 +18,10 @@
                   </td>
                   <td
                     style="text-align:left;"
-                    v-for="(item ,key ,index) in checkYear"
+                    v-for="(item ,key) in checkYear"
                     :key="key">
                     <b-form-checkbox
-                      @input="selectYear(index+1)"
+                      @input="selectYear(key)"
                       v-model="checkYear[key]">
                       {{key}}年
                     </b-form-checkbox>
@@ -40,10 +40,10 @@
                   </td>
                   <td
                     style="text-align:left;"
-                    v-for="(item1 ,key ,index) in classIdList">
+                    v-for="(item1 ,key) in classIdList">
                     <b-form-checkbox
                       style="display:block"
-                      v-for = "(item2) in classIdList[index+1]"
+                      v-for = "(item2) in classIdList[key]"
                       v-model = "item2.submit"
                       :key = "item2.classid">
                       {{key}}{{item2.course}}
