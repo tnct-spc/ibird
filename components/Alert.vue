@@ -39,9 +39,9 @@ export default {
 </script>
 <style scoped>
 .alert-div {
-  width: 50%;
-  height: 2%;
-  right: 3%;
+  width: 64%;
+  height: 3%;
+  left: 3%;
   bottom:3%;
   position:fixed;
 }
