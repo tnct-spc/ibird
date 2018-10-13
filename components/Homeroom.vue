@@ -39,10 +39,10 @@ section{
   width: 100%;
 }
 .qr {
-  height:10%;
+  height:13%;
   width:10%;
   right: 22%;
-  bottom: 3%;
+  bottom: 2%;
   position: fixed;
 }
 .timetableparent {
