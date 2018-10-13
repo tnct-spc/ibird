@@ -1,5 +1,5 @@
 <template>
-  <meta http-equiv="refresh" content="0; URL='/control'" />
+  <meta http-equiv="refresh" content="0; URL='/control/'" />
 </template>
 
 <script>
