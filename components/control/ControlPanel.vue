@@ -1,7 +1,7 @@
 <template>
   <section>
     <div>
-      <span style="font-size:150%">
+      <span style="font-size:150%;font-family: 'Noto Sans JP', sans-serif;">
         iBird Control Page
       </span>
       <span>classid = {{classid}}</span>
