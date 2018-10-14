@@ -4,7 +4,7 @@
       <span style="font-size:150%">
         iBird Control Page
       </span>
-      <span>classid = {{classid}}</span>
+      <!--span>classid = {{classid}}</span-->
     </div>
     <div>
       <input v-model="alertMessage" placeholder="緊急伝達事項を入力">
