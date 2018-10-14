@@ -8,8 +8,7 @@
             @click="switchingYear(index)"
             align="center"
             :variant="selectedStyle(index)"
-            class="class-button my-1"
-            :class="{'btn-outline-dark':unSelected1}">
+            class="class-button my-1">
             {{year}}
           </b-button>
         </b-button-group>
@@ -19,8 +18,7 @@
             :key="index"
             @click="switchingClass(index)"
             align="center"
-            :variant="selectedStyle2(index)"
-            :class="{'btn-outline-dark':unSelected2}">
+            :variant="selectedStyle2(index)">
             {{course}}
           </b-button>
         </b-button-group>
@@ -41,16 +39,14 @@ export default {
     }
   },
   props:{
-    "changedClassid":String,
+    "classid":String,
   },
   data:()=>{
     return{
       yearIndex: null,
       courseIndex: null,
       years: [],
-      courses: [],
-      unSelected1:false,
-      unSelected2:false
+      courses: []
       }
   },
   created(){
@@ -62,30 +58,44 @@ export default {
     .catch(e =>{
       console.log(e)
     })
-  },
-  mounted(){
-    if(!this.changedClassid)this.unSelected1 = true
-    if(!this.changedClassid)this.unSelected2 = true
+    if(this.classid){
+      axios.get(process.env.httpUrl + '/api/year-and-course',
+      {params:
+        {classid:this.classid}
+      })
+      .then(res =>{
+        this.years.forEach((e,i)=>{
+          if(res.data.year===e){
+            this.switchingYear(i)
+            this.selectedStyle(i)
+          }
+        })
+        this.courses.forEach((e,i)=>{
+          if(res.data.course===e){
+            this.switchingClass(i)
+            this.selectedStyle2(i)
+          }
+        })
+      })
+    }
   },
   watch:{
     yearIndex(){
-      if(this.courseIndex||this.courseIndex===0)this.getClassid()
+      if(this.courseIndex)this.getClassid()
     },
     courseIndex(){
-      if(this.yearIndex||this.yearIndex===0)this.getClassid()
+      if(this.yearIndex)this.getClassid()
     },
-    changedClassid(){
-      history.replaceState('','',this.changedClassid)
+    classid(){
+      history.replaceState('','',this.classid)
     }
   },
   methods:{
     selectedStyle: function(index){
-      if(index === this.courseIndex&&this.changedClassid)this.unSelected1 = false
       const backgroundColor = index === this.yearIndex ? 'primary' : 'outline-dark'
       return backgroundColor
     },
     selectedStyle2: function(index){
-      if(index === this.courseIndex&&this.changedClassid)this.unSelected2 = false
       const backgroundColor = index === this.courseIndex ? 'primary' : 'outline-dark'
       return backgroundColor
     },
