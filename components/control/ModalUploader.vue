@@ -5,7 +5,7 @@
        <div class="modal-header"/>
         <div class="modal-body">
           <div class="template">
-           <div class="my-2"><mark>ファイル名 : {{title}}</mark></div>
+           <div class="my-2"><mark>ファイル名 : {{filename}}</mark></div>
             <table style="width:500px;margin:0 auto;">
               <tbody>
                 <tr>
@@ -143,6 +143,13 @@ export default{
       })
     })
     this.title = this.filename
+    Object.keys(this.classIdList).forEach((e)=>{
+      if(e==="4"){
+        this.classIdList[e].forEach((e,i)=>{
+          if(e.course==="J")e.submit=true
+        })
+      }
+    })
   },
   methods:{
     cancel(){
