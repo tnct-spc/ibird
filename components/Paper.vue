@@ -22,6 +22,10 @@
       <div class="d-block text-center">
         <h3>本当に変更しますか？</h3>
       </div>
+      <div class="block my-5">
+        <label>掲載終了日</label>
+        <input type="date" v-model="endDate"/>
+      </div>
       <b-btn class="mt-3" variant="outline-primary" block @click="changeEndDate()">変更する</b-btn>
       <b-btn class="mt-3" variant="outline-danger" block @click="$refs.myModalRef.hide()">キャンセル</b-btn>
     </b-modal>
@@ -40,6 +44,7 @@ export default {
       menuTop: 1000,
       menuLeft: 1000,
       showMenu: false,
+      endDate:null
     }
   },
   props: {
@@ -97,11 +102,32 @@ export default {
       setTimeout(()=>{this.showMenu=false},100)
       //this.showMenu = false
     },
-    showModal(){
-      this.closeMenu()
-      this.$refs.myModalRef.show()
+    showModal: function(){
+      axios.get(process.env.httpUrl + '/api/doc-end-time', {
+        params: {
+          docid: this.paper.docid
+        }
+      })
+      .then((res)=>{
+        let currentEndDate = res.data
+        currentEndDate = currentEndDate.split('/')
+        this.endDate = currentEndDate.join('-')
+        this.closeMenu()
+        this.$refs.myModalRef.show()
+      })
+      .catch((e)=>{
+        console.log(e)
+      })
     },
     changeEndDate: function(){
+      axios.put(process.env.httpUrl + '/api/doc-end-time', {
+          docid: this.paper.docid,
+          endTime: this.endDate
+      })
+      .catch((e)=>{
+        console.log(e)
+      })
+      this.$refs.myModalRef.hide()
     },
     remove: function(){
       axios.delete(process.env.httpUrl + '/api/doc', {
