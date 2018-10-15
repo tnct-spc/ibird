@@ -15,8 +15,16 @@
     <b-list-group id="right-click-menu" tabindex="-1" v-if="showMenu" @blur="closeMenu" :style="{top: menuTop+'px', left: menuLeft+'px'}">
       <b-list-group-item button @click="remove">このクラスのみで削除</b-list-group-item>
       <b-list-group-item button @click="removeInAllClass">全てのクラスで削除</b-list-group-item>
+      <b-list-group-item button @click="showModal()">掲載終了日の変更</b-list-group-item>
       <b-list-group-item button @click="closeMenu">キャンセル</b-list-group-item>
     </b-list-group>
+    <b-modal ref="myModalRef" hide-footer>
+      <div class="d-block text-center">
+        <h3>本当に変更しますか？</h3>
+      </div>
+      <b-btn class="mt-3" variant="outline-primary" block @click="changeEndDate()">変更する</b-btn>
+      <b-btn class="mt-3" variant="outline-danger" block @click="$refs.myModalRef.hide()">キャンセル</b-btn>
+    </b-modal>
   </div>
 </template>
 <script>
@@ -88,6 +96,12 @@ export default {
     closeMenu: function(){
       setTimeout(()=>{this.showMenu=false},100)
       //this.showMenu = false
+    },
+    showModal(){
+      this.closeMenu()
+      this.$refs.myModalRef.show()
+    },
+    changeEndDate: function(){
     },
     remove: function(){
       axios.delete(process.env.httpUrl + '/api/doc', {
