@@ -18,17 +18,6 @@
       <b-list-group-item button @click="showModal()">掲載終了日の変更</b-list-group-item>
       <b-list-group-item button @click="closeMenu">キャンセル</b-list-group-item>
     </b-list-group>
-    <b-modal ref="myModalRef" hide-footer>
-      <div class="d-block text-center">
-        <h3>掲載終了日の変更</h3>
-      </div>
-      <div class="block my-5">
-        <label>掲載終了日</label>
-        <input type="date" v-model="endDate"/>
-      </div>
-      <b-btn class="mt-3" variant="outline-primary" block @click="changeEndDate()">変更する</b-btn>
-      <b-btn class="mt-3" variant="outline-danger" block @click="$refs.myModalRef.hide()">キャンセル</b-btn>
-    </b-modal>
   </div>
 </template>
 <script>
@@ -44,7 +33,6 @@ export default {
       menuTop: 1000,
       menuLeft: 1000,
       showMenu: false,
-      endDate:null
     }
   },
   props: {
@@ -107,34 +95,14 @@ export default {
       .then((res)=>{
         let currentEndDate = res.data
         currentEndDate = currentEndDate.split('/')
-        this.endDate = currentEndDate.join('-')
+        this.$parent.endDate = currentEndDate.join('-')
         this.closeMenu()
-        this.$refs.myModalRef.show()
+        this.$parent.selectedDocid = this.paper.docid
+        this.$parent.$refs.myModalRef.show()
       })
       .catch((e)=>{
         console.log(e)
       })
-    },
-    changeEndDate: function(){
-      const date = new Date()
-      let month = date.getMonth()+1
-      let day = date.getDate()
-      if(month<10) month = "0" + month
-      if(day<10) day = "0" + day
-      const today = [date.getFullYear(),month,day]
-      const checker = today.join('-')
-      if(checker > this.endDate){
-        alert("掲載終了日を今日より前には設定できません。")
-        return
-      }
-      axios.put(process.env.httpUrl + '/api/doc-end-time', {
-          docid: this.paper.docid,
-          endTime: this.endDate
-      })
-      .catch((e)=>{
-        console.log(e)
-      })
-      this.$refs.myModalRef.hide()
     },
     remove: function(){
       axios.delete(process.env.httpUrl + '/api/doc', {
