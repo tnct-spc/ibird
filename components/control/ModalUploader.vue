@@ -93,7 +93,7 @@ import { w3cwebsocket } from 'websocket'
 
 export default{
   props:{
-   "classes":Array,
+   "classIdList":Object,
    "docid":String,
    "filename":String,
    "checkCourse":Object,
@@ -104,7 +104,6 @@ export default{
     selected:0,
     startDate:null,
     endDate:null,
-    classIdList:{},
     submitId:[],
     today:0,
     month:"",
@@ -117,32 +116,38 @@ export default{
    }
   },
   mounted(){
-    this.date = new Date()
-    this.month = this.date.getMonth()+1
-    this.day = this.date.getDate()
-    if(this.month<10) this.month = "0" + this.month
-    if(this.day<10) this.day = "0" + this.day
-    this.today = [this.date.getFullYear(),this.month,this.day]
-    this.startDate = this.date.getFullYear()+"-"+this.month+"-"+this.day
-    this.date.setDate((Number(this.day)+7))
-    if(this.date.getDate()<this.day)this.month++
-    this.day = this.date.getDate()
-    if(this.day<10) this.day = "0" + this.day
-    this.endDate = this.date.getFullYear()+"-"+this.month+"-"+this.day
-    this.classes.sort((a,b)=>{
-      return a.classid - b.classid
-    })
-    Object.keys(this.checkCourse).forEach((e,i)=>{
-      this.classes.forEach((c)=> {
-        if(!this.classIdList[c.year]){
-          Vue.set(this.classIdList, c.year, [])
-        }
-        if(e === c.course){
-          this.classIdList[c.year].push({classid: c.classid, course: e, submit:false})
-        }
-      })
-    })
-    this.title = this.filename
+    if(this.$parent.setting.active){
+      this.date = new Date()
+      this.month = this.date.getMonth()+1
+      this.day = this.date.getDate()
+      if(this.month<10) this.month = "0" + this.month
+      if(this.day<10) this.day = "0" + this.day
+      this.today = [this.date.getFullYear(),this.month,this.day]
+      this.startDate = this.date.getFullYear()+"-"+this.month+"-"+this.day
+      this.date.setDate((Number(this.day)+7))
+      if(this.date.getDate()<this.day)this.month++
+      this.day = this.date.getDate()
+      if(this.day<10) this.day = "0" + this.day
+      this.endDate = this.date.getFullYear()+"-"+this.month+"-"+this.day
+      this.title = this.filename
+      this.$parent.setting.active = false
+    }
+    else{
+      this.date = new Date()
+      this.month = this.date.getMonth()+1
+      this.day = this.date.getDate()
+      if(this.month<10) this.month = "0" + this.month
+      if(this.day<10) this.day = "0" + this.day
+      this.today = [this.date.getFullYear(),this.month,this.day]
+      this.title = this.filename
+      this.startDate = this.$parent.setting.startDate
+      this.endDate = this.$parent.setting.endDate
+      this.classIdList = this.$parent.setting.classIdList
+      this.all = this.$parent.setting.all
+      this.checkCourse = this.$parent.setting.checkCourse
+      this.checkYear = this.$parent.setting.checkYear
+      this.openMobile = this.$parent.setting.openMobile
+    }
   },
   methods:{
     cancel(){
@@ -154,6 +159,7 @@ export default{
       this.day = this.date.getDate()
       if(this.month<10) this.month = "0" + this.month
       if(this.day<10) this.day = "0" + this.day
+      this.today = [this.date.getFullYear(),this.month,this.day]
       const checker = this.today.join('-')
       Object.keys(this.classIdList).forEach((e)=>{
         this.classIdList[e].forEach((i)=>{
@@ -177,35 +183,45 @@ export default{
         this.submitId.length = 0
         return
       }
-      const formData2 = {
-                        'x': 0,
-                        'y': 0,
-                        'startTime':this.startDate,
-                        'endTime':this.endDate,
-                        'priority':this.selected,
-                        'classids':this.submitId,
-                        'title': this.title,
-                        'openMobile': this.openMobile
-                        }
-      formData2.docid = this.docid
+      const params = {
+                     'x': 0,
+                     'y': 0,
+                     'startTime':this.startDate,
+                     'endTime':this.endDate,
+                     'priority':this.selected,
+                     'classids':this.submitId,
+                     'title': this.title,
+                     'openMobile': this.openMobile
+                      }
+      params.docid = this.docid
       //add-doc
-      axios.post('../api/docs',formData2)
+      axios.post('../api/docs',params)
       .then((response)=>{
       })
       .catch(e=>{
         console.log(e)
       })
       this.$parent.showModal = false
+      this.settings()
       this.$emit('submit')
     },
-    selectYear(index){
-      if(this.checkYear[index] === false){
-        this.classIdList[index].forEach((e)=>{
+    settings(){
+      this.$parent.setting.startDate = this.startDate
+      this.$parent.setting.endDate = this.endDate
+      this.$parent.setting.classIdList = this.classIdList
+      this.$parent.setting.all = this.all
+      this.$parent.setting.checkCourse = this.checkCourse
+      this.$parent.setting.checkYear = this.checkYear
+      this.$parent.setting.openMobile = this.openMobile
+    },
+    selectYear(key){
+      if(this.checkYear[key] === false){
+        this.classIdList[key].forEach((e)=>{
           e.submit = false
         })
       }
-      else if(this.checkYear[index] === true){
-        this.classIdList[index].forEach((e)=>{
+      else if(this.checkYear[key] === true){
+        this.classIdList[key].forEach((e)=>{
           e.submit = true
         })
       }

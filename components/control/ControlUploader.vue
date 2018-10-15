@@ -3,7 +3,7 @@
   <div @dragleave.prevent="onDragLeave($event)" @dragover.prevent="onDragOver($event)" @drop.prevent="onDrop($event)">
    <BulletinBoard :classid="classid"/>
   </div>
-  <ModalUploader v-if="showModal" @submit="upload()" :classes="classes" :filename="filename" :docid="docid" :checkCourse="checkCourse" :checkYear="checkYear"/>
+  <ModalUploader v-if="showModal" @submit="upload()" :classIdList="classIdList" :filename="filename" :docid="docid" :checkCourse="checkCourse" :checkYear="checkYear"/>
  </section>
 </template>
 <script>
@@ -19,14 +19,25 @@ export default{
   },
   data:function(){
     return{
-      showModal: false,
+      setting:{
+        active:true,
+        startDate:null,
+        endDate:null,
+        classIdList:null,
+        all:null,
+        checkCourse:null,
+        checkYear:null,
+        openMobile:null
+      },
+      showModal:false,
       filename:null,
       docid:null,
       checkCourse:{},
       checkYear:{},
       fileList:[],
       modal:0,
-      files:null
+      files:null,
+      classIdList:{}
     }
   },
   created(){
@@ -36,6 +47,19 @@ export default{
         })
         res.data.years.forEach((e)=>{
           Vue.set(this.checkYear,e,false)
+        })
+        this.classes.sort((a,b)=>{
+          return a.classid - b.classid
+        })
+        Object.keys(this.checkCourse).forEach((e,i)=>{
+          this.classes.forEach((c)=> {
+            if(!this.classIdList[c.year]){
+              Vue.set(this.classIdList, c.year, [])
+            }
+            if(e === c.course){
+              this.classIdList[c.year].push({classid: c.classid, course: e, submit:false})
+            }
+          })
         })
       })
   },
@@ -67,6 +91,18 @@ export default{
   onDragLeave(event){
   },
   onDrop(event){
+    this.setting.active = true
+    Object.keys(this.classIdList).forEach((e)=>{
+      this.classIdList[e].forEach((i)=>{
+        i.submit = false
+      })
+    })
+    Object.keys(this.checkYear).forEach((e)=>{
+      this.checkYear[e] = false
+    })
+    Object.keys(this.checkCourse).forEach((e)=>{
+      this.checkCourse[e] = false
+    })
     event.preventDefault()
     event.dataTransfer.dropEffect = "copy"
     this.modal=0
