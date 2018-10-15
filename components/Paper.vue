@@ -20,7 +20,7 @@
     </b-list-group>
     <b-modal ref="myModalRef" hide-footer>
       <div class="d-block text-center">
-        <h3>本当に変更しますか？</h3>
+        <h3>掲載終了日の変更</h3>
       </div>
       <div class="block my-5">
         <label>掲載終了日</label>
@@ -89,11 +89,7 @@ export default {
       }
     },
     openremovemenu: function(e){
-      console.log("for-debug")
       this.showMenu = true
-      console.log(this.showMenu)
-      console.log(e.x)
-      console.log(e.y)
       this.menuTop = e.y - this.BBxy.y + window.pageYOffset
       this.menuLeft = e.x
       return false
@@ -120,6 +116,17 @@ export default {
       })
     },
     changeEndDate: function(){
+      const date = new Date()
+      let month = date.getMonth()+1
+      let day = date.getDate()
+      if(month<10) month = "0" + month
+      if(day<10) day = "0" + day
+      const today = [date.getFullYear(),month,day]
+      const checker = today.join('-')
+      if(checker > this.endDate){
+        alert("掲載終了日を今日より前には設定できません。")
+        return
+      }
       axios.put(process.env.httpUrl + '/api/doc-end-time', {
           docid: this.paper.docid,
           endTime: this.endDate

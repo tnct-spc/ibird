@@ -161,18 +161,18 @@ export default{
         })
       })
       if(this.submitId.length === 0||this.endDate === null
-        ||this.startDate >= this.endDate||checker > this.startDate){
+        ||this.startDate > this.endDate||checker > this.startDate){
         if(this.submitId.length === 0){
           alert("クラスを選択してください")
         }
-        if(this.endDate === null){
+        /*if(this.endDate === null){
           alert("掲載開始日、終了日を入力してください")
-        }
-        if(this.startDate >= this.endDate){
+        }*/
+        if(this.startDate > this.endDate){
           alert("掲載開始日より前に終了日を設定することはできません")
         }
         if(checker > this.startDate){
-          alert("掲載開始日を"+this.date.getFullYear()+"年"+this.month+"月"+this.date.getDate()+"日より前には設定できません")
+          alert("掲載開始日を今日より前には設定できません")
         }
         this.submitId.length = 0
         return
