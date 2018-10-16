@@ -15,6 +15,7 @@
     <b-list-group id="right-click-menu" tabindex="-1" v-if="showMenu" @blur="closeMenu" :style="{top: menuTop+'px', left: menuLeft+'px'}">
       <b-list-group-item button @click="remove">このクラスのみで削除</b-list-group-item>
       <b-list-group-item button @click="removeInAllClass">全てのクラスで削除</b-list-group-item>
+      <b-list-group-item button @click="showModal()">掲載終了日の変更</b-list-group-item>
       <b-list-group-item button @click="closeMenu">キャンセル</b-list-group-item>
     </b-list-group>
   </div>
@@ -76,11 +77,7 @@ export default {
       }
     },
     openremovemenu: function(e){
-      console.log("for-debug")
       this.showMenu = true
-      console.log(this.showMenu)
-      console.log(e.x)
-      console.log(e.y)
       this.menuTop = e.y - this.BBxy.y + window.pageYOffset
       this.menuLeft = e.x
       return false
@@ -88,6 +85,24 @@ export default {
     closeMenu: function(){
       setTimeout(()=>{this.showMenu=false},100)
       //this.showMenu = false
+    },
+    showModal: function(){
+      axios.get(process.env.httpUrl + '/api/doc-end-time', {
+        params: {
+          docid: this.paper.docid
+        }
+      })
+      .then((res)=>{
+        let currentEndDate = res.data
+        currentEndDate = currentEndDate.split('/')
+        this.$parent.endDate = currentEndDate.join('-')
+        this.closeMenu()
+        this.$parent.selectedDocid = this.paper.docid
+        this.$parent.$refs.myModalRef.show()
+      })
+      .catch((e)=>{
+        console.log(e)
+      })
     },
     remove: function(){
       axios.delete(process.env.httpUrl + '/api/doc', {
