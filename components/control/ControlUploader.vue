@@ -3,7 +3,7 @@
   <div @dragleave.prevent="onDragLeave($event)" @dragover.prevent="onDragOver($event)" @drop.prevent="onDrop($event)">
    <BulletinBoard :classid="classid"/>
   </div>
-  <ModalUploader v-if="showModal" @submit="upload()" :classIdList="classIdList" :filename="filename" :docid="docid" :checkCourse="checkCourse" :checkYear="checkYear"/>
+  <ModalUploader v-if="showModal" @submit="upload()" @cancel="cancel()" :classIdList="classIdList" :filename="filename" :docid="docid" :checkCourse="checkCourse" :checkYear="checkYear"/>
  </section>
 </template>
 <script>
@@ -80,6 +80,19 @@ export default{
     .catch(e=>{
       console.log(e)
     })
+    this.$nextTick(() => {
+      this.showModal=true
+    })
+  },
+  cancel(){
+    this.modal--
+    if(this.modal<0)return
+    this.file = this.files[this.modal]
+    const formData = new FormData()
+    this.docid = new Date().getTime().toString(16)
+    formData.append('docid',this.docid)
+    formData.append('file',this.file)
+    this.filename = this.file.name
     this.$nextTick(() => {
       this.showModal=true
     })

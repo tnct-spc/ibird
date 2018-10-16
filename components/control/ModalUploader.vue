@@ -151,7 +151,9 @@ export default{
   },
   methods:{
     cancel(){
-      this.$parent.showModal=false
+      this.$parent.showModal = false
+      this.settings()
+      this.$emit('cancel')
     },
     submit(){
       this.date = new Date()
