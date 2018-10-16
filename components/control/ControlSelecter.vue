@@ -81,10 +81,10 @@ export default {
   },
   watch:{
     yearIndex(){
-      if(this.courseIndex)this.getClassid()
+      if(this.courseIndex!==null)this.getClassid()
     },
     courseIndex(){
-      if(this.yearIndex)this.getClassid()
+      if(this.yearIndex!==null)this.getClassid()
     },
     classid(){
       history.replaceState('','',this.classid)
