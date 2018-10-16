@@ -7,9 +7,9 @@
       <span>classid = {{classid}}</span>
     </div>
     <div>
-      <input v-model="alertMessage" placeholder="緊急伝達事項を入力">
-      <button type="button" class="btn btn-outline-primary btn-sm mx-1" @click="showAlert()">
-         アラート表示
+      <input v-model="alertMessage" class="w-25" placeholder="緊急伝達事項を入力">
+      <button  type="button" :disabled="!this.isAlertEmpty" class="btn btn-outline-primary btn-sm mx-1" @click="showAlert()">
+        {{this.isAlertEmpty ? 'アラート表示':'アラートは表示中です' }}
       </button>
       <button type="button" class="btn btn-outline-primary btn-sm mx-1" @click="sortDocs()">
          並び替え
@@ -31,6 +31,7 @@
 <script>
 import { w3cwebsocket } from 'websocket'
 import axios from 'axios'
+import { setTimeout } from 'timers';
 const W3cwebsocket = w3cwebsocket
 
 export default{
@@ -38,7 +39,8 @@ export default{
     return{
       alertMessage: '',
       isRandom:null,
-      Random:[{text:"適用",value:true},{text:"適用しない",value:false}]
+      Random:[{text:"適用",value:true},{text:"適用しない",value:false}],
+      isAlertEmpty: true
     }
   },
   props:{
@@ -83,6 +85,8 @@ export default{
             wsClient.send(JSON.stringify({message: this.alertMessage}))
           }
         }
+        this.isAlertEmpty = false
+        setTimeout(()=>{this.isAlertEmpty=true},1000*5)
       }
     }
   }
