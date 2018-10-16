@@ -9,7 +9,7 @@
     <div>
       <input v-model="alertMessage" class="w-25" placeholder="緊急伝達事項を入力">
       <button  type="button" :disabled="!this.isAlertEmpty" class="btn btn-outline-primary btn-sm mx-1" @click="showAlert()">
-        アラート表示
+        {{this.isAlertEmpty ? 'アラート表示':'アラートは表示中です' }}
       </button>
       <button type="button" class="btn btn-outline-primary btn-sm mx-1" @click="sortDocs()">
          並び替え
