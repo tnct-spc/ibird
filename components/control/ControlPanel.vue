@@ -9,7 +9,7 @@
     <div>
       <input v-model="alertMessage" class="w-25" placeholder="緊急伝達事項を入力">
       <button  type="button" :disabled="!this.isAlertEmpty" class="btn btn-outline-primary btn-sm mx-1" @click="showAlert()">
-        {{this.isAlertEmpty ? 'アラート表示':'アラートは表示中です' }}
+        アラート表示
       </button>
       <button type="button" class="btn btn-outline-primary btn-sm mx-1" @click="sortDocs()">
          並び替え
@@ -86,7 +86,7 @@ export default{
           }
         }
         this.isAlertEmpty = false
-        setTimeout(()=>{this.isAlertEmpty=true},1000*60*30)
+        setTimeout(()=>{this.isAlertEmpty=true},1000*5)
       }
     }
   }
