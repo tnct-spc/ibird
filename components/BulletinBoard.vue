@@ -1,10 +1,21 @@
 <template>
   <section>
+    <b-modal ref="myModalRef" hide-footer>
+      <div class="d-block text-center">
+        <h3>掲載終了日の変更</h3>
+      </div>
+      <div class="block my-5 text-center">
+        <label>掲載終了日</label>
+        <input type="date" v-model="endDate"/>
+      </div>
+      <b-btn class="mt-3" variant="outline-primary" block @click="changeEndDate()">変更する</b-btn>
+      <b-btn class="mt-3" variant="outline-danger" block @click="$refs.myModalRef.hide()">キャンセル</b-btn>
+    </b-modal>
     <div id="wrapper">
       <ViewPaper v-if="showPaper" @close="showPaper=false" :paper="papers[docid]" :docid="docid"/>
       <div id="content" :style="'background-image:url(/img/'+background+')'" ref="fieldElm">
        <b-alert :show="show">
-         <span style="font-size:50px;font-family: 'Sawarabi Mincho', sans-serif">{{noClassid}}</span>
+         <span style="font-size:50px;font-family: 'Noto Sans JP', sans-serif;">{{noClassid}}</span>
        </b-alert>
        <div :id=i v-for="(paper, i) in sortedPapers" @dblclick="viewPaper(paper.docid)">
         <Paper
@@ -30,13 +41,6 @@ import { setInterval } from 'timers';
 const W3cwebsocket = w3cwebsocket
 
 export default {
-  head () {
-    return {
-      link: [
-        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Sawarabi+Mincho&amp;subset=japanese,latin-ext' }
-      ]
-    }
-  },
   props: {
     "classid": String,
   },
@@ -48,7 +52,9 @@ export default {
       client: {},
       refreshClient: {},
       docid:"",
-      noClassid:""
+      noClassid:"",
+      endDate:null,
+      selectedDocid:null
     }
   },
   watch:{
@@ -119,6 +125,27 @@ export default {
     }
   },
   methods:{
+    changeEndDate: function(){
+      const date = new Date()
+      let month = date.getMonth()+1
+      let day = date.getDate()
+      if(month<10) month = "0" + month
+      if(day<10) day = "0" + day
+      const today = [date.getFullYear(),month,day]
+      const checker = today.join('-')
+      if(checker > this.endDate){
+        alert("掲載終了日を今日より前には設定できません。")
+        return
+      }
+      axios.put(process.env.httpUrl + '/api/doc-end-time', {
+          docid: this.selectedDocid,
+          endTime: this.endDate
+      })
+      .catch((e)=>{
+        console.log(e)
+      })
+      this.$refs.myModalRef.hide()
+    },
     viewPaper(docid){
       this.docid = docid
       this.showPaper = true
