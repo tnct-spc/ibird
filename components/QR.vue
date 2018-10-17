@@ -3,15 +3,21 @@
 </template>
 <script>
 import QRCode from 'qrcode'
+import axios from 'axios'
+import { setInterval } from 'timers';
+
 export default {
   props: {
-    url: String
+    classid: String
   },
   data: () => {
     return {svgCode: ''}
   },
+  created(){
+    setInterval(this.recreateQr, 10000)
+  },
   mounted () {
-    QRCode.toString(this.url, {
+    QRCode.toString('0', {
       type: 'svg',
       color: {
         light: '#0000'
@@ -20,6 +26,23 @@ export default {
       if (error) console.log(error)
       this.svgCode = string
     })
+  },
+  methods: {
+    recreateQr: function(){
+      axios.get(process.env.httpUrl + '/api/issue-qr-uri',{
+        params: { classid: this.classid }
+      }).then(res => {
+        QRCode.toString(process.env.httpUrl + '/qrlogin/?classid=' + this.classid +'&pass='+res.data, {
+          type: 'svg',
+          color: {
+            light: '#0000'
+          }
+        }, (error, string) => {
+          if (error) console.log(error)
+          this.svgCode = string
+        })
+      })
+    }
   }
 }
 </script>

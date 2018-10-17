@@ -1,7 +1,6 @@
-export default function ({ route, store, redirect }) {
+export default function ({ req, route, store, redirect }) {
   const path = route.path
-  console.log(path)
-  const user = store.state.authUser
+  const user = req.session.authUser
   const curentClass = Number(path.replace(/[^0-9]/g, ''))
   let isRedirect = true
   if (user) {
