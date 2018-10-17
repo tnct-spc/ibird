@@ -41,7 +41,6 @@ export default {
   created:function(){
   },
   mounted: function(){
-    console.log('for-debug2')
     const startWebsocket = () => {
       this.refreshClinet = new W3cwebsocket(process.env.wsUrl+'/ws/refresh-setting')
       this.refreshClinet.onmessage=({data})=>{
