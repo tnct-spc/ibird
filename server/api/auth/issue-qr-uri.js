@@ -20,7 +20,8 @@ router.get('/', (req, res, next) => {
     let pass = result.qrLoginPassword + Math.round(new Date().getTime() / (1000 * 20))
     let uri = sechash.strongHashSync(pass, hashopt).slice(22)
     res.send(uri)
-  }).catch(() => {
+  }).catch(err => {
+    console.log(err)
     res.sendStatus(400)
   })
 })
