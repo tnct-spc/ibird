@@ -9,7 +9,8 @@ module.exports = (sequelize, DataTypes) => {
     year: DataTypes.TEXT,
     course: DataTypes.TEXT,
     randomSort: DataTypes.BOOLEAN,
-    index: DataTypes.INTEGER
+    index: DataTypes.INTEGER,
+    qrLoginPassword: DataTypes.STRING
   }, {
     timestamps: false
   })

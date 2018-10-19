@@ -15,7 +15,7 @@ app.set('port', port)
 app.use(session({
   secret: 'super-secret-key',
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
   cookie: { maxAge: 3 * 10 ** 10 }
 }))
 

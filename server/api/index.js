@@ -8,6 +8,7 @@ import sort from './sort'
 import doc from './doc'
 import classes from './classes'
 import school from './school'
+import alert from './alert'
 
 const router = Router()
 
@@ -19,5 +20,6 @@ router.use(sort)
 router.use(doc)
 router.use(classes)
 router.use(school)
+router.use(alert)
 
 export default router
