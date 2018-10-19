@@ -39,7 +39,6 @@ export default {
     mounted(){
       axios.get(process.env.httpUrl + '/api/Courses').then(res =>{
         this.courses = res.data.courses
-        console.log(this.courses)
       }).catch(e =>{
         console.log(e)
       })
