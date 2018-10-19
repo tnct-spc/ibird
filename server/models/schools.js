@@ -9,7 +9,9 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     background_image: DataTypes.STRING,
     background_images: DataTypes.ARRAY(DataTypes.STRING),
-    timetable: DataTypes.JSON
+    timetable: DataTypes.JSON,
+    message: DataTypes.STRING,
+    messageEndDate: DataTypes.DATE
   }, {
     timestamps: false
   })
