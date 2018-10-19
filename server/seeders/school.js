@@ -14,7 +14,7 @@ module.exports = {
             'minimal_background4.png',
             'minimal_background5.png'
           ],
-          timetable:(function() {[/*
+          timetable: function () { /*
             {
                 "station":"狭間駅",
                 "line":"京王高尾線",
@@ -101,7 +101,8 @@ module.exports = {
                     "24":[{"min":"19","kind":"各駅停車","going":"高尾山口"},{"min":"42","kind":"各駅停車","going":"高尾山口"},{"min":"51","kind":"各駅停車","going":"高尾山口"}]
                 }
             }
-            */]}).toString().match(/\/\*([^]*)\*\//)[1],
+            */
+          }.toString().match(/\/\*([^]*)\*\//)[1],
           message: '',
           messageEndDate: new Date(1970, 1, 1)
         }
