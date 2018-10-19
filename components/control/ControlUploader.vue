@@ -135,7 +135,13 @@ export default{
       if(!this.files.length){
         alert("ファイルをドラッグ＆ドロップしてください")
       }
-      if(!this.file.type.match('application/pdf')&&!this.file.type.match('application/vnd.*')){
+      if(!this.file.type.match('application/pdf')
+      &&!this.file.type.match('application/msword')
+      &&!this.file.type.match('application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+      &&!this.file.type.match('application/vnd.ms-powerpoint')
+      &&!this.file.type.match('application/vnd.openxmlformats-officedocument.presentationml.presentation')
+      &&!this.file.type.match('application/vnd.ms-excel')
+      &&!this.file.type.match('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')){
         alert("ファイル形式に対応してません")
       }
       return
