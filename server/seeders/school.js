@@ -15,13 +15,12 @@ module.exports = {
             'minimal_background5.png'
           ],
           timetable:(function() {[/*
-            [
             {
                 "station":"狭間駅",
-                "direction":"新宿方面",
                 "line":"京王高尾線",
                 "day":"weekday",
-                "timetable":{
+                "timetable1":{
+                    "direction":"新宿方面",
                     "1":[],
                     "2":[],
                     "3":[],
@@ -59,14 +58,9 @@ module.exports = {
                     "23":[{"min":"10","kind":"各駅停車","going":"高幡不動"},{"min":"19","kind":"各駅停車","going":"高幡不動"},{"min":"25","kind":"各駅停車","going":"新宿"},
                         {"min":"38","kind":"区間急行","going":"桜上水"},{"min":"49","kind":"各駅停車","going":"北野"}],
                     "24":[{"min":"15","kind":"各駅停車","going":"高幡不動"}]
-                }
-            },
-            {
-                "station":"狭間駅",
-                "direction":"高尾山口方面",
-                "line":"京王高尾線",
-                "day":"weekday",
-                "timetable":{
+                },
+                "timetable2":{
+                    "direction":"高尾方面",
                     "1":[],
                     "2":[],
                     "3":[],
@@ -107,7 +101,6 @@ module.exports = {
                     "24":[{"min":"19","kind":"各駅停車","going":"高尾山口"},{"min":"42","kind":"各駅停車","going":"高尾山口"},{"min":"51","kind":"各駅停車","going":"高尾山口"}]
                 }
             }
-            ]
             */]}).toString().match(/\/\*([^]*)\*\//)[1]
         }
       ]

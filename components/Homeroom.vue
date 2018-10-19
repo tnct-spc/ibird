@@ -71,7 +71,7 @@ section{
   height: 10%;
   width:10%;
   right: 12%;
-  bottom: 5%;
+  bottom: 56%;
   position: fixed;
 }
 .raincloud {

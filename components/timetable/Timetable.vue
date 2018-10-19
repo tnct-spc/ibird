@@ -1,6 +1,6 @@
 <template>
    <div>
-    <b-card :header="stationData.station + ' ' + stationData.line + ' ' + stationData.direction" no-body>
+    <b-card :header="stationData.station + ' ' + stationData.line + ' ' + subStationData.direction" no-body>
         <b-list-group flush>
             <b-list-group-item v-for="(time, index) in nextTimes(2)" :key="index">
                 {{time.kind}} {{time.going}}行き {{time.hour}} : {{time.min}}
@@ -22,31 +22,19 @@ export default {
         }
     },
     props: {
-        "holidayData": Object,
-        "weekdaysData": Object,
-        "weekenddaysData": Object,
+        "stationData": Object,
+        "subStationData": Object
     },
     created : function(){
-        console.log(this.stationData);
-        this.timer();
-    },
-    computed : {
-        stationData : function() {
-            if(this.dayOfWeek == 0){
-                return this.holidayData
-            }else if(this.dayOfWeek == 6){
-                return this.weekenddaysData
-            }else{
-                return this.weekdaysData
-            }
-        },
+        //console.log(this.stationData)
+        this.timer()
     },
     methods : {
         nextTimes : function(elementNumber){ //何個の要素かを引数として取る
             const times = []
             var buff = null
             for(var i = 0; i< elementNumber; i++){
-                console.log(i)
+                //console.log(i)
                 if(!buff){
                     const firstTime = this.getNextTime(this.hour, this.minute)
                     times.push(firstTime)
@@ -61,7 +49,7 @@ export default {
         },
         getNextTime : function(nHour, nMinute){ //現在の時間と分が引数(0≦nHour≦24, 0≦nMinute≦59)
             nHour = nHour==0 ? 24 : nHour
-            const times = this.stationData.timetable[nHour]
+            const times = this.subStationData[nHour]
             for (var i = 0; i < times.length; i++) {
                 if(times[i].min > nMinute){
                     times[i].hour = nHour
@@ -71,7 +59,7 @@ export default {
             var limitter = 0 //無限ループをしないため
             while(limitter<1000){
                 nHour = nHour==24 ? 1 : nHour+1
-                const times = this.stationData.timetable[nHour]
+                const times = this.subStationData[nHour]
                 if(times.length!==0){
                     times[0].hour = nHour
                     return times[0]
