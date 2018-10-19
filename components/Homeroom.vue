@@ -2,7 +2,7 @@
   <section>
     <BulletinBoard ref="BulletinBoard" :classid="classid" />
     <Alert />
-    <QR class="qr" :url="url" />
+    <QR class="qr" :classid="classid" />
     <RainCloud class="raincloud" />
     <TimetableParent class="timetableparent" />
   </section>
