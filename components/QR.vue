@@ -32,6 +32,7 @@ export default {
       axios.get(process.env.httpUrl + '/api/issue-qr-uri',{
         params: { classid: this.classid }
       }).then(res => {
+        console.log(process.env.httpUrl + '/qrlogin/?classid=' + this.classid +'&pass='+res.data)
         QRCode.toString(process.env.httpUrl + '/qrlogin/?classid=' + this.classid +'&pass='+res.data, {
           type: 'svg',
           color: {

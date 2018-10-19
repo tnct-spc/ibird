@@ -35,7 +35,7 @@ router.post('/', (req, res, next) => {
     pass = (result.qrLoginPassword + Math.round(new Date().getTime() / (1000 * 20) - 1))
     let oldpass = sechash.strongHashSync(pass, hashopt).slice(22)
     if (nowpass === reqpass || oldpass === reqpass) {
-      req.session.hoge = {
+      req.session.authUser = {
         username: 'mobileUser',
         bb: false,
         mobile: true,

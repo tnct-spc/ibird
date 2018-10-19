@@ -17,23 +17,21 @@ export default {
   async asyncData({store, query, redirect}) {
     let classid =  query['classid']
     let pass =  query['pass']
-    const params = {
+    return {
       classid: classid,
       pass: pass
     }
-    return  axios.post('http://localhost:3000/api/issue-qr-uri',params)
-    .then(res => {
-      console.log('res.data' + res.data)
-      if (res.data === 'success'){
-        // setUser({user: 'mobileUser'})
-        // return store.commit('setUser', {username: 'mobileUser'})
-        return redirect('/mobilepage/'+classid)
-      }
-    })
   },
   created: function(){
   },
   mounted: function(){
+    const params = {
+      classid: this.classid,
+      pass: this.pass
+    }
+    axios.post(process.env.httpUrl+'/api/issue-qr-uri',params)
+    .then(res => {
+    })
   },
 }
 </script>
