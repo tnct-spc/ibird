@@ -38,6 +38,8 @@
 <script>
 import axios from 'axios'
 import VUe from 'vue'
+import { w3cwebsocket } from 'websocket'
+const W3cwebsocket = w3cwebsocket
 
 export default{
   data:()=>{
@@ -80,7 +82,14 @@ export default{
         filename: this.backgrounds[this.num]
       })
       .then(res=>{
-        if(res.data==="OK")this.selectedSkin = this.backgrounds[this.num]
+        if(res.data==="OK"){
+          this.selectedSkin = this.backgrounds[this.num]
+          let c = new w3cwebsocket(process.env.wsUrl + '/ws/refresh-setting')
+          c.onopen = () => {
+            c.send('background')
+            c.close()
+          }
+        }
         else alert("変更できませんでした")
       })
       .catch(err=>{

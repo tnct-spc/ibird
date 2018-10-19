@@ -46,7 +46,7 @@ export default {
   },
   data () {
     return {
-      background:"minimal_background1.png",
+      background:"",
       show:false,
       showPaper:false,
       client: {},
@@ -95,6 +95,7 @@ export default {
       this.noClassid="クラスを選択してください"
       this.show=true
     }
+    this.changeBackground()
   },
   mounted() {
     window.addEventListener('resize', this.handleResize)
@@ -182,7 +183,7 @@ export default {
       axios.get(process.env.httpUrl + '/api/background')
       .then(res =>{
         this.background = res.data
-        //console.log(this.selectedSkin)
+        console.log(this.background)
       })
       .catch(e =>{
         console.log(e)

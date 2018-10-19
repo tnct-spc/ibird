@@ -6,7 +6,7 @@ module.exports = {
       [
         {
           name: 'tokyo-ct',
-          background_image: 'minimal_background.png',
+          background_image: 'minimal_background1.png',
           background_images: [
             'minimal_background1.png',
             'minimal_background2.png',
