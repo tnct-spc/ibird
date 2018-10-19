@@ -1,6 +1,9 @@
 <template>
-<div>
-  <h1>認証に失敗しました</h1>
+<div v-if="isFaild">
+   <b-card class="text-center">
+     <b-alert show variant="danger">認証に失敗しました</b-alert>
+     QRコードを読み直してください
+   </b-card>
 </div>
 </template>
 
@@ -11,7 +14,7 @@ import { setInterval, setTimeout } from 'timers';
 export default {
   data: function(){
     return{
-      isRedirect: false,
+      isFaild: false,
     }
   },
   async asyncData({store, query, redirect}) {
@@ -23,15 +26,34 @@ export default {
     }
   },
   created: function(){
-  },
-  mounted: function(){
     const params = {
       classid: this.classid,
       pass: this.pass
     }
     axios.post(process.env.httpUrl+'/api/issue-qr-uri',params)
     .then(res => {
+      if(res.data==='success') {
+        window.location = process.env.httpUrl + '/mobilepage/' + this.classid
+      } else {
+        this.isFaild = true
+      }
     })
+  },
+  mounted: function(){
+    /*
+    const params = {
+      classid: this.classid,
+      pass: this.pass
+    }
+    axios.post(process.env.httpUrl+'/api/issue-qr-uri',params)
+    .then(res => {
+      if(res.data==='success') {
+        window.location = process.env.httpUrl + '/mobilepage/' + this.classid
+      } else {
+        isFaild = true
+      }
+    })
+    */
   },
 }
 </script>

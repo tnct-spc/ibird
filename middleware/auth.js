@@ -10,16 +10,13 @@ export default function ({ req, route, store, redirect }) {
       }
     } else if (path.match(/bb/)) {
       if (user.bb) {
-        console.log(user.classes)
-        console.log(user.allClass)
         if (user.allClass || user.classes.indexOf(curentClass) !== -1) {
           isRedirect = false
         }
       }
     } else if (path.match(/mobilepage/)) {
       if (user.mobile) {
-        console.log(user.classes)
-        if (user.allClass || user.classes.indexOf(curentClass) !== -1) {
+        if (user.allClass || user.classes.indexOf(String(curentClass)) !== -1) {
           isRedirect = false
         }
       }
