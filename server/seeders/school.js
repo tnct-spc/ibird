@@ -13,7 +13,9 @@ module.exports = {
             'minimal_background3.png',
             'minimal_background4.png',
             'minimal_background5.png'
-          ]
+          ],
+          message: '',
+          messageEndDate: new Date(1970, 1, 1)
         }
       ]
       , {})
