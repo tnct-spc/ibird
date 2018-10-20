@@ -11,6 +11,11 @@
       <b-btn class="mt-3" variant="outline-primary" block @click="changeEndDate()">変更する</b-btn>
       <b-btn class="mt-3" variant="outline-danger" block @click="$refs.myModalRef.hide()">キャンセル</b-btn>
     </b-modal>
+    <b-modal ref="showUrlModal" hide-footer>
+      <div class="d-block text-center">
+        <a v-bind:href="downloadUrl"> {{downloadUrl}} </a>
+      </div>
+    </b-modal>
     <div id="wrapper">
       <ViewPaper v-if="showPaper" @close="showPaper=false" :paper="papers[docid]" :docid="docid"/>
       <div id="content" :style="'background-image:url(/img/'+background+')'" ref="fieldElm">
@@ -54,7 +59,8 @@ export default {
       docid:"",
       noClassid:"",
       endDate:null,
-      selectedDocid:null
+      selectedDocid:null,
+      downloadUrl: ''
     }
   },
   watch:{

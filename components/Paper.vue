@@ -16,6 +16,7 @@
       <b-list-group-item button @click="remove">このクラスのみで削除</b-list-group-item>
       <b-list-group-item button @click="removeInAllClass">全てのクラスで削除</b-list-group-item>
       <b-list-group-item button @click="showModal()">掲載終了日の変更</b-list-group-item>
+      <b-list-group-item button @click="showDownloadUrl">ダウンロードリンクの取得</b-list-group-item>
       <b-list-group-item button @click="closeMenu">キャンセル</b-list-group-item>
     </b-list-group>
   </div>
@@ -157,6 +158,11 @@ export default {
       }).catch(e =>{
         console.log(e)
       })
+    },
+    showDownloadUrl: function(){
+      this.closeMenu()
+      this.$parent.downloadUrl = process.env.httpUrl + '/download/' + this.paper.docid
+      this.$parent.$refs.showUrlModal.show()
     }
   }
 }
@@ -176,7 +182,7 @@ img.paper:hover{
 
 #right-click-menu{
     position: absolute;
-    width: 220px;
+    width: 240px;
     z-index: 100000;
 }
 </style>
