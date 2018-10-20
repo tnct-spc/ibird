@@ -77,7 +77,6 @@ export default{
     .then((res)=>{
       this.message = res.data.message
       this.endDate = res.data.endDate
-      console.log(this.endDate)
       this.checkAlert()
     })
     const startWebsocket = () => {
@@ -87,7 +86,6 @@ export default{
          .then((res)=>{
            this.message = res.data.message
            this.endDate = res.data.endDate
-           this.checkAlert()
          })
        }
        this.client.onclose=()=>{
