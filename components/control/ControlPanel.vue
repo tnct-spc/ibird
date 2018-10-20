@@ -75,8 +75,8 @@ export default{
   created(){
     axios.get(process.env.httpUrl+'/api/alert')
     .then((res)=>{
-      this.message = res.data.message
-      this.endDate = res.data.endDate
+      if(!res.data.message) this.message = "現在表示中のアラートはありません"
+      else this.message = res.data.message
       this.checkAlert()
     })
     const startWebsocket = () => {
@@ -84,7 +84,8 @@ export default{
        this.client.onmessage=()=>{
          axios.get(process.env.httpUrl+'/api/alert')
          .then((res)=>{
-           this.message = res.data.message
+           if(!res.data.message) this.message = "現在表示中のアラートはありません"
+           else this.message = res.data.message
            this.endDate = res.data.endDate
          })
        }
@@ -104,8 +105,8 @@ export default{
     checkAlert(){
       const endDate = new Date()
       const unixTime = Math.floor( endDate.getTime())
-      if(this.endDate <= unixTime)this.message="現在表示中のアラートはありません"
-      setTimeout(this.checkAlert(),1000*3)
+      if(this.endDate >= unixTime)this.message="現在表示中のアラートはありません"
+      setTimeout(this.checkAlert,1000*3)
     },
     deleteAlert(){
       axios.delete(process.env.httpUrl + '/api/alert')
