@@ -45,7 +45,6 @@ import { mapState, mapMutations } from 'vuex'
 import { w3cwebsocket } from 'websocket'
 import axios from 'axios'
 import { setInterval } from 'timers';
-import VueClipboard from 'vue-clipboard2'
 
 const W3cwebsocket = w3cwebsocket
 
