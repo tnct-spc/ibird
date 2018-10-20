@@ -193,7 +193,8 @@ export default{
                      'priority':this.selected,
                      'classids':this.submitId,
                      'title': this.title,
-                     'openMobile': this.openMobile
+                     'openMobile': this.openMobile,
+                     'filename': this.filename
                       }
       params.docid = this.docid
       //add-doc

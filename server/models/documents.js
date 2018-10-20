@@ -18,8 +18,8 @@ module.exports = (sequelize, DataTypes) => {
     openMobile: DataTypes.BOOLEAN,
     sizeX: DataTypes.INTEGER,
     sizeY: DataTypes.INTEGER,
-    overlapPriority: DataTypes.INTEGER
-
+    overlapPriority: DataTypes.INTEGER,
+    filename: DataTypes.STRING
   }, {
     timestamps: false
   })
