@@ -10,7 +10,7 @@
 <script>
 
 import { w3cwebsocket } from 'websocket'
-import { setTimeout } from 'timers';
+import axios from 'axios'
 const W3cwebsocket = w3cwebsocket
 
 export default {
@@ -18,16 +18,28 @@ export default {
     return {
       client: {},
       message : null,
+      wsCheck : false
     }
   },
   created () {
+   axios.get(process.env.httpUrl+'/api/alert')
+   .then((res)=>{
+     this.message = res.data.message
+     const endDate = new Date()
+     const unixTime = Math.floor( endDate.getTime() )
+     const deleteTime = res.data.endDate - unixTime
+     setTimeout(() => {
+       if(this.wsCheck===true)this.message=null
+     },deleteTime)
+   })
    const startWebsocket = () => {
       this.client = new W3cwebsocket(process.env.wsUrl+'/ws/alert')
       this.client.onmessage=({data})=>{
-        this.message = JSON.parse(data).message;
+        this.message = JSON.parse(data).message
         console.log(this.message)
         setTimeout(() => {this.message=null},1000*60*30)
       }
+      this.wsCheck = true
       this.client.onclose=()=>{
         console.log('websocket disconnect ws/alert')
         setTimeout(() =>{startWebsocket()},1000)
