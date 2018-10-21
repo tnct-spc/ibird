@@ -1,7 +1,7 @@
 <template>
  <section>
   <div @dragleave.prevent="onDragLeave($event)" @dragover.prevent="onDragOver($event)" @drop.prevent="onDrop($event)">
-   <BulletinBoard :classid="classid"/>
+   <BulletinBoard :classid="classid" :classIdList="classIdList" :checkCourse="checkCourse" :checkYear="checkYear"/>
   </div>
   <ModalUploader v-if="showModal" @submit="upload()" @cancel="cancel()" :classIdList="classIdList" :filename="filename" :docid="docid" :checkCourse="checkCourse" :checkYear="checkYear"/>
  </section>
