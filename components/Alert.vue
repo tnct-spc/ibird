@@ -48,7 +48,7 @@ export default {
       checkAlert(){
         const endDate = new Date()
         const unixTime = Math.floor( endDate.getTime())
-        if(this.endDate >= unixTime)this.message=""
+        if(this.endDate <= unixTime)this.message=""
         setTimeout(this.checkAlert,1000*3)
       }
     }

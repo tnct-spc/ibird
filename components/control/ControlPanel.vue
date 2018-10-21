@@ -105,7 +105,7 @@ export default{
     checkAlert(){
       const endDate = new Date()
       const unixTime = Math.floor( endDate.getTime())
-      if(this.endDate >= unixTime)this.message="現在表示中のアラートはありません"
+      if(this.endDate <= unixTime)this.message="現在表示中のアラートはありません"
       setTimeout(this.checkAlert,1000*3)
     },
     deleteAlert(){
