@@ -12,7 +12,7 @@
       alt="" :style="{
         left: (this.paper.x*this.bbFieldSize.x/10000)+'px',
         top: (this.paper.y*this.bbFieldSize.y/10000)+'px',
-        'max-width': 15 * paper.sizeX / 561 + '%',
+        'max-width': 20.6767 * paper.sizeX / 1171 + '%',
         'z-index': paper.overlapPriority + zIndexPlus,
         //left: '0px',
         //top: '0px'
@@ -20,7 +20,8 @@
     <b-list-group id="right-click-menu" tabindex="-1" v-if="showMenu" @blur="closeMenu" :style="{top: menuTop+'px', left: menuLeft+'px'}">
       <b-list-group-item button @click="remove">このクラスのみで削除</b-list-group-item>
       <b-list-group-item button @click="removeInAllClass">全てのクラスで削除</b-list-group-item>
-      <b-list-group-item button @click="showModal()">掲載終了日の変更</b-list-group-item>
+      <b-list-group-item button @click="changeEndDateModal()">掲載終了日の変更</b-list-group-item>
+      <b-list-group-item button @click="changeClassIdModal()">掲載クラスの変更</b-list-group-item>
       <b-list-group-item button @click="showDownloadUrl">ダウンロードリンクの取得</b-list-group-item>
       <b-list-group-item button @click="closeMenu">キャンセル</b-list-group-item>
     </b-list-group>
@@ -95,7 +96,7 @@ export default {
       setTimeout(()=>{this.showMenu=false},100)
       //this.showMenu = false
     },
-    showModal: function(){
+    changeEndDateModal: function(){
       axios.get(process.env.httpUrl + '/api/doc-end-time', {
         params: {
           docid: this.paper.docid
@@ -105,9 +106,30 @@ export default {
         let currentEndDate = res.data
         currentEndDate = currentEndDate.split('/')
         this.$parent.endDate = currentEndDate.join('-')
-        this.closeMenu()
         this.$parent.selectedDocid = this.paper.docid
-        this.$parent.$refs.myModalRef.show()
+        this.closeMenu()
+        this.$parent.$refs.changeEndDateModalRef.show()
+      })
+      .catch((e)=>{
+        console.log(e)
+      })
+    },
+    changeClassIdModal: function(){
+      axios.get(process.env.httpUrl + '/api/doc-class', {
+        params: {
+          docid: this.paper.docid
+        }
+      })
+      .then((res)=>{
+        this.$parent.selectedDocid = this.paper.docid
+        this.$parent.selectedClassId = res.data
+        this.$parent.selectedClassId.sort((a,b)=>{
+          return a - b
+        })
+        this.closeMenu()
+        this.$nextTick(() => {
+          this.$parent.$refs.changeClassIdModalRef.show()
+        })
       })
       .catch((e)=>{
         console.log(e)

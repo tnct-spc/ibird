@@ -1,6 +1,6 @@
 <template>
   <section>
-    <b-modal ref="myModalRef" hide-footer>
+    <b-modal ref="changeEndDateModalRef" hide-footer>
       <div class="d-block text-center">
         <h3>掲載終了日の変更</h3>
       </div>
@@ -9,7 +9,63 @@
         <input type="date" v-model="endDate"/>
       </div>
       <b-btn class="mt-3" variant="outline-primary" block @click="changeEndDate()">変更する</b-btn>
-      <b-btn class="mt-3" variant="outline-danger" block @click="$refs.myModalRef.hide()">キャンセル</b-btn>
+      <b-btn class="mt-3" variant="outline-danger" block @click="$refs.changeEndDateModalRef.hide()">キャンセル</b-btn>
+    </b-modal>
+    <b-modal ref="changeClassIdModalRef" v-model="modalShow" size="lg" hide-footer>
+      <div class="d-block text-center">
+        <h3>掲載クラスの変更</h3>
+      </div>
+      <div class="block my-5 text-center">
+        <table style="width:500px;margin:100px auto;">
+          <tbody>
+            <tr>
+              <td style="text-align:left;">
+                <b-form-checkbox
+                  id="checkbox1"
+                  @input="selectAll()"
+                  v-model="all">
+                  全て
+                </b-form-checkbox>
+              </td>
+              <td
+                style="text-align:left;"
+                v-for="(item ,key) in checkYear"
+                :key="key">
+                <b-form-checkbox
+                  @input="selectYear(key)"
+                  v-model="checkYear[key]">
+                  {{key}}年
+                </b-form-checkbox>
+              </td>
+            </tr>
+            <tr>
+              <td
+                style="text-align:left;display:block"
+                v-for="(item,key) in checkCourse"
+                :key = "key">
+                <b-form-checkbox
+                  @input="selectCourse(key)"
+                  v-model="checkCourse[key]">
+                  {{key}}科
+                </b-form-checkbox>
+              </td>
+              <td
+                style="text-align:left;"
+                v-for="(item1 ,key) in classIdList">
+                <b-form-checkbox
+                  style="display:block"
+                  v-for = "(item2) in classIdList[key]"
+                  v-model = "item2.submit"
+                  :key = "item2.classid">
+                  {{key}}{{item2.course}}
+                </b-form-checkbox>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <b-btn class="mt-3" variant="outline-primary" block @click="changeClassId()">変更する</b-btn>
+      <b-btn class="mt-3" variant="outline-danger" block @click="$refs.changeClassIdModalRef.hide()">キャンセル</b-btn>
     </b-modal>
     <b-modal ref="showUrlModal" hide-footer>
       <div class="d-block text-center">
@@ -50,10 +106,16 @@ const W3cwebsocket = w3cwebsocket
 
 export default {
   props: {
+    "classIdList":Object,
     "classid": String,
+    "filename":String,
+    "checkCourse":Object,
+    "checkYear":Object
   },
   data () {
     return {
+      modalShow:false,
+      all:false,
       background:"",
       show:false,
       showPaper:false,
@@ -63,11 +125,35 @@ export default {
       noClassid:"",
       endDate:null,
       selectedDocid:null,
+      selectedClassId:null,
+      submitId:[],
       downloadUrl: '',
-
     }
   },
   watch:{
+    modalShow(){
+      this.selectedClassId.forEach((e)=>{
+        Object.keys(this.classIdList).forEach((k)=>{
+          this.classIdList[k].forEach((j)=>{
+            j.submit = false
+          })
+        })
+      })
+      this.selectedClassId.forEach((e)=>{
+        Object.keys(this.classIdList).forEach((k)=>{
+          this.classIdList[k].forEach((j)=>{
+            if(e===j.classid) j.submit = true
+          })
+        })
+      })
+      Object.keys(this.checkYear).forEach((e)=>{
+        this.checkYear[e] = false
+      })
+      Object.keys(this.checkCourse).forEach((e)=>{
+        this.checkCourse[e] = false
+      })
+      this.all = false
+    },
     classid(){
       this.refreshClient = new w3cwebsocket(process.env.wsUrl + '/ws/refresh')
       this.refreshClient.onopen = () => this.refreshClient.send('')
@@ -136,6 +222,78 @@ export default {
     }
   },
   methods:{
+    changeClassId(){
+      this.submitId.length = 0
+      Object.keys(this.classIdList).forEach((e)=>{
+        this.classIdList[e].forEach((i)=>{
+            if(i.submit === true) this.submitId.push(i.classid)
+        })
+      })
+      this.submitId.sort((a,b)=>{
+        return a - b
+      })
+      if(this.submitId.length === 0||JSON.stringify(this.submitId)===JSON.stringify(this.selectedClassId)){
+        if(this.submitId.length === 0){
+          alert("クラスを選択してください")
+        }
+        if(JSON.stringify(this.submitId)===JSON.stringify(this.selectedClassId)){
+          alert("掲示するクラスが変更されていません")
+        }
+        return
+      }
+      axios.put(process.env.httpUrl + '/api/doc-class',{
+        docid:this.selectedDocid,
+        classids:this.submitId
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
+      this.$refs.changeClassIdModalRef.hide()
+    },
+    selectYear(key){
+      if(this.checkYear[key] === false){
+        this.classIdList[key].forEach((e)=>{
+          e.submit = false
+        })
+      }
+      else if(this.checkYear[key] === true){
+        this.classIdList[key].forEach((e)=>{
+          e.submit = true
+        })
+      }
+    },
+    selectCourse(key){
+      if(this.checkCourse[key] === true){
+        Object.keys(this.classIdList).forEach((e)=>{
+          this.classIdList[e].forEach((i)=>{
+            if(i.course===key)i.submit=true
+          })
+        })
+      }
+      else{
+        Object.keys(this.classIdList).forEach((e)=>{
+          this.classIdList[e].forEach((i)=>{
+            if(i.course===key)i.submit=false
+          })
+        })
+      }
+    },
+    selectAll(){
+      if(this.all === false){
+        Object.keys(this.classIdList).forEach((e)=>{
+          this.classIdList[e].forEach((i)=>{
+            i.submit = false
+          })
+        })
+      }
+      else{
+        Object.keys(this.classIdList).forEach((e)=>{
+          this.classIdList[e].forEach((i)=>{
+            i.submit = true
+          })
+        })
+      }
+    },
     changeEndDate: function(){
       const date = new Date()
       let month = date.getMonth()+1
@@ -155,7 +313,7 @@ export default {
       .catch((e)=>{
         console.log(e)
       })
-      this.$refs.myModalRef.hide()
+      this.$refs.changeEndDateModalRef.hide()
     },
     viewPaper(docid){
       this.docid = docid
