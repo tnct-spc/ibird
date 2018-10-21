@@ -7,7 +7,7 @@
       alt="" :style="{
         left: (this.paper.x*this.bbFieldSize.x/10000)+'px',
         top: (this.paper.y*this.bbFieldSize.y/10000)+'px',
-        'max-width': 15 * paper.sizeX / 561 + '%',
+        'max-width': 20.6767 * paper.sizeX / 1171 + '%',
         'z-index': paper.overlapPriority,
         //left: '0px',
         //top: '0px'
@@ -17,6 +17,7 @@
       <b-list-group-item button @click="removeInAllClass">全てのクラスで削除</b-list-group-item>
       <b-list-group-item button @click="changeEndDateModal()">掲載終了日の変更</b-list-group-item>
       <b-list-group-item button @click="changeClassIdModal()">掲載クラスの変更</b-list-group-item>
+      <b-list-group-item button @click="showDownloadUrl">ダウンロードリンクの取得</b-list-group-item>
       <b-list-group-item button @click="closeMenu">キャンセル</b-list-group-item>
     </b-list-group>
   </div>
@@ -179,6 +180,11 @@ export default {
       }).catch(e =>{
         console.log(e)
       })
+    },
+    showDownloadUrl: function(){
+      this.closeMenu()
+      this.$parent.downloadUrl = process.env.httpUrl + '/download/' + this.paper.docid
+      this.$parent.$refs.showUrlModal.show()
     }
   }
 }
@@ -198,7 +204,7 @@ img.paper:hover{
 
 #right-click-menu{
     position: absolute;
-    width: 220px;
+    width: 240px;
     z-index: 100000;
 }
 </style>

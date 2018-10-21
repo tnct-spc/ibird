@@ -67,6 +67,14 @@
       <b-btn class="mt-3" variant="outline-primary" block @click="changeClassId()">変更する</b-btn>
       <b-btn class="mt-3" variant="outline-danger" block @click="$refs.changeClassIdModalRef.hide()">キャンセル</b-btn>
     </b-modal>
+    <b-modal ref="showUrlModal" hide-footer>
+      <div class="d-block text-center">
+        <div class="copy-container">
+          <b-link :href="downloadUrl">{{downloadUrl}}</b-link>
+          <b-button class="mx-2" variant="outline-primary" @click="doCopy">コピー</b-button>
+        </div>
+      </div>
+    </b-modal>
     <div id="wrapper">
       <ViewPaper v-if="showPaper" @close="showPaper=false" :paper="papers[docid]" :docid="docid"/>
       <div id="content" :style="'background-image:url(/img/'+background+')'" ref="fieldElm">
@@ -118,7 +126,8 @@ export default {
       endDate:null,
       selectedDocid:null,
       selectedClassId:null,
-      submitId:[]
+      submitId:[],
+      downloadUrl: '',
     }
   },
   watch:{
@@ -347,6 +356,17 @@ export default {
       .catch(e =>{
         console.log(e)
       })
+    },
+    doCopy: function () {
+      var temp = document.createElement('div');
+      temp.appendChild(document.createElement('pre')).textContent = this.downloadUrl;
+      var s = temp.style;
+      // s.position = 'fixed'
+      // s.left = '-100%'
+      document.body.appendChild(temp)
+      document.getSelection().selectAllChildren(temp)
+      if (document.execCommand('copy')) alert('コピーしました')
+      document.body.removeChild(temp)
     }
   },
   components: {

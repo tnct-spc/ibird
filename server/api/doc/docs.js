@@ -67,7 +67,8 @@ router.post('/', (req, res, next) => {
               startTime: startTime,
               endTime: endTime,
               sizeX: sizeX,
-              sizeY: sizeY
+              sizeY: sizeY,
+              filename: doc.filename
             })
         })
         documents.bulkCreate(insertData)
