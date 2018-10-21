@@ -24,7 +24,7 @@ router.delete('/', (req, res, next) => {
     .then(docs => {
       docs.forEach(doc => classids.add(doc.classid))
       documents.destroy({where: {docid: docid}})
-      classids.forEach(classid => sortDocs(classid))
+        .then(() => { classids.forEach(classid => sortDocs(classid)) })
       res.sendStatus(200)
     }).catch(err => {
       console.log(err)

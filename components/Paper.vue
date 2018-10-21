@@ -145,11 +145,6 @@ export default {
         params: {
           docid: this.paper.docid
         }
-      }).then( () => {
-        const c = new W3cwebsocket(process.env.wsUrl + '/ws/refresh')
-        c.onopen = () => c.send('{}')
-      }).catch(e =>{
-        console.log(e)
       })
     },
     savePosition: function(){
