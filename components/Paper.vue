@@ -112,6 +112,7 @@ export default {
         }
       })
       .then((res)=>{
+        this.$parent.selectedDocid = this.paper.docid
         this.$parent.selectedClassId = res.data
         this.closeMenu()
         this.$parent.$refs.changeClassIdModalRef.show()

@@ -117,7 +117,8 @@ export default {
       noClassid:"",
       endDate:null,
       selectedDocid:null,
-      selectedClassId:null
+      selectedClassId:null,
+      submitId:[]
     }
   },
   watch:{
@@ -200,6 +201,23 @@ export default {
   },
   methods:{
     changeClassId(){
+      this.submitId.length = 0
+      Object.keys(this.classIdList).forEach((e)=>{
+        this.classIdList[e].forEach((i)=>{
+            if(i.submit === true) this.submitId.push(i.classid)
+        })
+      })
+      if(this.submitId.length === 0){
+        alert("クラスを選択してください")
+        return
+      }
+      axios.put(process.env.httpUrl + '/api/doc-class',{
+        docid:this.selectedDocid,
+        classids:this.submitId
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
     },
     selectYear(key){
       if(this.checkYear[key] === false){
