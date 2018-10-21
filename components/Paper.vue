@@ -97,8 +97,8 @@ export default {
         let currentEndDate = res.data
         currentEndDate = currentEndDate.split('/')
         this.$parent.endDate = currentEndDate.join('-')
-        this.closeMenu()
         this.$parent.selectedDocid = this.paper.docid
+        this.closeMenu()
         this.$parent.$refs.changeEndDateModalRef.show()
       })
       .catch((e)=>{
@@ -113,6 +113,7 @@ export default {
       })
       .then((res)=>{
         console.log(res.data)
+        this.closeMenu()
         this.$parent.$refs.changeClassIdModalRef.show()
       })
       .catch((e)=>{
