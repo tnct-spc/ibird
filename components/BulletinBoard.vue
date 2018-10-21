@@ -1,6 +1,6 @@
 <template>
   <section>
-    <b-modal ref="myModalRef" hide-footer>
+    <b-modal ref="changeEndDateModalRef" hide-footer>
       <div class="d-block text-center">
         <h3>掲載終了日の変更</h3>
       </div>
@@ -9,7 +9,14 @@
         <input type="date" v-model="endDate"/>
       </div>
       <b-btn class="mt-3" variant="outline-primary" block @click="changeEndDate()">変更する</b-btn>
-      <b-btn class="mt-3" variant="outline-danger" block @click="$refs.myModalRef.hide()">キャンセル</b-btn>
+      <b-btn class="mt-3" variant="outline-danger" block @click="$refs.changeEndDateModalRef.hide()">キャンセル</b-btn>
+    </b-modal>
+    <b-modal ref="changeClassIdModalRef" size="lg" hide-footer>
+      <div class="d-block text-center">
+        <h3>掲載クラスの変更</h3>
+      </div>
+      <b-btn class="mt-3" variant="outline-primary" block @click="">変更する</b-btn>
+      <b-btn class="mt-3" variant="outline-danger" block @click="$refs.changeClassIdModalRef.hide()">キャンセル</b-btn>
     </b-modal>
     <div id="wrapper">
       <ViewPaper v-if="showPaper" @close="showPaper=false" :paper="papers[docid]" :docid="docid"/>
@@ -42,7 +49,8 @@ const W3cwebsocket = w3cwebsocket
 
 export default {
   props: {
-    "classid": String,
+    "classIdList":Object,
+    "classid": String
   },
   data () {
     return {
@@ -68,6 +76,7 @@ export default {
     }
   },
   created () {
+    console.log(this.classIdList)
     setInterval(this.refresh, 1000*60*60)
     this.refresh()
     const startWebsocketA = () =>{
