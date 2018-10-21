@@ -155,7 +155,6 @@ export default {
     }
   },
   created () {
-    console.log(this.classIdList)
     setInterval(this.refresh, 1000*60*60)
     this.refresh()
     const startWebsocketA = () =>{
