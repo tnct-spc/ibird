@@ -207,8 +207,16 @@ export default {
             if(i.submit === true) this.submitId.push(i.classid)
         })
       })
-      if(this.submitId.length === 0){
-        alert("クラスを選択してください")
+      this.submitId.sort((a,b)=>{
+        return a - b
+      })
+      if(this.submitId.length === 0||JSON.stringify(this.submitId)===JSON.stringify(this.selectedClassId)){
+        if(this.submitId.length === 0){
+          alert("クラスを選択してください")
+        }
+        if(JSON.stringify(this.submitId)===JSON.stringify(this.selectedClassId)){
+          alert("掲示するクラスが変更されていません")
+        }
         return
       }
       axios.put(process.env.httpUrl + '/api/doc-class',{
@@ -218,6 +226,7 @@ export default {
       .catch((err)=>{
         console.log(err)
       })
+      this.$refs.changeClassIdModalRef.hide()
     },
     selectYear(key){
       if(this.checkYear[key] === false){
@@ -282,7 +291,7 @@ export default {
       .catch((e)=>{
         console.log(e)
       })
-      this.$refs.myModalRef.hide()
+      this.$refs.changeEndDateModalRef.hide()
     },
     viewPaper(docid){
       this.docid = docid

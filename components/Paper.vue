@@ -114,6 +114,9 @@ export default {
       .then((res)=>{
         this.$parent.selectedDocid = this.paper.docid
         this.$parent.selectedClassId = res.data
+        this.$parent.selectedClassId.sort((a,b)=>{
+          return a - b
+        })
         this.closeMenu()
         this.$parent.$refs.changeClassIdModalRef.show()
       })
