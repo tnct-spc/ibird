@@ -11,7 +11,7 @@
       <b-btn class="mt-3" variant="outline-primary" block @click="changeEndDate()">変更する</b-btn>
       <b-btn class="mt-3" variant="outline-danger" block @click="$refs.changeEndDateModalRef.hide()">キャンセル</b-btn>
     </b-modal>
-    <b-modal ref="changeClassIdModalRef" size="lg" hide-footer>
+    <b-modal ref="changeClassIdModalRef" v-model="modalShow" size="lg" hide-footer>
       <div class="d-block text-center">
         <h3>掲載クラスの変更</h3>
       </div>
@@ -106,6 +106,7 @@ export default {
   },
   data () {
     return {
+      modalShow:false,
       all:false,
       background:"",
       show:false,
@@ -115,10 +116,20 @@ export default {
       docid:"",
       noClassid:"",
       endDate:null,
-      selectedDocid:null
+      selectedDocid:null,
+      selectedClassId:null
     }
   },
   watch:{
+    modalShow(){
+      this.selectedClassId.forEach((e)=>{
+        Object.keys(this.classIdList).forEach((k)=>{
+          this.classIdList[k].forEach((j)=>{
+            if(e===j.classid) j.submit = true
+          })
+        })
+      })
+    },
     classid(){
       this.refreshClient = new w3cwebsocket(process.env.wsUrl + '/ws/refresh')
       this.refreshClient.onopen = () => this.refreshClient.send('')
@@ -189,7 +200,6 @@ export default {
   },
   methods:{
     changeClassId(){
-
     },
     selectYear(key){
       if(this.checkYear[key] === false){

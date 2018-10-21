@@ -112,7 +112,7 @@ export default {
         }
       })
       .then((res)=>{
-        console.log(res.data)
+        this.$parent.selectedClassId = res.data
         this.closeMenu()
         this.$parent.$refs.changeClassIdModalRef.show()
       })
