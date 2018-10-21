@@ -77,6 +77,7 @@ export default{
     .then((res)=>{
       if(!res.data.message) this.message = "現在表示中のアラートはありません"
       else this.message = res.data.message
+      this.endDate = res.data.endDate
       this.checkAlert()
     })
     const startWebsocket = () => {
