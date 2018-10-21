@@ -118,7 +118,9 @@ export default {
           return a - b
         })
         this.closeMenu()
-        this.$parent.$refs.changeClassIdModalRef.show()
+        this.$nextTick(() => {
+          this.$parent.$refs.changeClassIdModalRef.show()
+        })
       })
       .catch((e)=>{
         console.log(e)

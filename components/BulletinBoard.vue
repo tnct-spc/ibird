@@ -126,10 +126,24 @@ export default {
       this.selectedClassId.forEach((e)=>{
         Object.keys(this.classIdList).forEach((k)=>{
           this.classIdList[k].forEach((j)=>{
+            j.submit = false
+          })
+        })
+      })
+      this.selectedClassId.forEach((e)=>{
+        Object.keys(this.classIdList).forEach((k)=>{
+          this.classIdList[k].forEach((j)=>{
             if(e===j.classid) j.submit = true
           })
         })
       })
+      Object.keys(this.checkYear).forEach((e)=>{
+        this.checkYear[e] = false
+      })
+      Object.keys(this.checkCourse).forEach((e)=>{
+        this.checkCourse[e] = false
+      })
+      this.all = false
     },
     classid(){
       this.refreshClient = new w3cwebsocket(process.env.wsUrl + '/ws/refresh')
