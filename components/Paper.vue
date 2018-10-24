@@ -1,5 +1,10 @@
 <template>
-  <div id="paper" @contextmenu.prevent="openremovemenu" @mousedown="mousedown" @mouseup="mouseup" ref="fieldElm">
+  <div id="paper" 
+    @contextmenu.prevent="openremovemenu"
+    @mousedown="startFollow"
+    @mouseup="stopFollow"
+    @mouseout="stopFollow"
+    ref="fieldElm">
 
     <!-- <p>{{ this.paper }}</p> -->
     <!-- <p>{{ controlSelecterSize }}</p> -->
@@ -8,7 +13,7 @@
         left: (this.paper.x*this.bbFieldSize.x/10000)+'px',
         top: (this.paper.y*this.bbFieldSize.y/10000)+'px',
         'max-width': 20.6767 * paper.sizeX / 1171 + '%',
-        'z-index': paper.overlapPriority,
+        'z-index': paper.overlapPriority + zIndexPlus,
         //left: '0px',
         //top: '0px'
         }" ondragstart="return false;" >
@@ -35,6 +40,7 @@ export default {
       menuTop: 1000,
       menuLeft: 1000,
       showMenu: false,
+      zIndexPlus: 0
     }
   },
   props: {
@@ -54,16 +60,18 @@ export default {
       selectedcard: 'selectCard',
       setCursorOffset: 'setCursorOffset'
     }),
-    mousedown: function(e){
+    startFollow: function(e){
       this.setCursorOffset({x: e.offsetX, y: e.offsetY})
       this.selectedcard({docid: this.paper.docid})
       document.addEventListener('mousemove',this.mousemove)
+      this.zIndexPlus = 100
     },
-    mouseup: function(e){
+    stopFollow: function(e){
       this.savePosition()
       this.saveOrder()
       this.selectedcard({docid: null})
       document.removeEventListener('mousemove',this.mousemove)
+      this.zIndexPlus = 0
     },
     mousemove: function(e){
       if(this.showMenu) return
