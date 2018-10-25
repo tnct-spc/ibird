@@ -161,9 +161,6 @@ export default {
         if(this.submitId.length === 0){
           alert("クラスを選択してください")
         }
-        if(JSON.stringify(this.submitId)===JSON.stringify(this.selectedClassId)){
-          alert("掲示するクラスが変更されていません")
-        }
         return
       }
       axios.put(process.env.httpUrl + '/api/doc-class',{
