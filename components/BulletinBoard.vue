@@ -3,6 +3,10 @@
     <b-modal ref="resetpaper" hide-footer >
       <ResetPaper 
         :docid="selectedDocid"
+        :classIdList="classIdList"
+        :checkYear="checkYear"
+        :checkCourse="checkCourse"
+        :paperData="paperData"
       />
     </b-modal>
     <b-modal ref="changeEndDateModalRef" hide-footer>
@@ -134,6 +138,7 @@ export default {
       selectedClassId:null,
       submitId:[],
       downloadUrl: '',
+      paperData: {},
     }
   },
   watch:{

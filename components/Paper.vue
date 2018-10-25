@@ -115,10 +115,20 @@ export default {
     },
     showResetPaperModal: function(){
       this.$parent.selectedDocid = this.paper.docid
-      console.log(this.paper.docid)
-      this.closeMenu()
-      this.$nextTick(() => {
-        this.$parent.$refs.resetpaper.show()
+      axios.get(process.env.httpUrl + '/api/doc', {
+        params: {
+          docid: this.paper.docid
+        }
+      }).then(res => {
+        console.log(res.data)
+        console.log("for-debug")
+        this.$parent.paperData = res.data
+        this.closeMenu()
+        this.$nextTick(() => {
+          this.$parent.$refs.resetpaper.show()
+        })
+      }).catch(e => {
+        console.log(e)
       })
     },
     changeClassIdModal: function(){
