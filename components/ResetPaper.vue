@@ -1,7 +1,7 @@
 <template>
   <section v-if="changed">
     <div class="d-block text-center">
-      <h3>掲載終了日の変更</h3>
+      <h3>掲示物の再設定</h3>
       <div class="block my-5 text-center">
         <table style="width:500px;margin:100px auto;">
           <tbody>

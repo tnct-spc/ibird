@@ -120,8 +120,6 @@ export default {
           docid: this.paper.docid
         }
       }).then(res => {
-        console.log(res.data)
-        console.log("for-debug")
         this.$parent.paperData = res.data
         this.closeMenu()
         axios.get(process.env.httpUrl + '/api/doc-class', {
