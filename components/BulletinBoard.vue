@@ -286,6 +286,50 @@ export default {
       document.getSelection().selectAllChildren(temp)
       if (document.execCommand('copy')) alert('コピーしました')
       document.body.removeChild(temp)
+    },
+    selectYear(key){
+      if(this.checkYear[key] === false){
+        this.classIdList[key].forEach((e)=>{
+          e.submit = false
+        })
+      }
+      else if(this.checkYear[key] === true){
+        this.classIdList[key].forEach((e)=>{
+          e.submit = true
+        })
+      }
+    },
+    selectCourse(key){
+      if(this.checkCourse[key] === true){
+        Object.keys(this.classIdList).forEach((e)=>{
+          this.classIdList[e].forEach((i)=>{
+            if(i.course===key)i.submit=true
+          })
+        })
+      }
+      else{
+        Object.keys(this.classIdList).forEach((e)=>{
+          this.classIdList[e].forEach((i)=>{
+            if(i.course===key)i.submit=false
+          })
+        })
+      }
+    },
+    selectAll(){
+      if(this.all === false){
+        Object.keys(this.classIdList).forEach((e)=>{
+          this.classIdList[e].forEach((i)=>{
+            i.submit = false
+          })
+        })
+      }
+      else{
+        Object.keys(this.classIdList).forEach((e)=>{
+          this.classIdList[e].forEach((i)=>{
+            i.submit = true
+          })
+        })
+      }
     }
   },
   components: {
