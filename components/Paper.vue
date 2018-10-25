@@ -20,8 +20,7 @@
     <b-list-group id="right-click-menu" tabindex="-1" v-if="showMenu" @blur="closeMenu" :style="{top: menuTop+'px', left: menuLeft+'px'}">
       <b-list-group-item button @click="remove">このクラスのみで削除</b-list-group-item>
       <b-list-group-item button @click="removeInAllClass">全てのクラスで削除</b-list-group-item>
-      <b-list-group-item button @click="changeEndDateModal()">掲載終了日の変更</b-list-group-item>
-      <b-list-group-item button @click="changeClassIdModal()">掲載クラスの変更</b-list-group-item>
+      <b-list-group-item button @click="showResetPaperModal">掲示物の再設定</b-list-group-item>
       <b-list-group-item button @click="showDownloadUrl">ダウンロードリンクの取得</b-list-group-item>
       <b-list-group-item button @click="closeMenu">キャンセル</b-list-group-item>
     </b-list-group>
@@ -112,6 +111,14 @@ export default {
       })
       .catch((e)=>{
         console.log(e)
+      })
+    },
+    showResetPaperModal: function(){
+      this.$parent.selectedDocid = this.paper.docid
+      console.log(this.paper.docid)
+      this.closeMenu()
+      this.$nextTick(() => {
+        this.$parent.$refs.resetpaper.show()
       })
     },
     changeClassIdModal: function(){

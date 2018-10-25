@@ -1,5 +1,10 @@
 <template>
   <section>
+    <b-modal ref="resetpaper" hide-footer >
+      <ResetPaper 
+        :docid="selectedDocid"
+      />
+    </b-modal>
     <b-modal ref="changeEndDateModalRef" hide-footer>
       <div class="d-block text-center">
         <h3>掲載終了日の変更</h3>
@@ -97,6 +102,7 @@
 <script>
 import Paper from '~/components/Paper.vue'
 import ViewPaper from '~/components/ViewPaper.vue'
+import ResetPaper from '~/components/ResetPaper.vue'
 import { mapState, mapMutations } from 'vuex'
 import { w3cwebsocket } from 'websocket'
 import axios from 'axios'
@@ -371,7 +377,8 @@ export default {
   },
   components: {
     Paper,
-    ViewPaper
+    ViewPaper,
+    ResetPaper
   }
 }
 </script>
