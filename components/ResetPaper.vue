@@ -83,6 +83,7 @@ export default {
       selected: true,
       all: false,
       changed: false,
+      submitId:[],
     }
   },
   props: {
@@ -107,19 +108,48 @@ export default {
   },
   methods: {
     submit: function(){
+      this.changeClassId()
       const params = {
                      'endTime':this.endDate,
-                     'priority':this.selected,
+                     'priority':this.priority,
                      'title': this.title,
                      'openMobile': this.openMobile,
                      'docid': this.docid
                       }
-      axios.post(process.env.httpUrl + '/api/doc',params)
+      axios.put(process.env.httpUrl + '/api/doc',params)
       .then((response)=>{
       })
       .catch(e=>{
         console.log(e)
       })
+    },
+    changeClassId(){
+      this.submitId.length = 0
+      Object.keys(this.classIdList).forEach((e)=>{
+        this.classIdList[e].forEach((i)=>{
+            if(i.submit === true) this.submitId.push(i.classid)
+        })
+      })
+      this.submitId.sort((a,b)=>{
+        return a - b
+      })
+      if(this.submitId.length === 0||JSON.stringify(this.submitId)===JSON.stringify(this.selectedClassId)){
+        if(this.submitId.length === 0){
+          alert("クラスを選択してください")
+        }
+        if(JSON.stringify(this.submitId)===JSON.stringify(this.selectedClassId)){
+          alert("掲示するクラスが変更されていません")
+        }
+        return
+      }
+      axios.put(process.env.httpUrl + '/api/doc-class',{
+        docid:this.docid,
+        classids:this.submitId
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
+      this.$refs.changeClassIdModalRef.hide()
     },
     selectYear(key){
       if(this.checkYear[key] === false){

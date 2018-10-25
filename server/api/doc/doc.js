@@ -40,6 +40,7 @@ router.get('/', (req, res, next) => {
 })
 
 router.put('/', (req, res, next) => {
+  console.log(req.body)
   const classid = req.body.classid
   const docid = req.body.docid
   const x = req.body.x
