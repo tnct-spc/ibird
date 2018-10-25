@@ -7,6 +7,7 @@
         :checkYear="checkYear"
         :checkCourse="checkCourse"
         :paperData="paperData"
+        :selectedClassId="selectedClassId"
       />
     </b-modal>
     <b-modal ref="changeEndDateModalRef" hide-footer>
@@ -233,99 +234,6 @@ export default {
     }
   },
   methods:{
-    changeClassId(){
-      this.submitId.length = 0
-      Object.keys(this.classIdList).forEach((e)=>{
-        this.classIdList[e].forEach((i)=>{
-            if(i.submit === true) this.submitId.push(i.classid)
-        })
-      })
-      this.submitId.sort((a,b)=>{
-        return a - b
-      })
-      if(this.submitId.length === 0||JSON.stringify(this.submitId)===JSON.stringify(this.selectedClassId)){
-        if(this.submitId.length === 0){
-          alert("クラスを選択してください")
-        }
-        if(JSON.stringify(this.submitId)===JSON.stringify(this.selectedClassId)){
-          alert("掲示するクラスが変更されていません")
-        }
-        return
-      }
-      axios.put(process.env.httpUrl + '/api/doc-class',{
-        docid:this.selectedDocid,
-        classids:this.submitId
-      })
-      .catch((err)=>{
-        console.log(err)
-      })
-      this.$refs.changeClassIdModalRef.hide()
-    },
-    selectYear(key){
-      if(this.checkYear[key] === false){
-        this.classIdList[key].forEach((e)=>{
-          e.submit = false
-        })
-      }
-      else if(this.checkYear[key] === true){
-        this.classIdList[key].forEach((e)=>{
-          e.submit = true
-        })
-      }
-    },
-    selectCourse(key){
-      if(this.checkCourse[key] === true){
-        Object.keys(this.classIdList).forEach((e)=>{
-          this.classIdList[e].forEach((i)=>{
-            if(i.course===key)i.submit=true
-          })
-        })
-      }
-      else{
-        Object.keys(this.classIdList).forEach((e)=>{
-          this.classIdList[e].forEach((i)=>{
-            if(i.course===key)i.submit=false
-          })
-        })
-      }
-    },
-    selectAll(){
-      if(this.all === false){
-        Object.keys(this.classIdList).forEach((e)=>{
-          this.classIdList[e].forEach((i)=>{
-            i.submit = false
-          })
-        })
-      }
-      else{
-        Object.keys(this.classIdList).forEach((e)=>{
-          this.classIdList[e].forEach((i)=>{
-            i.submit = true
-          })
-        })
-      }
-    },
-    changeEndDate: function(){
-      const date = new Date()
-      let month = date.getMonth()+1
-      let day = date.getDate()
-      if(month<10) month = "0" + month
-      if(day<10) day = "0" + day
-      const today = [date.getFullYear(),month,day]
-      const checker = today.join('-')
-      if(checker > this.endDate){
-        alert("掲載終了日を今日より前には設定できません。")
-        return
-      }
-      axios.put(process.env.httpUrl + '/api/doc-end-time', {
-          docid: this.selectedDocid,
-          endTime: this.endDate
-      })
-      .catch((e)=>{
-        console.log(e)
-      })
-      this.$refs.changeEndDateModalRef.hide()
-    },
     viewPaper(docid){
       this.docid = docid
       this.showPaper = true

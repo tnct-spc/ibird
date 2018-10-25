@@ -124,12 +124,25 @@ export default {
         console.log("for-debug")
         this.$parent.paperData = res.data
         this.closeMenu()
-        this.$nextTick(() => {
-          this.$parent.$refs.resetpaper.show()
+        axios.get(process.env.httpUrl + '/api/doc-class', {
+          params: {
+            docid: this.paper.docid
+          }
+        })
+        .then((res)=>{
+          this.$parent.selectedDocid = this.paper.docid
+          this.$parent.selectedClassId = res.data
+          this.$parent.selectedClassId.sort((a,b)=>{
+            return a - b
+          })
+          this.$nextTick(() => {
+            this.$parent.$refs.resetpaper.show()
+          })
         })
       }).catch(e => {
         console.log(e)
       })
+
     },
     changeClassIdModal: function(){
       axios.get(process.env.httpUrl + '/api/doc-class', {

@@ -91,7 +91,8 @@ export default {
     "docid": String,
     "checkYear": Object,
     "checkCourse": Object,
-    "paperData": Object
+    "paperData": Object,
+    "selectedClassId": Array,
   },
   computed: {
   },
@@ -104,6 +105,29 @@ export default {
       this.priority = this.paperData.priority
       this.title = this.paperData.title
       this.openMobile = this.paperData.openMobile
+    },
+    selectedClassId: function(){
+      this.selectedClassId.forEach((e)=>{
+        Object.keys(this.classIdList).forEach((k)=>{
+          this.classIdList[k].forEach((j)=>{
+            j.submit = false
+          })
+        })
+      })
+      this.selectedClassId.forEach((e)=>{
+        Object.keys(this.classIdList).forEach((k)=>{
+          this.classIdList[k].forEach((j)=>{
+            if(e===j.classid) j.submit = true
+          })
+        })
+      })
+      Object.keys(this.checkYear).forEach((e)=>{
+        this.checkYear[e] = false
+      })
+      Object.keys(this.checkCourse).forEach((e)=>{
+        this.checkCourse[e] = false
+      })
+      this.all = false
     }
   },
   methods: {
