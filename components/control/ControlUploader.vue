@@ -1,7 +1,7 @@
 <template>
  <section>
   <div @dragleave.prevent="onDragLeave($event)" @dragover.prevent="onDragOver($event)" @drop.prevent="onDrop($event)">
-   <BulletinBoard :classid="classid" :classIdList="classIdList" :checkCourse="checkCourse" :checkYear="checkYear"/>
+   <BulletinBoard ref="BulletinBoard" :classid="classid" :classIdList="classIdList" :checkCourse="checkCourse" :checkYear="checkYear"/>
   </div>
   <ModalUploader v-if="showModal" @submit="upload()" @cancel="cancel()" :classIdList="classIdList" :filename="filename" :docid="docid" :checkCourse="checkCourse" :checkYear="checkYear"/>
  </section>
@@ -11,6 +11,9 @@ import axios from 'axios'
 import Vue from 'vue'
 import BulletinBoard from '~/components/BulletinBoard.vue'
 import ModalUploader from '~/components/control/ModalUploader.vue'
+
+import { w3cwebsocket } from 'websocket'
+const W3cwebsocket = w3cwebsocket
 
 export default{
   props:{
@@ -62,6 +65,18 @@ export default{
           })
         })
       })
+  },
+  mounted(){
+    const startWebsocket = () => {
+      this.refreshClinet = new W3cwebsocket(process.env.wsUrl+'/ws/refresh-setting')
+      this.refreshClinet.onmessage=({data})=>{
+        if(data==='background') {
+          this.$refs.BulletinBoard.changeBackground()
+        }
+      }
+      this.refreshClinet.onclose = () => {setTimeout(startWebsocket(),1000)}
+    }
+    startWebsocket()
   },
   methods:{
   upload(){
