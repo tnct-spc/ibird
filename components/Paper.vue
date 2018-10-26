@@ -20,8 +20,7 @@
     <b-list-group id="right-click-menu" tabindex="-1" v-if="showMenu" @blur="closeMenu" :style="{top: menuTop+'px', left: menuLeft+'px'}">
       <b-list-group-item button @click="remove">このクラスのみで削除</b-list-group-item>
       <b-list-group-item button @click="removeInAllClass">全てのクラスで削除</b-list-group-item>
-      <b-list-group-item button @click="changeEndDateModal()">掲載終了日の変更</b-list-group-item>
-      <b-list-group-item button @click="changeClassIdModal()">掲載クラスの変更</b-list-group-item>
+      <b-list-group-item button @click="showResetPaperModal">掲示物の再設定</b-list-group-item>
       <b-list-group-item button @click="showDownloadUrl">ダウンロードリンクの取得</b-list-group-item>
       <b-list-group-item button @click="closeMenu">キャンセル</b-list-group-item>
     </b-list-group>
@@ -113,6 +112,35 @@ export default {
       .catch((e)=>{
         console.log(e)
       })
+    },
+    showResetPaperModal: function(){
+      this.$parent.selectedDocid = this.paper.docid
+      axios.get(process.env.httpUrl + '/api/doc', {
+        params: {
+          docid: this.paper.docid
+        }
+      }).then(res => {
+        this.$parent.paperData = res.data
+        this.closeMenu()
+        axios.get(process.env.httpUrl + '/api/doc-class', {
+          params: {
+            docid: this.paper.docid
+          }
+        })
+        .then((res)=>{
+          this.$parent.selectedDocid = this.paper.docid
+          this.$parent.selectedClassId = res.data
+          this.$parent.selectedClassId.sort((a,b)=>{
+            return a - b
+          })
+          this.$nextTick(() => {
+            this.$parent.showResetModal = true
+          })
+        })
+      }).catch(e => {
+        console.log(e)
+      })
+
     },
     changeClassIdModal: function(){
       axios.get(process.env.httpUrl + '/api/doc-class', {
