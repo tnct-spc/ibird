@@ -27,8 +27,41 @@ export default{
     return{
       width:0,
       height:0,
-      style:""
+      style:"",
+      windowWidth: 0,
+      windowHeight: 0,
+      sizeX: 0,
+      sizeY: 0
     }
+  },
+  watch: {
+    windowWidth(){
+      this.calcSize()
+    },
+    windowHeight(){
+      this.calcSize()
+    }
+  },
+  methods: {
+    handleResize: function() {
+      this.windowWidth = window.innerWidth;
+      this.windowHeight = window.innerHeight;
+    },
+    calcSize: function(){
+      if (this.windowWidth/this.windowHeight > this.sizeX / this.sizeY) {
+        const maxwidth = this.windowHeight * this.sizeX / this.sizeY
+        this.style = "max-width:"+maxwidth+"px;"
+      } else {
+        const maxheight = this.windowWidth * this.sizeY / this.sizeX
+        this.style = "max-height:"+maxheight+"px;"
+      }
+    }
+  },
+  ready: function () {
+    window.addEventListener('resize', this.handleResize)
+  },
+  beforeDestroy: function () {
+    window.removeEventListener('resize', this.handleResize)
   },
   computed: {
     ...mapState({
@@ -41,8 +74,11 @@ export default{
     const element = document.getElementById(this.docid)
     this.width = element.naturalWidth
     this.height = element.naturalHeight
-    if((this.height/this.width)<0.9) this.style="max-width:"+60+"%;max-height:"+100+"%;"
-    else this.style="max-width:"+30+"%;max-height:"+100+"%;"
+    this.windowWidth =  window.innerWidth;
+    this.windowHeight =  window.innerHeight;
+    this.sizeX = this.paper.sizeX
+    this.sizeY = this.paper.sizeY
+    this.calcSize()
   }
 }
 </script>
