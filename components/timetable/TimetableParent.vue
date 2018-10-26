@@ -35,7 +35,7 @@ export default {
   created(){
     axios.get(process.env.httpUrl + '/api/timetable')
     .then((res)=>{
-       this.timetable = res.data
+       this.timetable = {...res.data}
        this.active = true
     })
   },
