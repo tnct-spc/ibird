@@ -134,7 +134,7 @@ export default {
             return a - b
           })
           this.$nextTick(() => {
-            this.$parent.$refs.resetpaper.show()
+            this.$parent.showResetModal = true
           })
         })
       }).catch(e => {

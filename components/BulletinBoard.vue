@@ -1,6 +1,6 @@
 <template>
   <section>
-    <b-modal ref="resetpaper" hide-footer >
+    <b-modal v-model="showResetModal" ref="resetpaper" hide-footer >
       <ResetPaper 
         :docid="selectedDocid"
         :classIdList="classIdList"
@@ -8,6 +8,7 @@
         :checkCourse="checkCourse"
         :paperData="paperData"
         :selectedClassId="selectedClassId"
+        @hide="hideResetModal"
       />
     </b-modal>
     <b-modal ref="showUrlModal" hide-footer>
@@ -73,9 +74,13 @@ export default {
       submitId:[],
       downloadUrl: '',
       paperData: {},
+      showResetModal: false
     }
   },
   watch:{
+    showResetModal(){
+      console.log(this.showResetModal)
+    },
     modalShow(){
       this.selectedClassId.forEach((e)=>{
         Object.keys(this.classIdList).forEach((k)=>{
@@ -167,6 +172,9 @@ export default {
     }
   },
   methods:{
+    hideResetModal: function(){
+      this.showResetModal = false
+    },
     viewPaper(docid){
       this.docid = docid
       this.showPaper = true

@@ -146,6 +146,7 @@ export default {
       .catch(e=>{
         console.log(e)
       })
+      this.$emit('hide');
     },
     changeClassId(){
       this.submitId.length = 0
@@ -170,7 +171,6 @@ export default {
       .catch((err)=>{
         console.log(err)
       })
-      this.$refs.changeClassIdModalRef.hide()
     },
     selectYear(key){
       if(this.checkYear[key] === false){
