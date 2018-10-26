@@ -1,7 +1,7 @@
 <template>
   <section>
     <b-card class="text-center">
-      {{clockHour}}時:{{clockMinute}}分:{{clockSecond}}秒
+      {{clockHour}}時 {{clockMinute}}分 {{clockSecond}}秒
     </b-card>
     <Timetable v-if="active" :stationData="timetable" :subStationData="timetable['timetable1']"/>
     <Timetable v-if="active" :stationData="timetable" :subStationData="timetable['timetable2']"/>
