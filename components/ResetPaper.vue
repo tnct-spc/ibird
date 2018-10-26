@@ -107,6 +107,11 @@ export default {
       this.openMobile = this.paperData.openMobile
     },
     selectedClassId: function(){
+      this.refreshSelectedClass()
+    }
+  },
+  methods: {
+    refreshSelectedClass: function(){
       this.selectedClassId.forEach((e)=>{
         Object.keys(this.classIdList).forEach((k)=>{
           this.classIdList[k].forEach((j)=>{
@@ -128,9 +133,7 @@ export default {
         this.checkCourse[e] = false
       })
       this.all = false
-    }
-  },
-  methods: {
+    },
     submit: function(){
       this.changeClassId()
       const params = {
@@ -147,6 +150,7 @@ export default {
         console.log(e)
       })
       this.$emit('hide');
+      this.refreshSelectedClass()
     },
     changeClassId(){
       this.submitId.length = 0
