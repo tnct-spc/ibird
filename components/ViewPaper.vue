@@ -50,10 +50,10 @@ export default{
     calcSize: function(){
       if (this.windowWidth/this.windowHeight > this.sizeX / this.sizeY) {
         const maxwidth = this.windowHeight * this.sizeX / this.sizeY
-        this.style = "max-width:"+maxwidth+"px;"
+        this.style = "max-width:"+maxwidth * 0.8 +"px;"
       } else {
         const maxheight = this.windowWidth * this.sizeY / this.sizeX
-        this.style = "max-height:"+maxheight+"px;"
+        this.style = "max-height:"+maxheight * 0.8 +"px;"
       }
     }
   },
