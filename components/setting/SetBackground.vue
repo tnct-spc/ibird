@@ -1,21 +1,20 @@
 <template>
   <section>
     <div style="text-align:center">
-      <span class="my-1">今の背景は{{selectedSkin}}です</span>
       <table style="margin-left:auto;margin-right:auto" class="my-4">
         <tbody>
          <tr>
           <td v-for="(skin , index) in backgrounds">
           <b-row>
             <b-col>
-              <b-img rounded thumbnail fluid :src="'/img/'+skin" alt="Thumbnail"/>
+              <b-img rounded thumbnail fluid :src="'/img/'+skin.backgrounds" alt="Thumbnail"/>
             </b-col>
           </b-row>
           </td>
          </tr>
          <tr>
           <td v-for="(skin, index) in backgrounds" style="text-align:center">
-            <b-form-radio @change="setSkin(index)" name="radio"></b-form-radio>
+             <b-form-checkbox v-model="skin.active" @change="setSkin(index)"></b-form-checkbox>
           </td>
          </tr>
         </tbody>
@@ -37,7 +36,6 @@
 </template>
 <script>
 import axios from 'axios'
-import VUe from 'vue'
 import { w3cwebsocket } from 'websocket'
 const W3cwebsocket = w3cwebsocket
 
@@ -45,22 +43,24 @@ export default{
   data:()=>{
     return{
       backgrounds:[],
-      selectedSkin:null,
       num:null
     }
   },
   created(){
-    axios.get(process.env.httpUrl + '/api/background')
-    .then(res =>{
-      this.selectedSkin = res.data
-      //console.log(this.selectedSkin)
-    })
-    .catch(e =>{
-      console.log(e)
-    })
     axios.get(process.env.httpUrl + '/api/backgrounds')
-    .then(res =>{
-      this.backgrounds = res.data
+    .then(response =>{
+      response.data.forEach((e)=>{
+        this.backgrounds.push({backgrounds:e,active:false})
+      })
+      axios.get(process.env.httpUrl + '/api/background')
+      .then(res =>{
+        this.backgrounds.forEach((e)=>{
+          if(e.backgrounds === res.data)e.active = true
+        })
+      })
+      .catch(e =>{
+        console.log(e)
+      })
     })
     .catch(e =>{
       console.log(e)
@@ -69,6 +69,10 @@ export default{
   methods: {
     setSkin(num){
       this.num = num
+      Object.keys(this.backgrounds).forEach((e)=>{
+        this.backgrounds[e].active = false
+      })
+      this.backgrounds[num].active = true
       //console.log(num)
     },
     showModal () {
@@ -78,8 +82,12 @@ export default{
       this.$refs.myModalRef.hide()
     },
     changeSkin(){
+      let selectedSkin
+      Object.keys(this.backgrounds).forEach((e)=>{
+        if(this.backgrounds[e].active===true)selectedSkin=this.backgrounds[e].backgrounds
+      })
       axios.post(process.env.httpUrl + '/api/background',{
-        filename: this.backgrounds[this.num]
+        filename:selectedSkin
       })
       .then(res=>{
         if(res.data==="OK"){
