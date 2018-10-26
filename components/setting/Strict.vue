@@ -22,6 +22,9 @@
             </div>
         </div>
     </form>
+    <div style="text-align:right">
+      <button disabled class="btn btn-secondar mr-auto btn-outline-secondary">変更を反映する</button>
+    </div>
   </section>
 </template>
 
