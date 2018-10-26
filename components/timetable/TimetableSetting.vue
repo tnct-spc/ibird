@@ -22,14 +22,14 @@ export default {
     },
     watch : {
       textarea(){
-        this.isNotButtonActive = this.textarea === this.server_data
+        this.isNotButtonActive = JSON.stringify(this.textarea) === JSON.stringify(this.server_data)
       }
     },
     created : function(){
       axios.get(process.env.httpUrl + '/api/timetable')
       .then(response => {
-        this.textarea = response.data
-        this.server_data = response.data
+        this.textarea = JSON.stringify(response.data)
+        this.server_data = JSON.stringify(response.data)
       })
     },
     computed : {
@@ -39,10 +39,10 @@ export default {
         this.isNotButtonActive = true
         const formData = {timetable: this.textarea}
         axios.post(process.env.httpUrl + '/api/timetable',formData)
-        .then((response)=>{
+        .then(res=>{
           axios.get(process.env.httpUrl + '/api/timetable')
           .then(response => {
-            this.server_data = response.data
+            this.server_data = JSON.stringify(response.data)
           })
         })
         .catch(e=>{
