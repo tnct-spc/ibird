@@ -14,12 +14,13 @@ module.exports = {
             'minimal_background4.png',
             'minimal_background5.png'
           ],
-          timetable: function () { /*
+          timetable: JSON.stringify(
             {
               "station": "徳島駅",
               "line": "ＪＲ牟岐線",
               "timetable1": {
                 "direction": "阿南・牟岐方面",
+                "0": [],
                 "1": [],
                 "2": [],
                 "3": [],
@@ -225,6 +226,7 @@ module.exports = {
               },
               "timetable2": {
                 "direction": "高松・阿波池田方面",
+                "0": [],
                 "1": [],
                 "2": [],
                 "3": [],
@@ -703,9 +705,7 @@ module.exports = {
                   }
                 ]
               }
-            }
-            */
-          }.toString().match(/\/\*([^]*)\*\//)[1],
+            }),
           message: '',
           messageEndDate: new Date(1970, 1, 1)
         }
