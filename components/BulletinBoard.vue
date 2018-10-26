@@ -145,7 +145,7 @@ export default {
   },
   mounted() {
     window.addEventListener('resize', this.handleResize)
-    setTimeout(() =>{this.handleResize()},100)
+    setTimeout(() =>{this.handleResize()},500)
   },
   beforeDestroy: function () {
     window.removeEventListener('resize', this.handleResize)

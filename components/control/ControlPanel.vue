@@ -31,10 +31,10 @@
         <button  type="button" :disabled="!this.isAlertEmpty2" class="btn btn-outline-primary btn-sm ml-1" @click="deleteAlert()">
           {{this.isAlertEmpty2 ? '削除':'削除中です'}}
         </button>
-      </div>
-      <div>
-      <span style="display:block" class="my-2">現在のAlert表示</span>
-        <b-alert show>
+    </div>
+      <div class="d-flex align-items-center" style="">
+        <span style="display:block;" class="mx-1">現在のAlert表示</span>
+        <b-alert show style="margin-bottom: 0;padding:1px">
           <span style="font-family: 'Noto Sans JP', sans-serif;">
             {{message}}
           </span>
