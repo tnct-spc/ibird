@@ -33,7 +33,7 @@ const officeToPDF = (filepath) => {
 const pdfToJpg = (pdfPath) => {
   var jpgPath = pdfPath.slice(0, -4) + '.jpg'
   jpgPath = 'static/jpg/' + filename(jpgPath)
-  childProcess.execSync('convert -density 68  ' + pdfPath.slice(0, -4) + '.pdf ' + jpgPath)
+  childProcess.execSync('convert -density 100  ' + pdfPath.slice(0, -4) + '.pdf ' + jpgPath)
 
   // pdfの枚数を取得
   const pdfinfo = childProcess.execSync('pdfinfo  ' + pdfPath.slice(0, -4) + '.pdf ').toString()
@@ -105,7 +105,8 @@ router.post('/upload-file', upload.single('file'), (req, res, next) => {
                 startTime: startTime,
                 endTime: endTime,
                 sizeX: sizeX,
-                sizeY: sizeY
+                sizeY: sizeY,
+                filename: doc.filename
               })
           })
           documents.bulkCreate(insertData)

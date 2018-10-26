@@ -1,5 +1,10 @@
 <template>
-  <div id="paper" @contextmenu.prevent="openremovemenu" @mousedown="mousedown" @mouseup="mouseup" ref="fieldElm">
+  <div id="paper" 
+    @contextmenu.prevent="openremovemenu"
+    @mousedown="startFollow"
+    @mouseup="stopFollow"
+    @mouseout="stopFollow"
+    ref="fieldElm">
 
     <!-- <p>{{ this.paper }}</p> -->
     <!-- <p>{{ controlSelecterSize }}</p> -->
@@ -7,15 +12,18 @@
       alt="" :style="{
         left: (this.paper.x*this.bbFieldSize.x/10000)+'px',
         top: (this.paper.y*this.bbFieldSize.y/10000)+'px',
-        'max-width': 15 * paper.sizeX / 561 + '%',
-        'z-index': paper.overlapPriority,
+        'max-width': 20.6767 * paper.sizeX / 1171 + '%',
+        'z-index': paper.overlapPriority + zIndexPlus,
         //left: '0px',
         //top: '0px'
         }" ondragstart="return false;" >
-    <ul id="right-click-menu" tabindex="-1" v-if="showMenu" @blur="closeMenu" :style="{top: menuTop+'px', left: menuLeft+'px'}">
-      <li @click="remove">削除</li>
-      <li @click="closeMenu">キャンセル</li>
-    </ul>
+    <b-list-group id="right-click-menu" tabindex="-1" v-if="showMenu" @blur="closeMenu" :style="{top: menuTop+'px', left: menuLeft+'px'}">
+      <b-list-group-item button @click="remove">このクラスのみで削除</b-list-group-item>
+      <b-list-group-item button @click="removeInAllClass">全てのクラスで削除</b-list-group-item>
+      <b-list-group-item button @click="showResetPaperModal">掲示物の再設定</b-list-group-item>
+      <b-list-group-item button @click="showDownloadUrl">ダウンロードリンクの取得</b-list-group-item>
+      <b-list-group-item button @click="closeMenu">キャンセル</b-list-group-item>
+    </b-list-group>
   </div>
 </template>
 <script>
@@ -28,25 +36,16 @@ const W3cwebsocket = w3cwebsocket
 export default {
   data:function(){
     return{
-      wsClient: null,
       menuTop: 1000,
       menuLeft: 1000,
       showMenu: false,
+      zIndexPlus: 0
     }
   },
   props: {
     "classid": String,
-    "paper": {}
-  },
-  created (){
-    const startWebsocket = () => {
-      this.wsClient = new W3cwebsocket(process.env.wsUrl+'/ws/move')
-      this.wsClient.onclose=()=>{
-        console.log('websocket disconnect /ws/move')
-        setTimeout(() =>{startWebsocket()},1000)
-      }
-    }
-    startWebsocket()
+    "paper": {},
+    "wsClient": {}
   },
   computed: {
     ...mapState({
@@ -60,16 +59,18 @@ export default {
       selectedcard: 'selectCard',
       setCursorOffset: 'setCursorOffset'
     }),
-    mousedown: function(e){
+    startFollow: function(e){
       this.setCursorOffset({x: e.offsetX, y: e.offsetY})
       this.selectedcard({docid: this.paper.docid})
       document.addEventListener('mousemove',this.mousemove)
+      this.zIndexPlus = 100
     },
-    mouseup: function(e){
+    stopFollow: function(e){
       this.savePosition()
       this.saveOrder()
       this.selectedcard({docid: null})
       document.removeEventListener('mousemove',this.mousemove)
+      this.zIndexPlus = 0
     },
     mousemove: function(e){
       if(this.showMenu) return
@@ -85,11 +86,7 @@ export default {
       }
     },
     openremovemenu: function(e){
-      console.log("for-debug")
       this.showMenu = true
-      console.log(this.showMenu)
-      console.log(e.x)
-      console.log(e.y)
       this.menuTop = e.y - this.BBxy.y + window.pageYOffset
       this.menuLeft = e.x
       return false
@@ -97,6 +94,74 @@ export default {
     closeMenu: function(){
       setTimeout(()=>{this.showMenu=false},100)
       //this.showMenu = false
+    },
+    changeEndDateModal: function(){
+      axios.get(process.env.httpUrl + '/api/doc-end-time', {
+        params: {
+          docid: this.paper.docid
+        }
+      })
+      .then((res)=>{
+        let currentEndDate = res.data
+        currentEndDate = currentEndDate.split('/')
+        this.$parent.endDate = currentEndDate.join('-')
+        this.$parent.selectedDocid = this.paper.docid
+        this.closeMenu()
+        this.$parent.$refs.changeEndDateModalRef.show()
+      })
+      .catch((e)=>{
+        console.log(e)
+      })
+    },
+    showResetPaperModal: function(){
+      this.$parent.selectedDocid = this.paper.docid
+      axios.get(process.env.httpUrl + '/api/doc', {
+        params: {
+          docid: this.paper.docid
+        }
+      }).then(res => {
+        this.$parent.paperData = res.data
+        this.closeMenu()
+        axios.get(process.env.httpUrl + '/api/doc-class', {
+          params: {
+            docid: this.paper.docid
+          }
+        })
+        .then((res)=>{
+          this.$parent.selectedDocid = this.paper.docid
+          this.$parent.selectedClassId = res.data
+          this.$parent.selectedClassId.sort((a,b)=>{
+            return a - b
+          })
+          this.$nextTick(() => {
+            this.$parent.showResetModal = true
+          })
+        })
+      }).catch(e => {
+        console.log(e)
+      })
+
+    },
+    changeClassIdModal: function(){
+      axios.get(process.env.httpUrl + '/api/doc-class', {
+        params: {
+          docid: this.paper.docid
+        }
+      })
+      .then((res)=>{
+        this.$parent.selectedDocid = this.paper.docid
+        this.$parent.selectedClassId = res.data
+        this.$parent.selectedClassId.sort((a,b)=>{
+          return a - b
+        })
+        this.closeMenu()
+        this.$nextTick(() => {
+          this.$parent.$refs.changeClassIdModalRef.show()
+        })
+      })
+      .catch((e)=>{
+        console.log(e)
+      })
     },
     remove: function(){
       axios.delete(process.env.httpUrl + '/api/doc', {
@@ -109,6 +174,13 @@ export default {
         c.onopen = () => c.send('{}')
       }).catch(e =>{
         console.log(e)
+      })
+    },
+    removeInAllClass: function(){
+      axios.delete(process.env.httpUrl + '/api/docs', {
+        params: {
+          docid: this.paper.docid
+        }
       })
     },
     savePosition: function(){
@@ -139,6 +211,11 @@ export default {
       }).catch(e =>{
         console.log(e)
       })
+    },
+    showDownloadUrl: function(){
+      this.closeMenu()
+      this.$parent.downloadUrl = process.env.httpUrl + '/download/' + this.paper.docid
+      this.$parent.$refs.showUrlModal.show()
     }
   }
 }
@@ -155,31 +232,10 @@ img.paper:hover{
   box-shadow: 0.5rem 0.5rem 0.5rem 0.01rem;
   color: #0000CC;
 }
+
 #right-click-menu{
-    background: #FAFAFA;
-    border: 1px solid #BDBDBD;
-    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
-    display: block;
-    list-style: none;
-    margin: 0;
-    padding: 0;
     position: absolute;
-    width: 250px;
-    z-index: 999999;
-}
-
-#right-click-menu li {
-    border-bottom: 1px solid #E0E0E0;
-    margin: 0;
-    padding: 5px 35px;
-}
-
-#right-click-menu li:last-child {
-    border-bottom: none;
-}
-
-#right-click-menu li:hover {
-    background: #1E88E5;
-    color: #FAFAFA;
+    width: 240px;
+    z-index: 100000;
 }
 </style>

@@ -1,3 +1,4 @@
+[![CircleCI](https://circleci.com/gh/tnct-spc/ibird.svg?style=svg)](https://circleci.com/gh/tnct-spc/ibird)
 # ibird
 
 ## Build Setup

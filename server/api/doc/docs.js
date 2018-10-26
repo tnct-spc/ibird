@@ -17,6 +17,21 @@ router.get('/', (req, res, next) => {
   })
 })
 
+router.delete('/', (req, res, next) => {
+  const docid = req.query.docid
+  let classids = new Set()
+  documents.findAll({where: {docid: docid}})
+    .then(docs => {
+      docs.forEach(doc => classids.add(doc.classid))
+      documents.destroy({where: {docid: docid}})
+        .then(() => { classids.forEach(classid => sortDocs(classid)) })
+      res.sendStatus(200)
+    }).catch(err => {
+      console.log(err)
+      res.sendStatus(400)
+    })
+})
+
 router.post('/', (req, res, next) => {
   const doc = req.body
   const docid = req.body.docid
@@ -52,7 +67,8 @@ router.post('/', (req, res, next) => {
               startTime: startTime,
               endTime: endTime,
               sizeX: sizeX,
-              sizeY: sizeY
+              sizeY: sizeY,
+              filename: doc.filename
             })
         })
         documents.bulkCreate(insertData)

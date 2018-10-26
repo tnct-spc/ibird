@@ -4,6 +4,7 @@ import expressWs from 'express-ws'
 import session from 'express-session'
 
 import api from './api'
+import download from './download'
 import websocket from './websocket'
 
 const app = express()
@@ -15,12 +16,13 @@ app.set('port', port)
 app.use(session({
   secret: 'super-secret-key',
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
   cookie: { maxAge: 3 * 10 ** 10 }
 }))
 
 // Import API Routes
 app.use('/api', api)
+app.use('/download', download)
 
 // Websocketを使う
 expressWs(app)

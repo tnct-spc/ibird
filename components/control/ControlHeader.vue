@@ -1,8 +1,8 @@
 <template>
   <section>
   <div class="background" style="padding:1%" ref="fieldElm">
-   <ControlPanel :classid="classid"/>
-   <ControlSelecter :classid="classid" :classes="classes"/>
+   <ControlPanel :classid="changedClassid"/>
+   <ControlSelecter :classid="changedClassid"/>
   </div>
   </section>
 </template>
@@ -15,11 +15,18 @@ export default{
     "classid":String,
     "classes":Array
   },
-  watch:{
-    classid(){
-    console.log(this.classid)
-    this.$parent.classid = this.classid
+  data:()=>{
+    return{
+      changedClassid:""
     }
+  },
+  watch:{
+    changedClassid(){
+    this.$parent.classid = this.changedClassid
+    }
+  },
+  created(){
+    this.changedClassid=this.classid
   },
   components:{
     ControlPanel,

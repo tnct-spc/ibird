@@ -1,9 +1,9 @@
 <template>
  <section>
-  <div id="overlay" @dragleave.prevent="onDragLeave($event)" @dragover.prevent="onDragOver($event)" @drop.prevent="onDrop($event)">
-   <BulletinBoard :classid="classid"/>
+  <div @dragleave.prevent="onDragLeave($event)" @dragover.prevent="onDragOver($event)" @drop.prevent="onDrop($event)">
+   <BulletinBoard :classid="classid" :classIdList="classIdList" :checkCourse="checkCourse" :checkYear="checkYear"/>
   </div>
-  <ModalUploader v-if="showModal" @submit="upload()" :classes="classes" :filename="filename" :docid="docid" :checkCourse="checkCourse" :checkYear="checkYear"/>
+  <ModalUploader v-if="showModal" @submit="upload()" @cancel="cancel()" :classIdList="classIdList" :filename="filename" :docid="docid" :checkCourse="checkCourse" :checkYear="checkYear"/>
  </section>
 </template>
 <script>
@@ -19,23 +19,47 @@ export default{
   },
   data:function(){
     return{
-      showModal: false,
+      setting:{
+        active:true,
+        startDate:null,
+        endDate:null,
+        classIdList:null,
+        all:null,
+        checkCourse:null,
+        checkYear:null,
+        openMobile:null
+      },
+      showModal:false,
       filename:null,
       docid:null,
       checkCourse:{},
       checkYear:{},
       fileList:[],
       modal:0,
-      files:null
+      files:null,
+      classIdList:{}
     }
   },
-  mounted(){
+  created(){
       axios.get(process.env.httpUrl + '/api/years-and-courses').then(res =>{
         res.data.courses.forEach((e)=>{
           Vue.set(this.checkCourse,e,false)
         })
         res.data.years.forEach((e)=>{
           Vue.set(this.checkYear,e,false)
+        })
+        this.classes.sort((a,b)=>{
+          return a.classid - b.classid
+        })
+        Object.keys(this.checkCourse).forEach((e,i)=>{
+          this.classes.forEach((c)=> {
+            if(!this.classIdList[c.year]){
+              Vue.set(this.classIdList, c.year, [])
+            }
+            if(e === c.course){
+              this.classIdList[c.year].push({classid: c.classid, course: e, submit:false})
+            }
+          })
         })
       })
   },
@@ -60,6 +84,19 @@ export default{
       this.showModal=true
     })
   },
+  cancel(){
+    this.modal--
+    if(this.modal<0)return
+    this.file = this.files[this.modal]
+    const formData = new FormData()
+    this.docid = new Date().getTime().toString(16)
+    formData.append('docid',this.docid)
+    formData.append('file',this.file)
+    this.filename = this.file.name
+    this.$nextTick(() => {
+      this.showModal=true
+    })
+  },
   onDragOver(event){
     event.preventDefault()
     event.dataTransfer.dropEffect = "copy"
@@ -67,6 +104,18 @@ export default{
   onDragLeave(event){
   },
   onDrop(event){
+    this.setting.active = true
+    Object.keys(this.classIdList).forEach((e)=>{
+      this.classIdList[e].forEach((i)=>{
+        i.submit = false
+      })
+    })
+    Object.keys(this.checkYear).forEach((e)=>{
+      this.checkYear[e] = false
+    })
+    Object.keys(this.checkCourse).forEach((e)=>{
+      this.checkCourse[e] = false
+    })
     event.preventDefault()
     event.dataTransfer.dropEffect = "copy"
     this.modal=0
@@ -86,7 +135,13 @@ export default{
       if(!this.files.length){
         alert("ファイルをドラッグ＆ドロップしてください")
       }
-      if(!this.file.type.match('application/pdf')&&!this.file.type.match('application/vnd.*')){
+      if(!this.file.type.match('application/pdf')
+      &&!this.file.type.match('application/msword')
+      &&!this.file.type.match('application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+      &&!this.file.type.match('application/vnd.ms-powerpoint')
+      &&!this.file.type.match('application/vnd.openxmlformats-officedocument.presentationml.presentation')
+      &&!this.file.type.match('application/vnd.ms-excel')
+      &&!this.file.type.match('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')){
         alert("ファイル形式に対応してません")
       }
       return
@@ -113,9 +168,4 @@ export default{
 }
 </script>
 <style scoped>
-#overlay {
-  width: 100%;
-  height: 100%;
-  text-align: center;
-}
 </style>

@@ -1,7 +1,6 @@
 <template>
  <section>
   <div class="d-flex flex-column align-items-stretch">
-    <link href="https://fonts.googleapis.com/css?family=Baloo+Tammudu" rel="stylesheet">
         <!--学年 -->
         <b-button-group>
           <b-button v-for="(year, index) in years"
@@ -9,8 +8,7 @@
             @click="switchingYear(index)"
             align="center"
             :variant="selectedStyle(index)"
-            class="class-button my-1"
-            :class="{'btn-outline-dark':unSelected1}">
+            class="class-button my-1">
             {{year}}
           </b-button>
         </b-button-group>
@@ -20,8 +18,7 @@
             :key="index"
             @click="switchingClass(index)"
             align="center"
-            :variant="selectedStyle2(index)"
-            :class="{'btn-outline-dark':unSelected2}">
+            :variant="selectedStyle2(index)">
             {{course}}
           </b-button>
         </b-button-group>
@@ -34,6 +31,13 @@ import Vue from 'vue'
 import { w3cwebsocket } from 'websocket'
 
 export default {
+  head () {
+    return {
+      link: [
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Baloo+Tammudu' }
+      ]
+    }
+  },
   props:{
     "classid":String,
   },
@@ -42,14 +46,10 @@ export default {
       yearIndex: null,
       courseIndex: null,
       years: [],
-      courses: [],
-      unSelected1:false,
-      unSelected2:false
+      courses: []
       }
   },
-  mounted(){
-    if(!this.classid)this.unSelected1 = true
-    if(!this.classid)this.unSelected2 = true
+  created(){
     axios.get(process.env.httpUrl + '/api/years-and-courses')
     .then(res =>{
       this.years = res.data.years
@@ -58,13 +58,33 @@ export default {
     .catch(e =>{
       console.log(e)
     })
+    if(this.classid){
+      axios.get(process.env.httpUrl + '/api/year-and-course',
+      {params:
+        {classid:this.classid}
+      })
+      .then(res =>{
+        this.years.forEach((e,i)=>{
+          if(res.data.year===e){
+            this.switchingYear(i)
+            this.selectedStyle(i)
+          }
+        })
+        this.courses.forEach((e,i)=>{
+          if(res.data.course===e){
+            this.switchingClass(i)
+            this.selectedStyle2(i)
+          }
+        })
+      })
+    }
   },
   watch:{
     yearIndex(){
-      this.getClassid()
+      if(this.courseIndex!==null)this.getClassid()
     },
     courseIndex(){
-      this.getClassid()
+      if(this.yearIndex!==null)this.getClassid()
     },
     classid(){
       history.replaceState('','',this.classid)
@@ -72,12 +92,10 @@ export default {
   },
   methods:{
     selectedStyle: function(index){
-      if(index === this.courseIndex&&this.classid)this.unSelected1 = false
       const backgroundColor = index === this.yearIndex ? 'primary' : 'outline-dark'
       return backgroundColor
     },
     selectedStyle2: function(index){
-      if(index === this.courseIndex&&this.classid)this.unSelected2 = false
       const backgroundColor = index === this.courseIndex ? 'primary' : 'outline-dark'
       return backgroundColor
     },
@@ -91,7 +109,7 @@ export default {
       axios.get(process.env.httpUrl + '/api/class-id',{
         params: { year: this.years[this.yearIndex], course: this.courses[this.courseIndex] }
       }).then(res =>{
-        this.$parent.classid = String(res.data.classid)
+        this.$parent.changedClassid = String(res.data.classid)
       }).catch(e =>{
         console.log(e)
       })

@@ -1,13 +1,35 @@
 <template>
   <section>
+    <b-modal v-model="showResetModal" ref="resetpaper" hide-footer >
+      <ResetPaper 
+        :docid="selectedDocid"
+        :classIdList="classIdList"
+        :checkYear="checkYear"
+        :checkCourse="checkCourse"
+        :paperData="paperData"
+        :selectedClassId="selectedClassId"
+        @hide="hideResetModal"
+      />
+    </b-modal>
+    <b-modal ref="showUrlModal" hide-footer>
+      <div class="d-block text-center">
+        <div class="copy-container">
+          <b-link :href="downloadUrl">{{downloadUrl}}</b-link>
+          <b-button class="mx-2" variant="outline-primary" @click="doCopy">コピー</b-button>
+        </div>
+      </div>
+    </b-modal>
     <div id="wrapper">
       <ViewPaper v-if="showPaper" @close="showPaper=false" :paper="papers[docid]" :docid="docid"/>
-      <div id="content" ref="fieldElm">
+      <div id="content" :style="'background-image:url(/img/'+background+')'" ref="fieldElm">
+       <b-alert :show="show">
+         <span style="font-size:50px;font-family: 'Noto Sans JP', sans-serif;">{{noClassid}}</span>
+       </b-alert>
        <div :id=i v-for="(paper, i) in sortedPapers" @dblclick="viewPaper(paper.docid)">
         <Paper
           :key="i"
           :classid="classid"
-          :ws-client="client"
+          :wsClient="client"
           :paper="paper"
         />
       </div>
@@ -19,6 +41,7 @@
 <script>
 import Paper from '~/components/Paper.vue'
 import ViewPaper from '~/components/ViewPaper.vue'
+import ResetPaper from '~/components/ResetPaper.vue'
 import { mapState, mapMutations } from 'vuex'
 import { w3cwebsocket } from 'websocket'
 import axios from 'axios'
@@ -28,20 +51,66 @@ const W3cwebsocket = w3cwebsocket
 
 export default {
   props: {
+    "classIdList":Object,
     "classid": String,
+    "filename":String,
+    "checkCourse":Object,
+    "checkYear":Object
   },
   data () {
     return {
+      modalShow:false,
+      all:false,
+      background:"",
+      show:false,
       showPaper:false,
       client: {},
       refreshClient: {},
-      docid:""
+      docid:"",
+      noClassid:"",
+      endDate:null,
+      selectedDocid:null,
+      selectedClassId:null,
+      submitId:[],
+      downloadUrl: '',
+      paperData: {},
+      showResetModal: false
     }
   },
   watch:{
+    showResetModal(){
+      console.log(this.showResetModal)
+    },
+    modalShow(){
+      this.selectedClassId.forEach((e)=>{
+        Object.keys(this.classIdList).forEach((k)=>{
+          this.classIdList[k].forEach((j)=>{
+            j.submit = false
+          })
+        })
+      })
+      this.selectedClassId.forEach((e)=>{
+        Object.keys(this.classIdList).forEach((k)=>{
+          this.classIdList[k].forEach((j)=>{
+            if(e===j.classid) j.submit = true
+          })
+        })
+      })
+      Object.keys(this.checkYear).forEach((e)=>{
+        this.checkYear[e] = false
+      })
+      Object.keys(this.checkCourse).forEach((e)=>{
+        this.checkCourse[e] = false
+      })
+      this.all = false
+    },
     classid(){
       this.refreshClient = new w3cwebsocket(process.env.wsUrl + '/ws/refresh')
       this.refreshClient.onopen = () => this.refreshClient.send('')
+      if(this.classid){
+        this.noClassid=""
+        this.show=false
+      }
     }
   },
   created () {
@@ -68,6 +137,11 @@ export default {
       }
     }
     startWebsocketB()
+    if(!this.classid){
+      this.noClassid="クラスを選択してください"
+      this.show=true
+    }
+    this.changeBackground()
   },
   mounted() {
     window.addEventListener('resize', this.handleResize)
@@ -98,6 +172,9 @@ export default {
     }
   },
   methods:{
+    hideResetModal: function(){
+      this.showResetModal = false
+    },
     viewPaper(docid){
       this.docid = docid
       this.showPaper = true
@@ -129,11 +206,77 @@ export default {
       this.setbbFieldSize({x: x, y: y})
       const {left, top} = this.$refs.fieldElm.getBoundingClientRect();
       this.setBBxy({x: left, y: top})
+    },
+    changeBackground(){
+      axios.get(process.env.httpUrl + '/api/background')
+      .then(res =>{
+        this.background = res.data
+        //console.log(this.background)
+      })
+      .catch(e =>{
+        console.log(e)
+      })
+    },
+    doCopy: function () {
+      var temp = document.createElement('div');
+      temp.appendChild(document.createElement('pre')).textContent = this.downloadUrl;
+      var s = temp.style;
+      // s.position = 'fixed'
+      // s.left = '-100%'
+      document.body.appendChild(temp)
+      document.getSelection().selectAllChildren(temp)
+      if (document.execCommand('copy')) alert('コピーしました')
+      document.body.removeChild(temp)
+    },
+    selectYear(key){
+      if(this.checkYear[key] === false){
+        this.classIdList[key].forEach((e)=>{
+          e.submit = false
+        })
+      }
+      else if(this.checkYear[key] === true){
+        this.classIdList[key].forEach((e)=>{
+          e.submit = true
+        })
+      }
+    },
+    selectCourse(key){
+      if(this.checkCourse[key] === true){
+        Object.keys(this.classIdList).forEach((e)=>{
+          this.classIdList[e].forEach((i)=>{
+            if(i.course===key)i.submit=true
+          })
+        })
+      }
+      else{
+        Object.keys(this.classIdList).forEach((e)=>{
+          this.classIdList[e].forEach((i)=>{
+            if(i.course===key)i.submit=false
+          })
+        })
+      }
+    },
+    selectAll(){
+      if(this.all === false){
+        Object.keys(this.classIdList).forEach((e)=>{
+          this.classIdList[e].forEach((i)=>{
+            i.submit = false
+          })
+        })
+      }
+      else{
+        Object.keys(this.classIdList).forEach((e)=>{
+          this.classIdList[e].forEach((i)=>{
+            i.submit = true
+          })
+        })
+      }
     }
   },
   components: {
     Paper,
-    ViewPaper
+    ViewPaper,
+    ResetPaper
   }
 }
 </script>
@@ -161,6 +304,6 @@ export default {
     left: 0;
     bottom: 0;
     right: 0;
-    background-image:url("../assets/img/minimal_background2.png");
+    text-align: center;
   }
 </style>
