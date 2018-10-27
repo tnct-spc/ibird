@@ -2,8 +2,8 @@
   <section v-if="changed">
     <div class="d-block text-center">
       <h3>掲示物の再設定</h3>
-      <div class="block my-5 text-center">
-        <table style="width:500px;margin:100px auto;">
+      <div class="block my-3 text-center">
+        <table style="width:500px;margin:auto;">
           <tbody>
             <tr>
               <td style="text-align:left;">
@@ -60,12 +60,14 @@
         v-model="priority"
         :options="option"/>
       </b-form-group>
-      <b-form-checkbox style="display:block;margin-top:2%" v-model="openMobile">モバイル向けサイトでも公開</b-form-checkbox>
+      <b-form-checkbox class="my-1" style="display:block;" v-model="openMobile">モバイル向けサイトでも公開</b-form-checkbox>
       <span v-if="openMobile">モバイル向けサイトでの表示名 </span>
-      <input v-if="openMobile" v-model="title" placeholder="掲示物の表示名を入力">
-      <button class="btn btn-primary" @click="submit">
-        変更
-      </button>
+      <input class="my-3" v-if="openMobile" v-model="title" placeholder="掲示物の表示名を入力">
+      <div style="text-align:center">
+        <b-button @click="submit" variant="primary">
+          変更する
+        </b-button>
+      </div>
     </div>
   </section>
 </template>
