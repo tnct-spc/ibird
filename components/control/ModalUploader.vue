@@ -116,6 +116,7 @@ export default{
    }
   },
   mounted(){
+    const name = /(.*)(?:\.([^.]+$))/
     if(this.$parent.setting.active){
       this.date = new Date()
       this.month = this.date.getMonth()+1
@@ -129,7 +130,7 @@ export default{
       this.day = this.date.getDate()
       if(this.day<10) this.day = "0" + this.day
       this.endDate = this.date.getFullYear()+"-"+this.month+"-"+this.day
-      this.title = this.filename
+      this.title = this.filename.match(name)[1]
       this.$parent.setting.active = false
     }
     else{
@@ -139,7 +140,7 @@ export default{
       if(this.month<10) this.month = "0" + this.month
       if(this.day<10) this.day = "0" + this.day
       this.today = [this.date.getFullYear(),this.month,this.day]
-      this.title = this.filename
+      this.title = this.filename.match(name)[1]
       this.startDate = this.$parent.setting.startDate
       this.endDate = this.$parent.setting.endDate
       this.classIdList = this.$parent.setting.classIdList
