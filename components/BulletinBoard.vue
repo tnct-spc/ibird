@@ -1,7 +1,7 @@
 <template>
   <section>
-    <b-modal v-model="showResetModal" ref="resetpaper" hide-footer >
-      <ResetPaper 
+    <b-modal v-model="showResetModal" ref="resetpaper" hide-footer size="lg">
+      <ResetPaper
         :docid="selectedDocid"
         :classIdList="classIdList"
         :checkYear="checkYear"

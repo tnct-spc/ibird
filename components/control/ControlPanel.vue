@@ -4,7 +4,6 @@
       <span style="font-size:150%;font-family: 'Noto Sans JP', sans-serif;">
         iBird Control Page
       </span>
-      <span>classid = {{classid}}</span>
     </div>
     <div>
       <div>
@@ -33,7 +32,7 @@
         </button>
     </div>
       <div class="d-flex align-items-center" style="">
-        <span style="display:block;" class="mx-1">現在のAlert表示</span>
+        <span style="display:block;" class="mx-1">現在のアラート表示</span>
         <b-alert show style="margin-bottom: 0;padding:1px">
           <span style="font-family: 'Noto Sans JP', sans-serif;">
             {{message}}
