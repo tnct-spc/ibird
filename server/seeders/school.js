@@ -20,7 +20,6 @@ module.exports = {
               'line': 'ＪＲ牟岐線',
               'timetable1': {
                 'direction': '阿南・牟岐方面',
-                '0': [],
                 '1': [],
                 '2': [],
                 '3': [],
@@ -222,11 +221,11 @@ module.exports = {
                     'kind': '各駅停車',
                     'going': '阿南'
                   }
-                ]
+                ],
+                '24': []
               },
               'timetable2': {
                 'direction': '高松・阿波池田方面',
-                '0': [],
                 '1': [],
                 '2': [],
                 '3': [],
@@ -703,7 +702,8 @@ module.exports = {
                     'kind': '各駅停車',
                     'going': '穴吹'
                   }
-                ]
+                ],
+                '24': []
               }
             }),
           message: '',
