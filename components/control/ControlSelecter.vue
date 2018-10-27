@@ -54,30 +54,30 @@ export default {
     .then(res =>{
       this.years = res.data.years
       this.courses = res.data.courses
+      if(this.classid){
+        axios.get(process.env.httpUrl + '/api/year-and-course',
+        {params:
+          {classid:this.classid}
+        })
+        .then(res =>{
+          this.years.forEach((e,i)=>{
+            if(res.data.year===e){
+              this.switchingYear(i)
+              this.selectedStyle(i)
+            }
+          })
+          this.courses.forEach((e,i)=>{
+            if(res.data.course===e){
+              this.switchingClass(i)
+              this.selectedStyle2(i)
+            }
+          })
+        })
+      }
     })
     .catch(e =>{
       console.log(e)
     })
-    if(this.classid){
-      axios.get(process.env.httpUrl + '/api/year-and-course',
-      {params:
-        {classid:this.classid}
-      })
-      .then(res =>{
-        this.years.forEach((e,i)=>{
-          if(res.data.year===e){
-            this.switchingYear(i)
-            this.selectedStyle(i)
-          }
-        })
-        this.courses.forEach((e,i)=>{
-          if(res.data.course===e){
-            this.switchingClass(i)
-            this.selectedStyle2(i)
-          }
-        })
-      })
-    }
   },
   watch:{
     yearIndex(){
