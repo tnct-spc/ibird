@@ -2,7 +2,7 @@ const host = 'ibird.tokyo-ct.org'
 
 const environment = process.env.NODE_ENV || 'development'
 const env = environment === 'production' ? {
-  httpUrl: process.env.HTTP_URL || 'https://ibrid.tokyo-ct.org',
+  httpUrl: process.env.HTTP_URL || 'https://ibird.tokyo-ct.org',
   wsUrl: process.env.WS_URL || 'wss://ibird.tokyo-ct.org'
 } : {
   httpUrl: process.env.HTTP_URL || 'https://' + host,
