@@ -5,8 +5,8 @@ const env = environment === 'production' ? {
   httpUrl: process.env.HTTP_URL || 'https://ibrid.tokyo-ct.org',
   wsUrl: process.env.WS_URL || 'wss://ibird.tokyo-ct.org'
 } : {
-  httpUrl: process.env.HTTP_URL || 'http://' + host,
-  wsUrl: process.env.WS_URL || 'ws://' + host
+  httpUrl: process.env.HTTP_URL || 'https://' + host,
+  wsUrl: process.env.WS_URL || 'wss://' + host
 }
 
 module.exports = {
