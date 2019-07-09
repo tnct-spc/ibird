@@ -8,7 +8,6 @@
   </section>
 </template>
 <script>
-
 import { w3cwebsocket } from 'websocket'
 import axios from 'axios'
 const W3cwebsocket = w3cwebsocket
