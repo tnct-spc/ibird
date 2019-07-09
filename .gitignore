@@ -35,9 +35,6 @@ build
 db/data
 yarn-error.log
 
-# yarn
-yarn.lock
-
 #log
 *.log
 *.out
