@@ -1,18 +1,15 @@
 version: '2'
 services:
   #develop,productionで良しなにコメントアウトする
-  #nginx:
-    #build:
-    #  context: ./docker/nginx
-    #container_name: ibird.nginx
-    #ports:
-    #  - "80:80"
-    #  - "443:443"
-    #volumes:
-    #  - "./docker/nginx/conf.d:/etc/nginx/conf.d"
-    #  - "./docker/nginx/sslkey:/sslkey"
-    #links:
-    #    - node_express
+  https-porta:
+    image: steveltn/https-portal
+    ports:
+      - '80:80'
+      - '443:443'
+    environment:
+      #DOMAINS: 'ibird.tokyo-ct.org -> http://node_express:3000'
+      SRAGE: 'production'
+
   node_express:
     build:
       context: ./docker/node
@@ -22,12 +19,9 @@ services:
       - ".:/src"
       - ".docker_node_modules:/src/node_modules"
     working_dir: /src
-    #command: [sh, -c, yarn install && yarn run build && yarn run start]
-    command: [sh, -c, yarn install && yarn run dev]
-    #expose: 
-    #   - "3000"
-    ports: 
-      - "3000:3000"
+    command: [sh, -c, yarn install && yarn run build && yarn run start]
+    expose:
+       - "3000"
   postgres:
     build:
       context: ./docker/postgres
